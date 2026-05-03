@@ -8,7 +8,6 @@ static_sites:
       deploy_on_push: true
     build_command: node build.js
     output_dir: dist
-    environment_slug: node-js
     envs:
       - key: SITE_URL
         value: https://meetlifeagents.com
@@ -19,20 +18,12 @@ static_sites:
       - key: PLATFORM_NUMBER
         value: ""
         scope: BUILD_TIME
-        type: SECRET
       - key: PLATFORM_DISPLAY
         value: ""
         scope: BUILD_TIME
       - key: MAPBOX_TOKEN
         value: ""
         scope: BUILD_TIME
-        type: SECRET
     routes:
       - path: /
     error_document: 404.html
-
-domains:
-  - domain: meetlifeagents.com
-    type: PRIMARY
-  - domain: www.meetlifeagents.com
-    type: ALIAS
