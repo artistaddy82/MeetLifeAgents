@@ -1,0 +1,55 @@
+{
+  "prattville_al": [
+    {
+      "id": "amber-smith-al",
+      "slug": "amber-smith",
+      "first_name": "Amber",
+      "last_name": "Smith",
+      "npn": "22111867",
+      "years_licensed": 12,
+      "carrier_count": 14,
+      "specialties": ["Term Life", "Mortgage Protection", "Impaired Risk", "Family Coverage"],
+      "tier": "elite",
+      "bio": "Independent broker specializing in term life and mortgage protection for families. Helps clients navigate impaired-risk underwriting (diabetes, smoker, family history) by shopping multiple carriers to find the best rate class.",
+      "office_city": "Prattville",
+      "office_state": "AL",
+      "extension": "1042",
+      "response_time": "1 hr",
+      "photo_url": null
+    },
+    {
+      "id": "angela-malone-al",
+      "slug": "angela-malone",
+      "first_name": "Angela",
+      "last_name": "Malone",
+      "npn": "20565876",
+      "years_licensed": 9,
+      "carrier_count": 11,
+      "specialties": ["Whole Life", "Final Expense", "LUTCF", "Seniors"],
+      "tier": "elite",
+      "bio": "Focused on whole life and final expense for seniors and pre-retirees. Holds the LUTCF designation and works extensively with families planning for end-of-life expenses, legacy gifts, and burial coverage.",
+      "office_city": "Millbrook",
+      "office_state": "AL",
+      "extension": "1078",
+      "response_time": "1 hr",
+      "photo_url": null
+    },
+    {
+      "id": "james-thornton-al",
+      "slug": "james-thornton",
+      "first_name": "James",
+      "last_name": "Thornton",
+      "npn": "22893441",
+      "years_licensed": 18,
+      "carrier_count": 16,
+      "specialties": ["IUL", "Estate Planning", "Business Insurance", "CLU · ChFC", "Veterans"],
+      "tier": "elite",
+      "bio": "Veteran-owned agency. Specializes in IUL and whole life for high-net-worth individuals, business owners, and key-person coverage. CLU and ChFC designations. Works closely with estate planning attorneys.",
+      "office_city": "Prattville",
+      "office_state": "AL",
+      "extension": "1156",
+      "response_time": "1 hr",
+      "photo_url": null
+    }
+  ]
+}

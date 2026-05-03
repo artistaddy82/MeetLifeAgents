@@ -1,23 +1,13 @@
 {
   "name": "meetlifeagents",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "MeetLifeAgents.com — national directory of verified local life insurance agents",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "node build.js",
+    "dev": "node build.js && npx --yes serve dist -p 3000",
+    "watch": "npx --yes nodemon --watch data --watch src --watch build.js --exec 'node build.js'"
   },
-  "dependencies": {
-    "next": "16.2.4",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+  "engines": {
+    "node": ">=18"
   }
 }

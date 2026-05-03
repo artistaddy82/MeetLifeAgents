@@ -1,0 +1,49 @@
+{
+  "states": [
+    { "slug": "al", "name": "Alabama", "doi_url": "https://www.aldoi.gov/Consumers/FindLicensee.aspx" },
+    { "slug": "fl", "name": "Florida",  "doi_url": "https://www.myfloridacfo.com/Division/Agents/Verify" },
+    { "slug": "ga", "name": "Georgia",  "doi_url": "https://www.oci.ga.gov/ConsumerService/LicenseSearch.aspx" },
+    { "slug": "tx", "name": "Texas",    "doi_url": "https://www.tdi.texas.gov/agent/agentlicensesearch.html" },
+    { "slug": "sc", "name": "South Carolina", "doi_url": "https://doi.sc.gov/781/Verify-a-License" },
+    { "slug": "nc", "name": "North Carolina", "doi_url": "https://www.ncdoi.gov/agents-and-licensing" },
+    { "slug": "tn", "name": "Tennessee", "doi_url": "https://www.tn.gov/commerce/insurance/agents.html" },
+    { "slug": "ms", "name": "Mississippi", "doi_url": "https://www.mid.ms.gov/licensee-search" }
+  ],
+  "cities": [
+    {
+      "city_slug": "prattville",
+      "city_name": "Prattville",
+      "state_slug": "al",
+      "state_name": "Alabama",
+      "state_abbr": "AL",
+      "county": "Autauga County",
+      "population": "38,162",
+      "median_income": "$74,830",
+      "median_home_value": "$214,400",
+      "guaranty_amount": "$300,000",
+      "guaranty_org": "ALCGA",
+      "guaranty_url": "https://www.alcga.com",
+      "intake_extension": "0001",
+      "agent_count": 3,
+      "vetted_count": 3,
+      "avg_distance": "4.2 mi",
+      "local_prose": [
+        "Prattville sits in Autauga County just north of Montgomery, with a population of roughly 38,000 and a median household income notably above the Alabama state average. The local economy spans manufacturing, retail, and a growing service sector — meaning a wide range of income tiers and coverage needs across the city's residents.",
+        "Alabama law provides several consumer protections specific to life insurance buyers. The state requires a 10-day free-look period on new policies, during which buyers may cancel for a full refund. Alabama's Life and Health Insurance Guaranty Association protects up to $300,000 in death benefits per insured if a carrier becomes insolvent — a meaningful floor when comparing carrier financial strength.",
+        "For Prattville families with mortgages near the local median, term life insurance covering the outstanding balance plus 10× annual income is the most common starting point. Working agents in this market often help clients evaluate the trade-offs between term, return-of-premium term, and indexed universal life depending on the family's tax situation and timeline.",
+        "Health-rating considerations specific to this area: Alabama has a higher-than-national-average rate of certain chronic conditions, and several agents on our network specialize specifically in impaired-risk underwriting — meaning they know which carriers offer the best rate classes for diabetics, smokers, or applicants with cardiac history."
+      ],
+      "community_text": "MeetLifeAgents and our network of local Prattville agents support the Autauga County Backpack Buddies program, the Prattville YMCA scholarship fund, and Daniel Pratt Historic District preservation. We believe that being part of the local community means showing up — not just selling policies.",
+      "nearby": [
+        { "name": "Montgomery",  "slug": "montgomery",  "state": "al", "agent_count": 22, "distance": "12 mi" },
+        { "name": "Wetumpka",    "slug": "wetumpka",    "state": "al", "agent_count": 5,  "distance": "14 mi" },
+        { "name": "Millbrook",   "slug": "millbrook",   "state": "al", "agent_count": 6,  "distance": "8 mi"  },
+        { "name": "Clanton",     "slug": "clanton",     "state": "al", "agent_count": 3,  "distance": "36 mi" },
+        { "name": "Auburn",      "slug": "auburn",      "state": "al", "agent_count": 14, "distance": "65 mi" },
+        { "name": "Birmingham",  "slug": "birmingham",  "state": "al", "agent_count": 38, "distance": "92 mi" },
+        { "name": "Tuscaloosa",  "slug": "tuscaloosa",  "state": "al", "agent_count": 17, "distance": "110 mi"},
+        { "name": "View all Alabama →", "slug": "", "state": "al", "agent_count": 186, "distance": "statewide" }
+      ]
+    }
+  ]
+}
