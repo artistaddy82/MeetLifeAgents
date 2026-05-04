@@ -975,11 +975,15 @@ h1.city-title em { font-style: italic; color: var(--rust); font-weight: 400; }
 .ov-tiers {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
   gap: 0;
   border-top: 1px solid var(--rule);
   border-left: 1px solid var(--rule);
 }
 .ov-tier {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 2;
   border-right: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
 }
