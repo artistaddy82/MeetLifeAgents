@@ -1167,4 +1167,296 @@ ${footer()}
 </html>`
 }
 
-module.exports = { notFoundPage, privacyPage, termsPage, tcpaPage, contactPage, howItWorksPage, ourVettingPage, whyIndependentPage, faqPage, glossaryPage }
+// ── WHY NOT ETHOS ─────────────────────────────────────────────────────────────
+function whyNotEthosPage(config) {
+  const siteUrl   = config.siteUrl || 'https://meetlifeagents.com'
+  const canonical = `${siteUrl}/why-not-ethos/`
+
+  const rows = [
+    { dim: 'Who you work with',  ethos: 'An algorithm and a call center', mla: 'A licensed, locally-resident independent agent you can call directly' },
+    { dim: 'Carrier options',    ethos: '1–2 carriers (Ethos\'s own partners)', mla: '10–30+ carriers — your agent shops the market for you' },
+    { dim: 'Policy types',       ethos: 'Term only (and some final expense)', mla: 'Term, Whole Life, IUL, Final Expense, Mortgage Protection' },
+    { dim: 'Medical underwriting', ethos: 'Simplified issue — limited questions, higher rates', mla: 'Full underwriting available — best rates for healthy applicants' },
+    { dim: 'Coverage ceiling',   ethos: 'Up to $2M (algorithmic approval)', mla: 'No ceiling — agents access fully underwritten policies at any amount' },
+    { dim: 'If you get declined',ethos: 'No path forward — start over somewhere else', mla: 'Your agent re-shops to carriers that will approve your specific health profile' },
+    { dim: 'Ongoing service',    ethos: 'App + chat support', mla: 'Direct line to the agent who placed your policy — for years' },
+    { dim: 'Who pays',           ethos: 'You pay Ethos\'s margin into every premium', mla: 'Agent commission is carrier-paid — same cost to you, more options' },
+  ]
+
+  const jsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home',         item: `${siteUrl}/` },
+        { '@type': 'ListItem', position: 2, name: 'Why Not Ethos', item: canonical },
+      ]},
+      { '@type': 'FAQPage', mainEntity: [
+        { '@type': 'Question', name: 'Is Ethos Life Insurance legit?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Ethos is a legitimate licensed platform. The tradeoff is you get simplified-issue underwriting from a narrow carrier panel and no ongoing agent relationship — which costs some applicants more and leaves others without options when declined.' } },
+        { '@type': 'Question', name: 'Is Ethos cheaper than using an agent?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Not necessarily. Simplified-issue policies typically carry higher premiums than fully-underwritten coverage. An independent agent who shops 10–30+ carriers often finds lower rates for healthy applicants than Ethos\'s partner carriers offer.' } },
+      ]},
+    ]
+  })
+
+  return `${head({
+    title:       'Why Not Ethos? Independent Agents vs. Direct Online Life Insurance | MeetLifeAgents',
+    description: 'Ethos is convenient but limited to one or two carriers and no real agent relationship. Here\'s what you give up — and what an independent agent gives you instead.',
+    canonical,
+    extraHead:   `<meta name="robots" content="index,follow"><script type="application/ld+json">${jsonLd}</script>`,
+  })}
+<body>
+${header()}
+
+<!-- ── HERO ── -->
+<section style="background:var(--ink);color:var(--cream);padding:72px 0 80px;border-bottom:3px solid var(--gold);">
+  <div class="container">
+    <p class="city-eyebrow" style="color:var(--gold-soft);padding-top:0;">An honest look</p>
+    <h1 class="display" style="font-size:clamp(36px,5vw,60px);line-height:1.05;letter-spacing:-0.025em;color:var(--cream);max-width:700px;margin-bottom:20px;">
+      Ethos is <em>convenient.</em><br>It's not always <em>best.</em>
+    </h1>
+    <p style="font-size:18px;color:rgba(250,246,238,0.72);max-width:560px;line-height:1.6;margin-bottom:36px;">
+      Online platforms like Ethos are a step up from nothing. But for most people, a vetted independent agent finds better rates, more options, and stays in your corner after the policy issues.
+    </p>
+    <a href="/" class="btn-cream" data-find-cta>Find a vetted independent agent →</a>
+  </div>
+</section>
+
+<!-- ── COMPARISON TABLE ── -->
+<section style="padding:80px 0;">
+  <div class="container">
+    <p class="city-eyebrow">Side by side</p>
+    <h2 class="display" style="font-size:clamp(28px,3.5vw,42px);line-height:1.1;margin-bottom:48px;">Ethos vs.<br>independent agent.</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:15px;">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:14px 16px;border-bottom:2px solid var(--rule);width:22%;color:var(--ink-soft);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:0.04em;"></th>
+            <th style="text-align:left;padding:14px 16px;border-bottom:2px solid var(--rule);color:var(--ink-soft);font-weight:700;font-size:15px;">Ethos (direct)</th>
+            <th style="text-align:left;padding:14px 16px;border-bottom:2px solid var(--rule);background:rgba(176,141,58,0.06);color:var(--ink);font-weight:700;font-size:15px;">MeetLifeAgents</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((r, i) => `
+          <tr style="border-bottom:1px solid var(--rule);${i % 2 === 0 ? '' : 'background:var(--cream-warm);'}">
+            <td style="padding:16px;font-weight:600;font-size:13px;color:var(--ink-soft);vertical-align:top;">${r.dim}</td>
+            <td style="padding:16px;color:var(--ink);line-height:1.55;vertical-align:top;">${r.ethos}</td>
+            <td style="padding:16px;color:var(--ink);line-height:1.55;vertical-align:top;background:rgba(176,141,58,0.04);">
+              <strong style="color:var(--gold);">✓</strong> ${r.mla}
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHEN ETHOS IS FINE ── -->
+<section style="background:var(--cream-warm);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:72px 0;">
+  <div class="container" style="max-width:760px;">
+    <p class="city-eyebrow">To be fair</p>
+    <h2 class="display" style="font-size:clamp(26px,3.5vw,38px);margin-bottom:24px;line-height:1.15;">When Ethos (or any direct platform) is probably fine</h2>
+    <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:16px;">
+      ${[
+        'You\'re young, healthy, and want a quick $250K–$500K term policy with no medical exam',
+        'You\'ve already decided on term life and just want the fastest possible approval',
+        'You only need coverage that fits within Ethos\'s simplified-issue limits',
+        'You have no health history that could complicate underwriting',
+      ].map(item => `
+      <li style="display:flex;gap:14px;align-items:flex-start;">
+        <span style="color:var(--gold);font-weight:700;flex-shrink:0;margin-top:2px;">→</span>
+        <span style="font-size:16px;line-height:1.55;color:var(--ink);">${item}</span>
+      </li>`).join('')}
+    </ul>
+    <p style="margin-top:32px;font-size:15px;color:var(--ink-soft);line-height:1.6;">
+      If that's you, Ethos works. But if you have any health history, need more than $2M, want coverage other than term, or just want a real human who knows your situation — an independent agent is worth the 15-minute phone call.
+    </p>
+  </div>
+</section>
+
+<!-- ── WHAT AGENTS DO ── -->
+<section style="padding:80px 0;">
+  <div class="container" style="max-width:760px;">
+    <p class="city-eyebrow">The real difference</p>
+    <h2 class="display" style="font-size:clamp(26px,3.5vw,38px);margin-bottom:40px;line-height:1.15;">What a vetted independent agent actually does for you</h2>
+    <div style="display:flex;flex-direction:column;gap:32px;">
+      ${[
+        { title: 'Shops your health profile across carriers', body: 'Every carrier rates health conditions differently. An agent knows which carrier is lenient on diabetes, which underwrites sleep apnea well, which has the best rates for former smokers. Ethos can\'t do that — it has one underwriting algorithm and 1–2 partners.' },
+        { title: 'Handles the paperwork and follow-up', body: 'Applications, medical records requests, lab orders — your agent manages all of it and stays in contact with the carrier so you don\'t have to chase anyone.' },
+        { title: 'Calls you when something changes', body: 'Got healthier? Rates may have dropped. Had another kid? Your coverage need changed. Your agent notices and reaches out. An app doesn\'t.' },
+        { title: 'Is there when there\'s a claim', body: 'When something happens, your family calls a real person who placed the policy and can help navigate the claim process — not a chat widget.' },
+      ].map(pt => `
+      <div style="display:flex;gap:20px;">
+        <div style="width:3px;flex-shrink:0;background:var(--gold);border-radius:2px;margin-top:4px;"></div>
+        <div>
+          <h3 style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin-bottom:8px;letter-spacing:-0.01em;">${pt.title}</h3>
+          <p style="font-size:15px;color:var(--ink-soft);line-height:1.65;">${pt.body}</p>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="intake" style="padding:80px 0;text-align:center;">
+  <div class="container">
+    <h2 class="display" style="font-size:clamp(28px,4vw,44px);color:var(--cream);margin-bottom:16px;">Ready to talk to an actual human?</h2>
+    <p style="color:rgba(250,246,238,0.75);font-size:17px;margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto;">Find a vetted, locally-resident independent agent in your city — free, no spam, one call.</p>
+    <a href="/" class="btn-cream" data-find-cta style="font-size:16px;padding:16px 36px;">Find an agent near you →</a>
+  </div>
+</section>
+
+${GLOBAL_SCRIPTS}
+${footer()}
+</body>
+</html>`
+}
+
+// ── ABOUT ──────────────────────────────────────────────────────────────────────
+function aboutPage(config) {
+  const siteUrl   = config.siteUrl || 'https://meetlifeagents.com'
+  const canonical = `${siteUrl}/about/`
+
+  return `${head({
+    title:       'About MeetLifeAgents — Independent Life Insurance Agent Directory',
+    description: 'MeetLifeAgents is an independent directory connecting life insurance buyers with vetted, locally-resident licensed agents. We don\'t sell policies. We connect.',
+    canonical,
+    extraHead:   `<meta name="robots" content="index,follow">`,
+  })}
+<body>
+${header()}
+
+<!-- ── HERO ── -->
+<section style="background:var(--ink);color:var(--cream);padding:72px 0 80px;border-bottom:3px solid var(--gold);">
+  <div class="container">
+    <p class="city-eyebrow" style="color:var(--gold-soft);padding-top:0;">Who we are</p>
+    <h1 class="display" style="font-size:clamp(36px,5vw,60px);line-height:1.05;letter-spacing:-0.025em;color:var(--cream);max-width:660px;margin-bottom:20px;">
+      We connect. We don't sell.
+    </h1>
+    <p style="font-size:18px;color:rgba(250,246,238,0.72);max-width:540px;line-height:1.6;">
+      MeetLifeAgents is an independent directory — not an agency, not a carrier, not a lead aggregator. We find you one vetted local agent and make the introduction. That's it.
+    </p>
+  </div>
+</section>
+
+<!-- ── WHAT WE ARE / AREN'T ── -->
+<section style="padding:80px 0;">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;max-width:900px;">
+      <div>
+        <p class="city-eyebrow">What we are</p>
+        <h2 class="display" style="font-size:clamp(24px,3vw,34px);margin-bottom:24px;line-height:1.15;">An independent<br>agent directory.</h2>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px;">
+          ${[
+            'A curated directory of licensed, vetted, locally-resident agents',
+            'A free resource for consumers — we never charge buyers',
+            'A private network with real vetting standards',
+            'A direct connection between you and one agent — not a lead pool',
+          ].map(item => `<li style="display:flex;gap:12px;font-size:15px;line-height:1.55;color:var(--ink);">
+            <span style="color:var(--gold);font-weight:700;flex-shrink:0;">✓</span>
+            <span>${item}</span>
+          </li>`).join('')}
+        </ul>
+      </div>
+      <div>
+        <p class="city-eyebrow">What we are not</p>
+        <h2 class="display" style="font-size:clamp(24px,3vw,34px);margin-bottom:24px;line-height:1.15;">Not an agency.<br>Not a carrier.</h2>
+        <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px;">
+          ${[
+            'We do not sell life insurance policies',
+            'We do not employ or contract the agents in our directory',
+            'We do not receive commissions from policy sales',
+            'We do not sell your information to multiple agents',
+          ].map(item => `<li style="display:flex;gap:12px;font-size:15px;line-height:1.55;color:var(--ink);">
+            <span style="color:var(--ink-soft);font-weight:700;flex-shrink:0;">✕</span>
+            <span>${item}</span>
+          </li>`).join('')}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW WE WORK ── -->
+<section style="background:var(--cream-warm);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:80px 0;">
+  <div class="container">
+    <p class="city-eyebrow">How it works</p>
+    <h2 class="display" style="font-size:clamp(26px,3.5vw,40px);margin-bottom:48px;line-height:1.1;">The model is simple.</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;max-width:900px;">
+      ${[
+        { num: '1', title: 'You search by location', body: 'Every agent in our directory is licensed in their state and lives in or near the city where they practice. You get a local professional, not a call center.' },
+        { num: '2', title: 'We vet before we list', body: 'Active license, clean disciplinary record, real local presence. We check every agent before they appear in the directory and monitor for changes.' },
+        { num: '3', title: 'You connect — directly', body: 'We pass your contact to one agent. That agent calls you. No auction, no reselling, no four agents calling at once.' },
+      ].map(step => `
+      <div>
+        <div style="font-family:'Fraunces',serif;font-size:56px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:16px;font-style:italic;">${step.num}</div>
+        <h3 style="font-family:'Fraunces',serif;font-size:19px;font-weight:600;margin-bottom:10px;letter-spacing:-0.01em;">${step.title}</h3>
+        <p style="font-size:14px;color:var(--ink-soft);line-height:1.65;">${step.body}</p>
+      </div>`).join('')}
+    </div>
+  </div>
+</section>
+
+<!-- ── VALUES ── -->
+<section style="padding:80px 0;">
+  <div class="container" style="max-width:760px;">
+    <p class="city-eyebrow">What we believe</p>
+    <h2 class="display" style="font-size:clamp(26px,3.5vw,40px);margin-bottom:40px;line-height:1.1;">Life insurance is a<br>relationship, not a transaction.</h2>
+    <div style="display:flex;flex-direction:column;gap:32px;">
+      ${[
+        { title: 'Local matters', body: 'An agent who lives in your city understands the local cost of living, the common employers, the state-specific rules. They\'re also reachable — you can walk into their office.' },
+        { title: 'One agent is enough', body: 'The lead-aggregator model sells your information to five agents who compete for your business with phone calls. That\'s not how trust is built. We send your contact to one vetted professional.' },
+        { title: 'Consumers deserve real information', body: 'Too much life insurance content is written to rank for keywords and sell affiliate clicks. We\'d rather explain the actual tradeoffs — policy types, underwriting, what independent really means.' },
+      ].map(v => `
+      <div style="display:flex;gap:20px;">
+        <div style="width:3px;flex-shrink:0;background:var(--gold);border-radius:2px;margin-top:4px;"></div>
+        <div>
+          <h3 style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin-bottom:8px;letter-spacing:-0.01em;">${v.title}</h3>
+          <p style="font-size:15px;color:var(--ink-soft);line-height:1.65;">${v.body}</p>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+</section>
+
+<!-- ── FOR AGENTS ── -->
+<section style="background:var(--ink);color:var(--cream);padding:72px 0;">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;max-width:900px;">
+      <div>
+        <p class="city-eyebrow" style="color:var(--gold-soft);padding-top:0;">For agents</p>
+        <h2 class="display" style="font-size:clamp(26px,3.5vw,40px);color:var(--cream);line-height:1.1;margin-bottom:20px;">We work for qualified agents too.</h2>
+        <p style="font-size:16px;color:rgba(250,246,238,0.72);line-height:1.6;margin-bottom:28px;">If you\'re a licensed independent agent with a real local presence, we\'d like to list you. We charge a monthly directory fee — no per-lead charges, no revenue share.</p>
+        <a href="/agents/apply/" style="display:inline-block;background:var(--gold);color:var(--ink);font-weight:700;font-size:15px;padding:14px 28px;border-radius:6px;text-decoration:none;">Apply to join the network →</a>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        ${[
+          { stat: '1', label: 'Lead per city — we don\'t auction your leads' },
+          { stat: '0%', label: 'Commission split — we don\'t take a cut of your sales' },
+          { stat: '50', label: 'States — we\'re building a national independent network' },
+        ].map(s => `
+        <div style="border-left:2px solid var(--gold);padding-left:20px;">
+          <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:4px;">${s.stat}</div>
+          <div style="font-size:14px;color:rgba(250,246,238,0.65);line-height:1.5;">${s.label}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="intake" style="padding:80px 0;text-align:center;">
+  <div class="container">
+    <h2 class="display" style="font-size:clamp(28px,4vw,44px);color:var(--cream);margin-bottom:16px;">Find your local agent.</h2>
+    <p style="color:rgba(250,246,238,0.75);font-size:17px;margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto;">Search by city. One vetted agent. Free connection.</p>
+    <a href="/" class="btn-cream" data-find-cta style="font-size:16px;padding:16px 36px;">Find an agent near you →</a>
+  </div>
+</section>
+
+${GLOBAL_SCRIPTS}
+${footer()}
+</body>
+</html>`
+}
+
+module.exports = { notFoundPage, privacyPage, termsPage, tcpaPage, contactPage, howItWorksPage, ourVettingPage, whyIndependentPage, faqPage, glossaryPage, whyNotEthosPage, aboutPage }
