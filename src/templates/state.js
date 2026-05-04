@@ -1,73 +1,47 @@
 'use strict'
 const { head, header, footer } = require('./layout')
 
-/**
- * Full state landing page.
- * @param {object} stateData  — { slug, name, abbr, doi_url, guaranty_amount, guaranty_org, guaranty_url }
- * @param {Array}  cities     — all markets for this state
- * @param {object} config     — site config
- */
 function statePage(stateData, cities, config) {
   const { slug, name, abbr, doi_url, guaranty_amount, guaranty_org, guaranty_url } = stateData
-  const siteUrl = config.siteUrl || 'https://meetlifeagents.com'
+  const siteUrl    = config.siteUrl || 'https://meetlifeagents.com'
+  const title      = `Life Insurance Agents in ${name} — Verified Local Agents | MeetLifeAgents`
+  const description= `Find verified, locally-resident life insurance agents across ${name}. Browse by city. Every agent license-checked through the ${name} DOI.`
+  const canonical  = `${siteUrl}/${slug}/`
+  const cityCount  = cities.length
+  const totalAgents= cities.reduce((s, m) => s + (m.agent_count || 0), 0)
 
-  const title       = `Life Insurance Agents in ${name} — Verified Local Agents | MeetLifeAgents`
-  const description = `Find verified, locally-resident life insurance agents in ${name}. Browse by city. Every agent is license-checked through the ${name} Department of Insurance.`
-  const canonical   = `${siteUrl}/${slug}/`
-
-  const totalAgents = cities.reduce((s, m) => s + (m.agent_count || 0), 0)
-  const cityCount   = cities.length
-
-  // Sort cities by population (numeric) descending, then alphabetically
   const sorted = [...cities].sort((a, b) => {
     const pa = parseInt((a.population || '').replace(/,/g, '')) || 0
     const pb = parseInt((b.population || '').replace(/,/g, '')) || 0
-    if (pb !== pa) return pb - pa
-    return a.city_name.localeCompare(b.city_name)
+    return pb - pa || a.city_name.localeCompare(b.city_name)
   })
 
   const cityCards = sorted.map(m => {
-    const agentLabel = m.agent_count === 1 ? '1 verified agent' : `${m.agent_count || 0} verified agents`
-    const pop = m.population ? `Pop. ${m.population}` : ''
-    const income = m.median_income ? `Median income ${m.median_income}` : ''
-    return `<a class="state-city-card" href="/${slug}/${m.city_slug}/">
-  <div class="scc-name">${m.city_name}</div>
-  ${pop ? `<div class="scc-meta">${pop}${income ? ` · ${income}` : ''}</div>` : ''}
-  <div class="scc-agents">${agentLabel} →</div>
+    const agents = m.agent_count || 0
+    return `<a class="sc-card" href="/${slug}/${m.city_slug}/">
+  <span class="sc-name">${m.city_name}</span>
+  ${m.population ? `<span class="sc-pop">Pop. ${m.population}</span>` : ''}
+  <span class="sc-agents">${agents || 'Agents coming soon'} ${agents ? (agents === 1 ? 'agent →' : 'agents →') : ''}</span>
 </a>`
   }).join('\n')
 
-  // Featured product links for this state
   const products = [
-    { label: 'Term Insurance',        slug: 'term-insurance',        desc: 'Affordable coverage for a set period — 10, 20, or 30 years.' },
-    { label: 'Whole Life',            slug: 'whole-life',            desc: 'Permanent coverage that builds guaranteed cash value.' },
-    { label: 'Final Expense',         slug: 'final-expense',         desc: 'Simplified-issue coverage designed for burial and end-of-life costs.' },
-    { label: 'Mortgage Protection',   slug: 'mortgage-protection',   desc: 'A policy sized to your mortgage that protects your family\'s home.' },
-    { label: 'Indexed Universal Life',slug: 'indexed-universal-life',desc: 'Flexible permanent coverage with index-linked growth potential.' },
+    ['term-insurance',         'Term Life',              'Affordable protection for a set period — 10, 20, or 30 years.'],
+    ['whole-life',             'Whole Life',             'Permanent coverage with guaranteed cash value that grows tax-deferred.'],
+    ['final-expense',          'Final Expense',          'Simplified-issue coverage for burial, medical, and end-of-life costs.'],
+    ['mortgage-protection',    'Mortgage Protection',    'Coverage sized to your loan balance to keep your family in their home.'],
+    ['indexed-universal-life', 'Indexed Universal Life', 'Flexible permanent coverage with index-linked upside and principal protection.'],
   ]
-  const productCards = products.map(p => `
-<a class="product-card" href="/${slug}/${p.slug}/">
-  <div class="product-label">${p.label}</div>
-  <div class="product-desc">${p.desc}</div>
-  <span class="product-link">${name} agents →</span>
-</a>`).join('')
 
   const jsonLd = JSON.stringify({
     '@context': 'https://schema.org',
     '@graph': [
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl + '/' },
-          { '@type': 'ListItem', position: 2, name: name, item: canonical }
-        ]
-      },
-      {
-        '@type': 'InsuranceAgency',
-        name: `MeetLifeAgents — ${name}`,
-        url: canonical,
-        areaServed: { '@type': 'State', name }
-      }
+      { '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+        { '@type': 'ListItem', position: 2, name: name, item: canonical }
+      ]},
+      { '@type': 'InsuranceAgency', name: `MeetLifeAgents — ${name}`, url: canonical,
+        areaServed: { '@type': 'State', name } }
     ]
   })
 
@@ -75,102 +49,117 @@ function statePage(stateData, cities, config) {
 <body>
 ${header()}
 
-<div class="container" style="padding-top:40px;">
-  <nav class="breadcrumb">
-    <a href="/">Home</a>
-    <span>›</span>
-    <span>${name}</span>
-  </nav>
-</div>
-
-<!-- STATE HERO -->
-<section class="state-hero">
+<!-- ── PAGE HERO ───────────────────────────────────── -->
+<section class="pg-hero pg-hero--state">
   <div class="container">
-    <div class="state-hero-inner">
-      <div class="state-hero-text">
-        <div class="state-eyebrow">Life insurance agents in</div>
-        <h1 class="display">${name}</h1>
-        <p class="state-hero-sub">Every agent in our ${name} network is a resident of the state they serve, independently licensed, and verified through the ${name} Department of Insurance. Browse by city to find an agent who actually knows your neighborhood.</p>
-        <div class="state-trust-row">
-          <div class="state-trust-item">
-            <span class="state-trust-num">${cityCount}</span>
-            <span class="state-trust-label">cities covered</span>
+    <nav class="breadcrumb" style="padding-top:20px;">
+      <a href="/">Home</a><span>›</span><span>${name}</span>
+    </nav>
+    <div class="pg-hero-grid">
+      <div class="pg-hero-left">
+        <p class="city-eyebrow">${name} · Life Insurance</p>
+        <h1 class="display pg-hero-title">Verified life insurance agents<br>across <em>${name}.</em></h1>
+        <p class="pg-hero-sub">Every agent in our ${name} network lives and works in the state they serve. License-checked through the ${name} DOI. Independent — not captive agents pushing one carrier.</p>
+        <div class="pg-hero-stats">
+          <div class="pg-stat">
+            <span class="pg-stat-num">${cityCount}</span>
+            <span class="pg-stat-label">Cities covered</span>
           </div>
-          <div class="state-trust-item">
-            <span class="state-trust-num">${totalAgents || '—'}</span>
-            <span class="state-trust-label">verified agents</span>
+          <div class="pg-stat">
+            <span class="pg-stat-num">${totalAgents || '—'}</span>
+            <span class="pg-stat-label">Verified agents</span>
           </div>
-          <div class="state-trust-item">
-            <span class="state-trust-num">${guaranty_amount}</span>
-            <span class="state-trust-label">guaranty protection</span>
+          <div class="pg-stat">
+            <span class="pg-stat-num">${guaranty_amount}</span>
+            <span class="pg-stat-label">Guaranty protection</span>
           </div>
         </div>
       </div>
-      <div class="state-hero-aside">
-        <div class="state-guaranty-card">
-          <div class="sgc-label">State consumer protection</div>
-          <div class="sgc-amount">${guaranty_amount}</div>
-          <div class="sgc-desc">The <strong>${guaranty_org}</strong> protects ${name} policyholders up to ${guaranty_amount} in death benefits per insured if a carrier becomes insolvent.</div>
-          <a href="${guaranty_url}" class="sgc-link" target="_blank" rel="noopener">Learn more ↗</a>
-          <div class="sgc-divider"></div>
-          <div class="sgc-doi">
-            <span>Verify any agent's license:</span>
-            <a href="${doi_url}" target="_blank" rel="noopener">${name} DOI ↗</a>
-          </div>
+      <div class="pg-hero-right">
+        <div class="state-doi-card">
+          <p class="sdoi-label">Consumer protection · ${abbr}</p>
+          <div class="sdoi-amount">${guaranty_amount}</div>
+          <p class="sdoi-desc">The <strong>${guaranty_org}</strong> protects ${name} policyholders up to ${guaranty_amount} per insured if a carrier becomes insolvent.</p>
+          <a class="sdoi-link" href="${guaranty_url}" target="_blank" rel="noopener">Learn about ${guaranty_org} ↗</a>
+          <div class="sdoi-divider"></div>
+          <p class="sdoi-verify-label">Verify any agent's ${abbr} license</p>
+          <a class="sdoi-verify-btn" href="${doi_url}" target="_blank" rel="noopener">${name} DOI license lookup ↗</a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CITIES GRID -->
-<section class="state-cities-section">
+<!-- ── TRUST STRIP ─────────────────────────────────── -->
+<div class="trust-strip">
+  <div class="trust-strip-inner">
+    <span class="trust-strip-item">License verified through ${name} DOI</span>
+    <span class="trust-strip-item">State residents only — not virtual agents</span>
+    <span class="trust-strip-item">10+ independent carrier appointments</span>
+    <span class="trust-strip-item">Clean disciplinary record required</span>
+  </div>
+</div>
+
+<!-- ── CITY GRID ────────────────────────────────────── -->
+<section class="state-cities-sec">
   <div class="container">
-    <div class="section-header">
-      <h2 class="display" style="font-size:clamp(28px,3vw,40px);">Browse by city</h2>
-      <p style="color:var(--ink-soft);font-size:15px;margin-top:8px;">Select a city to see verified agents who live and work there.</p>
+    <div class="sec-head">
+      <h2 class="display" style="font-size:clamp(26px,3vw,36px);">Browse by city</h2>
+      <span class="sec-meta">${cityCount} cit${cityCount === 1 ? 'y' : 'ies'} in ${name}</span>
     </div>
-    <div class="state-cities-grid">
+    <div class="sc-grid">
       ${cityCards}
     </div>
   </div>
 </section>
 
-<!-- PRODUCTS FOR THIS STATE -->
-<section class="state-products-section">
+<!-- ── PRODUCTS STRIP (dark) ───────────────────────── -->
+<section class="state-products-strip">
   <div class="container">
-    <h2 class="display" style="font-size:clamp(26px,3vw,36px);margin-bottom:8px;">Coverage options in ${name}</h2>
-    <p style="color:var(--ink-soft);font-size:15px;margin-bottom:32px;">Explore state-specific guidance for each major life insurance type.</p>
-    <div class="state-products-grid">
-      ${productCards}
+    <p class="city-eyebrow" style="color:var(--gold-soft);margin-bottom:16px;">Coverage options in ${name}</p>
+    <h2 class="display" style="font-size:clamp(26px,3vw,36px);color:var(--cream);margin-bottom:8px;">State-specific guidance by coverage type</h2>
+    <p style="color:rgba(250,246,238,0.75);font-size:15px;margin-bottom:36px;max-width:580px;">Local agents in ${name} who specialize in each product type — not generalists, not captive agents.</p>
+    <div class="sp-grid">
+      ${products.map(([ps, label, desc]) => `<a class="sp-card" href="/${slug}/${ps}/">
+  <span class="sp-label">${label}</span>
+  <span class="sp-desc">${desc}</span>
+  <span class="sp-cta">${name} agents →</span>
+</a>`).join('\n')}
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS STRIP -->
-<section class="state-hiw-strip">
+<!-- ── HOW IT WORKS ─────────────────────────────────── -->
+<section class="state-hiw">
   <div class="container">
-    <h2 class="display" style="font-size:clamp(24px,2.5vw,34px);text-align:center;margin-bottom:40px;">How MeetLifeAgents works</h2>
-    <div class="hiw-steps">
-      <div class="hiw-step">
-        <div class="hiw-num">1</div>
-        <div class="hiw-body">
-          <strong>Choose your city</strong>
-          <p>Select a city in ${name} to see locally-resident agents who are actively licensed in your area.</p>
-        </div>
+    <div class="state-hiw-grid">
+      <div class="state-hiw-left">
+        <p class="city-eyebrow">How it works</p>
+        <h2 class="display" style="font-size:clamp(28px,3.5vw,42px);margin-bottom:20px;">Meet a real agent.<br>No spam. No runaround.</h2>
+        <p style="font-size:16px;color:var(--ink-soft);line-height:1.65;margin-bottom:24px;">Most insurance sites sell your contact info to dozens of agents who call for weeks. MeetLifeAgents works differently — you pick a local ${name} agent, you contact them directly.</p>
+        <a href="/how-it-works/" style="color:var(--gold);font-size:14px;font-weight:600;text-decoration:none;">Read the full explanation →</a>
       </div>
-      <div class="hiw-step">
-        <div class="hiw-num">2</div>
-        <div class="hiw-body">
-          <strong>Review verified agents</strong>
-          <p>Every agent passed our four-point vetting: active ${abbr} license, resident of ${name}, 10+ carrier appointments, clean DOI record.</p>
+      <div class="state-hiw-steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <h4>Choose a city in ${name}</h4>
+            <p>Select any city above to see locally-resident, actively-licensed agents in that market.</p>
+          </div>
         </div>
-      </div>
-      <div class="hiw-step">
-        <div class="hiw-num">3</div>
-        <div class="hiw-body">
-          <strong>Connect directly</strong>
-          <p>Call or request a callback. No spam, no third-party forwarding. You connect with the agent directly.</p>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <h4>Review the verified agents</h4>
+            <p>Every agent passed our four-point check: active ${abbr} license, ${name} resident, 10+ carriers, clean DOI record.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <h4>Call or request a callback</h4>
+            <p>Your info goes to one agent — not a waterfall of buyers. Direct contact, no middlemen.</p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,63 +1,49 @@
 'use strict'
 const { head, header, footer } = require('./layout')
 
-/**
- * Agent profile page.
- * @param {object} agent    — agent record from data/agents.json
- * @param {object} market   — city market record from data/markets.json
- * @param {string} doiUrl   — state DOI URL
- * @param {object} config   — site config
- */
 function agentProfilePage(agent, market, doiUrl, config) {
-  const siteUrl = config.siteUrl || 'https://meetlifeagents.com'
-  const fullName = `${agent.first_name} ${agent.last_name}`
-  const initials  = (agent.first_name[0] + agent.last_name[0]).toUpperCase()
-  const stateSlug = market.state_slug
-  const citySlug  = market.city_slug
-  const canonical = `${siteUrl}/${stateSlug}/${citySlug}/${agent.slug}/`
+  const siteUrl        = config.siteUrl || 'https://meetlifeagents.com'
+  const platformNumber = config.platformNumber || ''
+  const platformDisplay= config.platformDisplay || platformNumber
+  const apiUrl         = config.apiUrl || ''
+  const stateSlug      = market.state_slug
+  const citySlug       = market.city_slug
+  const fullName       = `${agent.first_name} ${agent.last_name}`
+  const initials       = (agent.first_name[0] + agent.last_name[0]).toUpperCase()
+  const canonical      = `${siteUrl}/${stateSlug}/${citySlug}/${agent.slug}/`
+  const doiVerify      = `${doiUrl}?npn=${agent.npn}`
 
-  const tierLabel = agent.tier === 'elite'   ? 'Vetted · Top Tier' :
-                    agent.tier === 'premier'  ? 'Premier Agent' :
-                    'Verified Agent'
-  const tierClass = agent.tier === 'elite'   ? 'tier-elite' :
-                    agent.tier === 'premier'  ? 'tier-premier' :
-                    'tier-verified'
+  const tierBadge = agent.tier === 'elite'   ? '<span class="ap-tier ap-tier--elite">VETTED · TOP TIER</span>'
+                  : agent.tier === 'premier'  ? '<span class="ap-tier ap-tier--premier">Premier Agent</span>'
+                  :                             '<span class="ap-tier ap-tier--verified">Verified Agent</span>'
+
+  const tags = (agent.specialties || []).map(t => `<span class="tag">${t}</span>`).join('')
 
   const title       = `${fullName} — Life Insurance Agent in ${market.city_name}, ${market.state_abbr} | MeetLifeAgents`
   const description = `${fullName} is a verified, locally-resident life insurance agent in ${market.city_name}, ${market.state_name}. ${agent.years_licensed} years licensed · ${agent.carrier_count} carrier appointments.`
 
-  const tags = (agent.specialties || []).map(t => `<span class="tag">${t}</span>`).join('')
-  const doiVerifyUrl = `${doiUrl}?npn=${agent.npn}`
-
-  const platformNumber = config.platformNumber || ''
-  const platformDisplay = config.platformDisplay || platformNumber
-  const apiUrl = config.apiUrl || ''
+  const vettingItems = [
+    `Active ${market.state_abbr} life insurance license`,
+    `Resident of ${market.state_name}`,
+    `${agent.carrier_count}+ independent carrier appointments`,
+    'Clean DOI complaint record',
+    ...(agent.tier !== 'verified' ? [`${agent.years_licensed}+ years licensed`] : []),
+    ...(agent.tier === 'elite' ? ['Advanced industry designation (CLU/ChFC/CFP)'] : []),
+  ]
 
   const jsonLd = JSON.stringify({
     '@context': 'https://schema.org',
     '@graph': [
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home',                  item: `${siteUrl}/` },
-          { '@type': 'ListItem', position: 2, name: market.state_name,       item: `${siteUrl}/${stateSlug}/` },
-          { '@type': 'ListItem', position: 3, name: market.city_name,        item: `${siteUrl}/${stateSlug}/${citySlug}/` },
-          { '@type': 'ListItem', position: 4, name: fullName,                item: canonical }
-        ]
-      },
-      {
-        '@type': 'Person',
-        name: fullName,
+      { '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home',            item: `${siteUrl}/` },
+        { '@type': 'ListItem', position: 2, name: market.state_name, item: `${siteUrl}/${stateSlug}/` },
+        { '@type': 'ListItem', position: 3, name: market.city_name,  item: `${siteUrl}/${stateSlug}/${citySlug}/` },
+        { '@type': 'ListItem', position: 4, name: fullName,          item: canonical }
+      ]},
+      { '@type': 'Person', name: fullName,
         jobTitle: 'Independent Life Insurance Agent',
         worksFor: { '@type': 'Organization', name: 'MeetLifeAgents Network' },
-        areaServed: { '@type': 'City', name: market.city_name },
-        hasCredential: agent.npn ? {
-          '@type': 'EducationalOccupationalCredential',
-          credentialCategory: 'Insurance License',
-          name: `${market.state_abbr} Life & Health License`,
-          recognizedBy: { '@type': 'GovernmentOrganization', name: `${market.state_name} Department of Insurance` }
-        } : undefined
-      }
+        areaServed: { '@type': 'City', name: market.city_name } }
     ]
   })
 
@@ -65,176 +51,173 @@ function agentProfilePage(agent, market, doiUrl, config) {
 <body data-agent="${agent.slug}" data-city="${citySlug}" data-state="${stateSlug}">
 ${header()}
 
-<div class="container" style="padding-top:40px;">
-  <nav class="breadcrumb">
-    <a href="/">Home</a>
-    <span>›</span>
-    <a href="/${stateSlug}/">${market.state_name}</a>
-    <span>›</span>
-    <a href="/${stateSlug}/${citySlug}/">${market.city_name}</a>
-    <span>›</span>
-    <span>${fullName}</span>
-  </nav>
-</div>
-
-<!-- AGENT HERO -->
-<section class="agent-hero">
+<!-- ── AGENT HERO ─────────────────────────────────── -->
+<section class="ap-hero">
   <div class="container">
-    <div class="agent-hero-inner">
-      <!-- Photo + identity -->
-      <div class="agent-profile-photo-wrap">
+    <nav class="breadcrumb" style="padding-top:20px;">
+      <a href="/">Home</a><span>›</span>
+      <a href="/${stateSlug}/">${market.state_name}</a><span>›</span>
+      <a href="/${stateSlug}/${citySlug}/">${market.city_name}</a><span>›</span>
+      <span>${fullName}</span>
+    </nav>
+
+    <div class="ap-hero-grid">
+      <div class="ap-photo-col">
         ${agent.photo_url
-          ? `<img src="${agent.photo_url}" alt="${fullName}" class="agent-profile-photo" width="160" height="160" loading="eager">`
-          : `<div class="agent-profile-initials">${initials}</div>`
-        }
-        <div class="agent-tier-badge ${tierClass}">${tierLabel}</div>
+          ? `<img src="${agent.photo_url}" alt="${fullName}" class="ap-photo" width="180" height="180" loading="eager">`
+          : `<div class="ap-initials">${initials}</div>`}
+        ${tierBadge}
       </div>
+      <div class="ap-hero-info">
+        <p class="city-eyebrow">${market.city_name}, ${market.state_abbr}</p>
+        <h1 class="display" style="font-size:clamp(32px,4.5vw,52px);line-height:1.05;margin-bottom:12px;">${fullName}</h1>
+        <p class="ap-location">📍 Based in ${agent.office_city}, ${agent.office_state} · Serving the ${market.city_name} area</p>
 
-      <!-- Core info -->
-      <div class="agent-hero-info">
-        <h1 class="display" style="font-size:clamp(28px,3.5vw,44px);margin-bottom:8px;">${fullName}</h1>
-        <div class="agent-hero-location">📍 ${agent.office_city}, ${agent.office_state} · Serving ${market.city_name} area</div>
-
-        <div class="agent-hero-stats">
-          <div class="ahs-item">
-            <span class="ahs-val">${agent.years_licensed}</span>
-            <span class="ahs-label">years licensed</span>
+        <div class="ap-stats-row">
+          <div class="city-stat">
+            <span class="city-stat-num">${agent.years_licensed}</span>
+            <span class="city-stat-label">Years licensed</span>
           </div>
-          <div class="ahs-item">
-            <span class="ahs-val">${agent.carrier_count}</span>
-            <span class="ahs-label">carrier appointments</span>
+          <div class="city-stat">
+            <span class="city-stat-num">${agent.carrier_count}</span>
+            <span class="city-stat-label">Carrier appts</span>
           </div>
-          <div class="ahs-item">
-            <span class="ahs-val">${agent.response_time || '24 hrs'}</span>
-            <span class="ahs-label">avg. response</span>
-          </div>
-        </div>
-
-        ${tags ? `<div class="agent-tags" style="margin-top:16px;">${tags}</div>` : ''}
-
-        <!-- Call action -->
-        <div class="agent-profile-cta">
-          <button class="call-btn call-btn-lg" data-ext="${agent.extension}" data-agent="${fullName}" onclick="revealCall(this)">
-            Call ${agent.first_name}
-          </button>
-          <a href="/${stateSlug}/${citySlug}/" class="agent-back-link">← All ${market.city_name} agents</a>
-        </div>
-
-        <div id="call-reveal-${agent.extension}" class="call-reveal" style="display:none;">
-          <div class="call-reveal-inner">
-            <div class="call-reveal-number">${platformDisplay}</div>
-            <div class="call-reveal-ext">Extension: <strong>${agent.extension}</strong></div>
-            <a class="call-reveal-dial" href="tel:${platformNumber.replace(/\D/g,'')},,${agent.extension}">
-              Tap to dial with extension →
-            </a>
+          <div class="city-stat">
+            <span class="city-stat-num">${agent.response_time || '24 hrs'}</span>
+            <span class="city-stat-label">Avg. response</span>
           </div>
         </div>
+
+        ${tags ? `<div class="agent-tags" style="margin-top:20px;">${tags}</div>` : ''}
       </div>
     </div>
   </div>
 </section>
 
-<!-- MAIN CONTENT -->
-<div class="agent-profile-body">
+<!-- ── CALL CTA STRIP (dark) ─────────────────────── -->
+<div class="intake" style="padding:28px 0;">
   <div class="container">
-    <div class="agent-profile-grid">
+    <div class="ap-cta-strip">
+      <div>
+        <p style="font-size:18px;font-family:'Fraunces',serif;font-weight:500;color:white;margin-bottom:4px;">Ready to connect with ${agent.first_name}?</p>
+        <p style="font-size:14px;color:rgba(250,246,238,0.75);">Direct call — no middlemen, no sales pressure.</p>
+      </div>
+      <div class="ap-cta-actions">
+        <button class="intake-call-btn" data-ext="${agent.extension}" data-agent="${fullName}" onclick="revealCall(this)">
+          📞 Call ${agent.first_name}
+        </button>
+        <a href="/${stateSlug}/${citySlug}/#intake" class="intake-form-link">Request a callback →</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="call-reveal-${agent.extension}" class="call-reveal" style="display:none;background:var(--green);padding:20px 0;">
+  <div class="container" style="text-align:center;">
+    <p style="color:white;font-size:13px;margin-bottom:8px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;">Call routing number + extension</p>
+    <p style="color:white;font-family:'Fraunces',serif;font-size:32px;font-weight:500;margin-bottom:4px;">${platformDisplay}</p>
+    <p style="color:rgba(255,255,255,0.85);font-size:15px;margin-bottom:16px;">Extension: <strong>${agent.extension}</strong></p>
+    <a class="intake-call-btn" style="display:inline-flex;" href="tel:${platformNumber.replace(/\D/g,'')},,${agent.extension}">Tap to dial with extension →</a>
+  </div>
+</div>
 
-      <!-- Left: Bio + details -->
-      <div class="agent-profile-main">
+<!-- ── MAIN BODY ──────────────────────────────────── -->
+<div class="container ap-body">
+  <div class="ap-main-grid">
 
-        ${agent.bio ? `
-        <section class="agent-profile-section">
-          <h2 class="agent-section-title">About ${agent.first_name}</h2>
-          <p class="agent-bio-full">${agent.bio}</p>
-        </section>` : ''}
+    <!-- LEFT: bio + details -->
+    <div class="ap-main">
 
-        ${agent.specialties && agent.specialties.length ? `
-        <section class="agent-profile-section">
-          <h2 class="agent-section-title">Specialties</h2>
-          <div class="agent-specialties-list">
-            ${agent.specialties.map(s => `
-            <div class="agent-specialty-item">
-              <span class="specialty-check">✓</span>
-              <span>${s}</span>
-            </div>`).join('')}
+      ${agent.bio ? `
+      <div class="ap-section">
+        <div class="sec-head">
+          <h2 class="display" style="font-size:24px;">About ${agent.first_name}</h2>
+        </div>
+        <p style="font-size:16px;line-height:1.7;color:var(--ink-soft);">${agent.bio}</p>
+      </div>` : ''}
+
+      ${agent.specialties && agent.specialties.length ? `
+      <div class="ap-section">
+        <div class="sec-head">
+          <h2 class="display" style="font-size:24px;">Specialties</h2>
+        </div>
+        <div class="ap-spec-grid">
+          ${agent.specialties.map(s => `<div class="ap-spec-item"><span class="ap-spec-check">✓</span>${s}</div>`).join('')}
+        </div>
+      </div>` : ''}
+
+      <div class="ap-section">
+        <div class="sec-head">
+          <h2 class="display" style="font-size:24px;">License verification</h2>
+        </div>
+        <div class="local-stats" style="grid-template-columns:repeat(2,1fr);">
+          <div class="local-stat">
+            <div class="local-stat-label">NPN</div>
+            <div class="local-stat-value" style="font-size:22px;">${agent.npn}</div>
+            <div class="local-stat-source">National Producer Number</div>
           </div>
-        </section>` : ''}
-
-        <section class="agent-profile-section">
-          <h2 class="agent-section-title">License verification</h2>
-          <div class="license-block">
-            <div class="license-row">
-              <span class="license-label">NPN (National Producer Number)</span>
-              <span class="license-val">${agent.npn}</span>
-            </div>
-            <div class="license-row">
-              <span class="license-label">Licensed state</span>
-              <span class="license-val">${market.state_name} (${market.state_abbr})</span>
-            </div>
-            <div class="license-row">
-              <span class="license-label">Years licensed</span>
-              <span class="license-val">${agent.years_licensed}</span>
-            </div>
-            <div class="license-row">
-              <span class="license-label">Carrier appointments</span>
-              <span class="license-val">${agent.carrier_count}</span>
-            </div>
+          <div class="local-stat">
+            <div class="local-stat-label">Licensed state</div>
+            <div class="local-stat-value" style="font-size:22px;">${market.state_abbr}</div>
+            <div class="local-stat-source">${market.state_name}</div>
           </div>
-          <a href="${doiVerifyUrl}" class="doi-verify-link" target="_blank" rel="noopener noreferrer">
+          <div class="local-stat">
+            <div class="local-stat-label">Years licensed</div>
+            <div class="local-stat-value" style="font-size:22px;">${agent.years_licensed}</div>
+            <div class="local-stat-source">Active producer</div>
+          </div>
+          <div class="local-stat">
+            <div class="local-stat-label">Carrier appointments</div>
+            <div class="local-stat-value" style="font-size:22px;">${agent.carrier_count}</div>
+            <div class="local-stat-source">Independent carrier access</div>
+          </div>
+        </div>
+        <div style="margin-top:20px;">
+          <a href="${doiVerify}" class="agent-verify-link" target="_blank" rel="noopener noreferrer" style="font-size:14px;">
             Verify NPN ${agent.npn} on the ${market.state_name} DOI ↗
           </a>
-        </section>
-
-        <section class="agent-profile-section">
-          <h2 class="agent-section-title">Service area</h2>
-          <p style="color:var(--ink-soft);">
-            ${agent.first_name} is based in ${agent.office_city}, ${agent.office_state} and serves the
-            ${market.city_name} area. As an independent agent, ${agent.first_name} can work with
-            clients throughout ${market.state_name}.
-          </p>
-        </section>
-
+        </div>
       </div>
 
-      <!-- Right: Sidebar -->
-      <aside class="agent-profile-sidebar">
-
-        <!-- Vetting card -->
-        <div class="sidebar-card">
-          <div class="sidebar-card-title">How we vetted ${agent.first_name}</div>
-          <ul class="vetting-checklist">
-            <li class="vc-pass">Active ${market.state_abbr} life insurance license</li>
-            <li class="vc-pass">Resident of ${market.state_name}</li>
-            <li class="vc-pass">${agent.carrier_count}+ independent carrier appointments</li>
-            <li class="vc-pass">Clean DOI complaint record</li>
-            ${agent.tier !== 'verified' ? `<li class="vc-pass">${agent.years_licensed}+ years licensed</li>` : ''}
-            ${agent.tier === 'elite' ? `<li class="vc-pass">Advanced industry designation</li>` : ''}
-          </ul>
+      <div class="ap-section">
+        <div class="sec-head">
+          <h2 class="display" style="font-size:24px;">Service area</h2>
         </div>
-
-        <!-- Connect card -->
-        <div class="sidebar-card sidebar-card-cta">
-          <div class="sidebar-card-title">Ready to connect?</div>
-          <p style="font-size:14px;color:var(--ink-soft);margin-bottom:16px;">
-            Call ${agent.first_name} directly — no middlemen, no sales pressure.
-          </p>
-          <button class="call-btn" style="width:100%;" data-ext="${agent.extension}" data-agent="${fullName}" onclick="revealCall(this)">
-            Call ${agent.first_name}
-          </button>
-          <div style="font-size:12px;color:var(--ink-soft);margin-top:12px;text-align:center;">
-            Or <a href="/${stateSlug}/${citySlug}/#intake" style="color:var(--gold);">request a callback</a> from ${market.city_name} agents
-          </div>
-        </div>
-
-        <!-- Back to city -->
-        <div class="sidebar-card" style="text-align:center;">
-          <a href="/${stateSlug}/${citySlug}/" style="color:var(--gold);font-size:14px;font-weight:600;">
-            ← View all ${market.city_name} agents
+        <p style="font-size:15px;color:var(--ink-soft);line-height:1.65;">
+          ${agent.first_name} is based in ${agent.office_city}, ${agent.office_state} and serves the ${market.city_name} metropolitan area. As a fully independent agent, ${agent.first_name} works with clients across ${market.state_name} — wherever the coverage need is.
+        </p>
+        <div style="margin-top:20px;">
+          <a href="/${stateSlug}/${citySlug}/" style="color:var(--gold);font-size:14px;font-weight:600;text-decoration:none;">
+            ← View all ${market.city_name} verified agents
           </a>
         </div>
+      </div>
 
-      </aside>
     </div>
+
+    <!-- RIGHT: sidebar -->
+    <aside class="sidebar">
+      <div class="side-card dark">
+        <h4>How we vetted ${agent.first_name}</h4>
+        <ul class="side-list">
+          ${vettingItems.map(v => `<li>${v}</li>`).join('')}
+        </ul>
+      </div>
+      <div class="side-card">
+        <h4>Connect with ${agent.first_name}</h4>
+        <p style="margin-bottom:16px;">Call directly — no middlemen, no sales pressure.</p>
+        <button class="call-btn" style="width:100%;margin-bottom:12px;" data-ext="${agent.extension}" data-agent="${fullName}" onclick="revealCall(this)">
+          Call ${agent.first_name}
+        </button>
+        <a href="/${stateSlug}/${citySlug}/#intake" style="display:block;text-align:center;color:var(--ink-soft);font-size:13px;text-decoration:none;padding:10px;border:1px solid var(--rule);border-radius:6px;">
+          Request a callback
+        </a>
+      </div>
+      <div class="promise-card">
+        <h4>Our promise</h4>
+        <p>Your contact info goes to ${agent.first_name} — not to a pool of 50 buyers. One agent, direct connection.</p>
+      </div>
+    </aside>
+
   </div>
 </div>
 
@@ -246,7 +229,6 @@ window.MLA_CONFIG = {
 };
 </script>
 <script src="/js/city.js"></script>
-
 ${footer({ stateSlug, stateName: market.state_name })}
 </body>
 </html>`
