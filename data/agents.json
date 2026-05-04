@@ -1,4 +1,57 @@
 {
+  "clearwater_fl": [
+    {
+      "id": "rachel-torres-fl",
+      "slug": "rachel-torres",
+      "first_name": "Rachel",
+      "last_name": "Torres",
+      "npn": "19872341",
+      "years_licensed": 14,
+      "carrier_count": 18,
+      "specialties": ["Term Life", "Mortgage Protection", "Family Coverage", "Impaired Risk"],
+      "tier": "elite",
+      "bio": "Independent broker serving Tampa Bay families for 14 years. Rachel specializes in term life and mortgage protection, shopping 18+ carriers to find the right rate for every health profile — including tobacco users and those with prior health history.",
+      "office_city": "Clearwater",
+      "office_state": "FL",
+      "extension": "2011",
+      "response_time": "Under 1 hr",
+      "photo_url": null
+    },
+    {
+      "id": "lisa-mcallister-fl",
+      "slug": "lisa-mcallister",
+      "first_name": "Lisa",
+      "last_name": "McAllister",
+      "npn": "20318754",
+      "years_licensed": 10,
+      "carrier_count": 12,
+      "specialties": ["IUL", "Whole Life", "Estate Planning", "Business Owners"],
+      "tier": "premier",
+      "bio": "Lisa helps business owners and professionals in the Tampa Bay area use indexed universal life to build tax-advantaged retirement income. She works closely with CPAs and estate attorneys to structure policies that complement broader financial plans.",
+      "office_city": "St. Petersburg",
+      "office_state": "FL",
+      "extension": "2033",
+      "response_time": "2 hrs",
+      "photo_url": null
+    },
+    {
+      "id": "david-okafor-fl",
+      "slug": "david-okafor",
+      "first_name": "David",
+      "last_name": "Okafor",
+      "npn": "21043887",
+      "years_licensed": 6,
+      "carrier_count": 9,
+      "specialties": ["Final Expense", "Whole Life", "Seniors", "Burial Coverage"],
+      "tier": "verified",
+      "bio": "David focuses exclusively on final expense and whole life coverage for seniors across Pinellas County. Straightforward planning, no pressure — just honest guidance to help families protect what matters most.",
+      "office_city": "Clearwater",
+      "office_state": "FL",
+      "extension": "2047",
+      "response_time": "Same day",
+      "photo_url": null
+    }
+  ],
   "prattville_al": [
     {
       "id": "amber-smith-al",

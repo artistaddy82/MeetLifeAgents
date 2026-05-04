@@ -55,6 +55,7 @@ const { homepage }        = require('./src/templates/homepage')
 const { cityPage }        = require('./src/templates/city')
 const { statePage }       = require('./src/templates/state')
 const { agentProfilePage }= require('./src/templates/agent')
+const { policyPage, POLICIES } = require('./src/templates/policy')
 const {
   notFoundPage,
   privacyPage,
@@ -189,6 +190,27 @@ async function build() {
     console.log()
   }
 
+  // ── POLICY PAGES ──────────────────────────────────────────────────────────
+  const policySlugList = Object.keys(POLICIES)
+  if (statesToBuild.size) {
+    const byState2 = {}
+    for (const m of markets.cities) {
+      if (!byState2[m.state_slug]) byState2[m.state_slug] = []
+      byState2[m.state_slug].push(m)
+    }
+    const policyTotal = statesToBuild.size * policySlugList.length
+    console.log(`Policy pages (${policyTotal}):`)
+    for (const slug of statesToBuild) {
+      const stateData = stateMap[slug]
+      if (!stateData) continue
+      const citiesForState = byState2[slug] || []
+      for (const ps of policySlugList) {
+        write(`dist/${slug}/${ps}/index.html`, policyPage(stateData, citiesForState, ps, config))
+      }
+    }
+    console.log()
+  }
+
   // ── SITEMAP + ROBOTS ───────────────────────────────────────────────────────
   if (FULL_BUILD) {
     console.log('Sitemap & robots:')
@@ -205,6 +227,14 @@ async function build() {
     const stateUrls  = markets.states.map(s => `${SITE_URL}/${s.slug}/`)
     const cityUrls   = markets.cities.map(m => `${SITE_URL}/${m.state_slug}/${m.city_slug}/`)
 
+    // Policy page URLs
+    const policyUrls = []
+    for (const s of markets.states) {
+      for (const ps of policySlugList) {
+        policyUrls.push(`${SITE_URL}/${s.slug}/${ps}/`)
+      }
+    }
+
     // Agent profile URLs
     const agentUrls = []
     for (const market of markets.cities) {
@@ -214,7 +244,7 @@ async function build() {
       }
     }
 
-    const allUrls = [...staticUrls, ...stateUrls, ...cityUrls, ...agentUrls]
+    const allUrls = [...staticUrls, ...stateUrls, ...policyUrls, ...cityUrls, ...agentUrls]
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allUrls.map(u => `  <url><loc>${u}</loc><changefreq>weekly</changefreq></url>`).join('\n')}

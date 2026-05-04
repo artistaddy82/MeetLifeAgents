@@ -96,9 +96,10 @@ ${header()}
       <div class="ap-contact-card">
         <div class="ap-cc-eyebrow">Connect with</div>
         <div class="ap-cc-name">${fullName}</div>
-        <button class="ap-cc-btn" data-ext="${agent.extension}" data-agent="${fullName}" onclick="revealCall(this)">
+        <a class="ap-cc-btn" href="tel:${(platformNumber || '+18005550199').replace(/\D/g,'')},,${agent.extension}">
           📞 Call ${agent.first_name}
-        </button>
+        </a>
+        <p class="ap-cc-tel-hint">Dials ${platformDisplay || platformNumber || '(800) 555-0199'} · Ext. ${agent.extension}</p>
         <a href="/${stateSlug}/${citySlug}/#intake" class="ap-cc-link">Request a callback →</a>
         <div class="ap-cc-divider"></div>
         <div class="ap-cc-row">
@@ -122,14 +123,6 @@ ${header()}
   </div>
 </section>
 
-<div id="call-reveal-${agent.extension}" class="call-reveal" style="display:none;background:var(--green);padding:20px 0;">
-  <div class="container" style="text-align:center;">
-    <p style="color:white;font-size:13px;margin-bottom:8px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;">Call routing number + extension</p>
-    <p style="color:white;font-family:'Fraunces',serif;font-size:32px;font-weight:500;margin-bottom:4px;">${platformDisplay}</p>
-    <p style="color:rgba(255,255,255,0.85);font-size:15px;margin-bottom:16px;">Extension: <strong>${agent.extension}</strong></p>
-    <a class="intake-call-btn" style="display:inline-flex;" href="tel:${platformNumber.replace(/\D/g,'')},,${agent.extension}">Tap to dial with extension →</a>
-  </div>
-</div>
 
 <!-- ── MAIN BODY ──────────────────────────────────── -->
 <div class="container ap-body">
@@ -216,9 +209,9 @@ ${header()}
       <div class="side-card">
         <h4>Connect with ${agent.first_name}</h4>
         <p style="margin-bottom:16px;">Call directly — no middlemen, no sales pressure.</p>
-        <button class="call-btn" style="width:100%;margin-bottom:12px;" data-ext="${agent.extension}" data-agent="${fullName}" onclick="revealCall(this)">
+        <a class="call-btn" style="width:100%;margin-bottom:12px;display:flex;justify-content:center;" href="tel:${(platformNumber || '+18005550199').replace(/\D/g,'')},,${agent.extension}">
           Call ${agent.first_name}
-        </button>
+        </a>
         <a href="/${stateSlug}/${citySlug}/#intake" style="display:block;text-align:center;color:var(--ink-soft);font-size:13px;text-decoration:none;padding:10px;border:1px solid var(--rule);border-radius:6px;">
           Request a callback
         </a>
