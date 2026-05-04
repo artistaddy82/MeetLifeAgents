@@ -52,7 +52,7 @@ function handler(req, res) {
     const ext         = path.extname(filePath).toLowerCase()
     const contentType = MIME[ext] || 'application/octet-stream'
     const is404       = filePath.endsWith('404.html') && !resolved.endsWith('404.html')
-    const cache       = ext === '.html' ? 'no-cache, no-store' : 'public, max-age=31536000, immutable'
+    const cache       = ext === '.html' ? 'no-cache, no-store' : 'public, max-age=86400'
 
     res.writeHead(is404 ? 404 : 200, {
       'Content-Type' : contentType,
