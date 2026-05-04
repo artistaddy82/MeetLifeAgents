@@ -1459,4 +1459,316 @@ ${footer()}
 </html>`
 }
 
-module.exports = { notFoundPage, privacyPage, termsPage, tcpaPage, contactPage, howItWorksPage, ourVettingPage, whyIndependentPage, faqPage, glossaryPage, whyNotEthosPage, aboutPage }
+// ── AGENT APPLY ───────────────────────────────────────────────────────────────
+function agentApplyPage(config) {
+  const siteUrl   = config.siteUrl || 'https://meetlifeagents.com'
+  const apiUrl    = config.apiUrl  || 'https://sidecarleads.com'
+  const canonical = `${siteUrl}/agents/apply/`
+
+  const stateNames = {
+    al:'Alabama',az:'Arizona',ar:'Arkansas',ca:'California',co:'Colorado',
+    ct:'Connecticut',de:'Delaware',fl:'Florida',ga:'Georgia',id:'Idaho',
+    il:'Illinois',in:'Indiana',ia:'Iowa',ks:'Kansas',ky:'Kentucky',
+    la:'Louisiana',me:'Maine',md:'Maryland',ma:'Massachusetts',mi:'Michigan',
+    mn:'Minnesota',ms:'Mississippi',mo:'Missouri',mt:'Montana',ne:'Nebraska',
+    nv:'Nevada',nh:'New Hampshire',nj:'New Jersey',nm:'New Mexico',ny:'New York',
+    nc:'North Carolina',nd:'North Dakota',oh:'Ohio',ok:'Oklahoma',or:'Oregon',
+    pa:'Pennsylvania',ri:'Rhode Island',sc:'South Carolina',sd:'South Dakota',
+    tn:'Tennessee',tx:'Texas',ut:'Utah',vt:'Vermont',va:'Virginia',
+    wa:'Washington',wv:'West Virginia',wi:'Wisconsin',wy:'Wyoming',dc:'Washington DC'
+  }
+  const stateOptions = Object.entries(stateNames)
+    .map(([v,n]) => `<option value="${v}">${n}</option>`).join('')
+
+  return `${head({
+    title:       'Apply to Join the MeetLifeAgents Network — Independent Agent Directory',
+    description: 'Qualified independent life insurance agents: apply to be listed in our vetted local directory. One lead per city, no per-lead fees, no revenue share.',
+    canonical,
+    extraHead:   `<meta name="robots" content="index,follow">`,
+  })}
+<body>
+${header()}
+
+<!-- ── HERO ── -->
+<section style="background:var(--ink);color:var(--cream);padding:72px 0 80px;border-bottom:3px solid var(--gold);">
+  <div class="container">
+    <p class="city-eyebrow" style="color:var(--gold-soft);padding-top:0;">For independent agents</p>
+    <h1 class="display" style="font-size:clamp(36px,5vw,58px);line-height:1.05;letter-spacing:-0.025em;color:var(--cream);max-width:680px;margin-bottom:20px;">
+      One market. One agent.<br>Your city.
+    </h1>
+    <p style="font-size:18px;color:rgba(250,246,238,0.72);max-width:560px;line-height:1.6;margin-bottom:12px;">
+      MeetLifeAgents lists one vetted independent agent per city. Consumers come to us to find a real local professional — not a call center, not a lead pool.
+    </p>
+    <p style="font-size:15px;color:rgba(250,246,238,0.5);max-width:520px;line-height:1.55;">Flat monthly directory fee. No per-lead charges. No commission split. No auction.</p>
+  </div>
+</section>
+
+<!-- ── WHAT YOU GET ── -->
+<section style="padding:80px 0;border-bottom:1px solid var(--rule);">
+  <div class="container">
+    <p class="city-eyebrow">What you get</p>
+    <h2 class="display" style="font-size:clamp(26px,3.5vw,40px);margin-bottom:48px;line-height:1.1;">How the directory works<br>for listed agents.</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;">
+      ${[
+        { icon: '①', title: 'Exclusive city listing', body: 'One agent per city in the directory. When a consumer in your city searches, they see you — not you and four competitors. We don\'t auction leads.' },
+        { icon: '②', title: 'Flat monthly fee — nothing else', body: 'No per-lead charges. No percentage of commission. No hidden fees. Your listing fee is fixed and predictable regardless of how many connections you receive.' },
+        { icon: '③', title: 'Direct consumer connection', body: 'We collect the consumer\'s name and phone number and pass it directly to you. No intermediary call. No lead aggregator markup. One introduction.' },
+        { icon: '④', title: 'Your full profile, your city', body: 'Your profile shows your licenses, specialties, years in the business, and local presence. Consumers choose you before they call — not after.' },
+        { icon: '⑤', title: 'Vetted network credibility', body: 'Consumers trust MeetLifeAgents because we turn agents away. Being listed signals that you\'ve passed our license, residency, and disciplinary checks.' },
+        { icon: '⑥', title: 'Ongoing support', body: 'Update your profile, add policy specialties, or flag market changes — your listing manager handles it without a support ticket queue.' },
+      ].map(item => `
+      <div style="border-top:2px solid var(--gold);padding-top:24px;">
+        <div style="font-family:'Fraunces',serif;font-size:32px;color:var(--gold);line-height:1;margin-bottom:14px;font-style:italic;">${item.icon}</div>
+        <h3 style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;margin-bottom:10px;letter-spacing:-0.01em;">${item.title}</h3>
+        <p style="font-size:14px;color:var(--ink-soft);line-height:1.65;">${item.body}</p>
+      </div>`).join('')}
+    </div>
+  </div>
+</section>
+
+<!-- ── REQUIREMENTS ── -->
+<section style="background:var(--cream-warm);border-bottom:1px solid var(--rule);padding:80px 0;">
+  <div class="container" style="max-width:800px;">
+    <p class="city-eyebrow">Who qualifies</p>
+    <h2 class="display" style="font-size:clamp(26px,3.5vw,40px);margin-bottom:12px;line-height:1.1;">Our listing requirements.</h2>
+    <p style="font-size:16px;color:var(--ink-soft);margin-bottom:40px;line-height:1.6;">We check every application manually. We turn away agents who don\'t meet these standards — which is why consumers trust the directory.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      ${[
+        { req: 'Active state license', note: 'Current and in good standing in at least one state' },
+        { req: 'Independent contractor status', note: 'Not captive or employed by a single carrier' },
+        { req: 'Local residency', note: 'You live in or within 30 miles of the city you\'re listed in' },
+        { req: 'Clean disciplinary record', note: 'No active complaints, suspensions, or regulatory actions' },
+        { req: 'Life insurance specialty', note: 'You actively place life insurance — not primarily health or P&C' },
+        { req: 'Responsive to leads', note: 'We monitor response rates and de-list agents who go dark on consumers' },
+      ].map(r => `
+      <div style="background:#fff;border:1px solid var(--rule);border-radius:8px;padding:20px 22px;display:flex;gap:14px;align-items:flex-start;">
+        <span style="color:var(--gold);font-weight:700;flex-shrink:0;font-size:17px;margin-top:1px;">✓</span>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:var(--ink);margin-bottom:4px;">${r.req}</div>
+          <div style="font-size:13px;color:var(--ink-soft);line-height:1.5;">${r.note}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+    <p style="margin-top:28px;font-size:13px;color:var(--ink-soft);line-height:1.6;">We verify license status through NIPR and state DOI records. Applications typically receive a decision within 5 business days.</p>
+  </div>
+</section>
+
+<!-- ── APPLICATION FORM ── -->
+<section style="padding:80px 0;" id="apply">
+  <div class="container" style="max-width:760px;">
+    <p class="city-eyebrow">Application</p>
+    <h2 class="display" style="font-size:clamp(26px,3.5vw,40px);margin-bottom:8px;line-height:1.1;">Apply to join the network.</h2>
+    <p style="font-size:16px;color:var(--ink-soft);margin-bottom:48px;line-height:1.6;">Fill out the form below. We review every application manually — no automated approvals. We'll follow up by email within 5 business days.</p>
+
+    <div id="apply-form-wrap">
+      <form id="apply-form" style="display:flex;flex-direction:column;gap:0;" onsubmit="return false;">
+
+        <!-- Name row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <div class="apply-field">
+            <label class="apply-label" for="ap-first">First name <span class="apply-req">*</span></label>
+            <input class="apply-input" id="ap-first" type="text" placeholder="Jane" autocomplete="given-name">
+          </div>
+          <div class="apply-field">
+            <label class="apply-label" for="ap-last">Last name <span class="apply-req">*</span></label>
+            <input class="apply-input" id="ap-last" type="text" placeholder="Smith" autocomplete="family-name">
+          </div>
+        </div>
+
+        <!-- Contact row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <div class="apply-field">
+            <label class="apply-label" for="ap-email">Business email <span class="apply-req">*</span></label>
+            <input class="apply-input" id="ap-email" type="email" placeholder="jane@example.com" autocomplete="email">
+          </div>
+          <div class="apply-field">
+            <label class="apply-label" for="ap-phone">Direct phone <span class="apply-req">*</span></label>
+            <input class="apply-input" id="ap-phone" type="tel" placeholder="(555) 555-5555" autocomplete="tel">
+          </div>
+        </div>
+
+        <!-- Location row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <div class="apply-field">
+            <label class="apply-label" for="ap-city">Primary city (where you reside) <span class="apply-req">*</span></label>
+            <input class="apply-input" id="ap-city" type="text" placeholder="Austin">
+          </div>
+          <div class="apply-field">
+            <label class="apply-label" for="ap-state">State <span class="apply-req">*</span></label>
+            <select class="apply-input apply-select" id="ap-state">
+              <option value="">Select state</option>
+              ${stateOptions}
+            </select>
+          </div>
+        </div>
+
+        <!-- License + NPN row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <div class="apply-field">
+            <label class="apply-label" for="ap-npn">NPN (National Producer Number) <span class="apply-req">*</span></label>
+            <input class="apply-input" id="ap-npn" type="text" placeholder="1234567" inputmode="numeric">
+          </div>
+          <div class="apply-field">
+            <label class="apply-label" for="ap-years">Years in life insurance</label>
+            <select class="apply-input apply-select" id="ap-years">
+              <option value="">Select</option>
+              <option value="less1">Less than 1 year</option>
+              <option value="1-3">1–3 years</option>
+              <option value="4-7">4–7 years</option>
+              <option value="8-15">8–15 years</option>
+              <option value="15+">15+ years</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Policy specialties -->
+        <div class="apply-field" style="margin-bottom:16px;">
+          <label class="apply-label">Policy specialties (select all that apply)</label>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">
+            ${['Term Life','Whole Life','Indexed Universal Life (IUL)','Final Expense','Mortgage Protection','Key Man / Business'].map(p => `
+            <label class="apply-check-label">
+              <input type="checkbox" class="apply-check" name="specialty" value="${p}">
+              <span>${p}</span>
+            </label>`).join('')}
+          </div>
+        </div>
+
+        <!-- Carriers -->
+        <div class="apply-field" style="margin-bottom:16px;">
+          <label class="apply-label" for="ap-carriers">Carriers you currently place with</label>
+          <input class="apply-input" id="ap-carriers" type="text" placeholder="e.g. Mutual of Omaha, North American, Protective…">
+        </div>
+
+        <!-- How heard + bio -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+          <div class="apply-field">
+            <label class="apply-label" for="ap-heard">How did you hear about us?</label>
+            <select class="apply-input apply-select" id="ap-heard">
+              <option value="">Select</option>
+              <option value="google">Google search</option>
+              <option value="referral">Referral from another agent</option>
+              <option value="social">Social media</option>
+              <option value="podcast">Podcast or YouTube</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="apply-field">
+            <label class="apply-label" for="ap-website">Your website (optional)</label>
+            <input class="apply-input" id="ap-website" type="url" placeholder="https://yoursite.com">
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div class="apply-field" style="margin-bottom:32px;">
+          <label class="apply-label" for="ap-message">Anything else you'd like us to know?</label>
+          <textarea class="apply-input apply-textarea" id="ap-message" placeholder="Tell us about your practice, client focus, or why you want to join…" rows="4"></textarea>
+        </div>
+
+        <!-- Error -->
+        <div id="apply-error" style="display:none;background:#fde8e8;border:1px solid #f5b5b5;border-radius:6px;padding:12px 16px;font-size:14px;color:#b91c1c;margin-bottom:20px;"></div>
+
+        <!-- Submit -->
+        <button class="apply-submit" id="apply-btn" onclick="applySubmit()">Submit application →</button>
+        <p style="margin-top:14px;font-size:13px;color:var(--ink-soft);line-height:1.5;">
+          By submitting you agree to be contacted by our team regarding your application.
+          We verify license status through NIPR. We never share your information.
+        </p>
+      </form>
+    </div>
+
+    <!-- Success -->
+    <div id="apply-success" style="display:none;text-align:center;padding:60px 0;">
+      <div style="font-size:56px;margin-bottom:24px;">✓</div>
+      <h2 class="display" style="font-size:36px;margin-bottom:16px;letter-spacing:-0.02em;">Application received.</h2>
+      <p style="font-size:17px;color:var(--ink-soft);line-height:1.6;max-width:440px;margin:0 auto 32px;">
+        We'll review your application and follow up by email within 5 business days. In the meantime, check out our <a href="/agents/standards/" style="color:var(--gold);">network standards</a>.
+      </p>
+      <a href="/" style="display:inline-block;background:var(--ink);color:var(--cream);font-weight:700;font-size:15px;padding:14px 28px;border-radius:6px;text-decoration:none;">← Back to directory</a>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  const API_URL = '${apiUrl}';
+
+  window.applySubmit = function () {
+    const first    = document.getElementById('ap-first').value.trim();
+    const last     = document.getElementById('ap-last').value.trim();
+    const email    = document.getElementById('ap-email').value.trim();
+    const phone    = document.getElementById('ap-phone').value.trim();
+    const city     = document.getElementById('ap-city').value.trim();
+    const state    = document.getElementById('ap-state').value;
+    const npn      = document.getElementById('ap-npn').value.trim();
+    const years    = document.getElementById('ap-years').value;
+    const carriers = document.getElementById('ap-carriers').value.trim();
+    const heard    = document.getElementById('ap-heard').value;
+    const website  = document.getElementById('ap-website').value.trim();
+    const message  = document.getElementById('ap-message').value.trim();
+
+    const specialties = Array.from(
+      document.querySelectorAll('.apply-check:checked')
+    ).map(el => el.value);
+
+    const errorEl = document.getElementById('apply-error');
+    errorEl.style.display = 'none';
+
+    if (!first || !last) { showErr('Please enter your full name.'); return; }
+    if (!email || !/^[^@]+@[^@]+\.[^@]+$/.test(email)) { showErr('Please enter a valid email address.'); return; }
+    if (!phone) { showErr('Please enter your direct phone number.'); return; }
+    if (!city || !state) { showErr('Please enter your city and state.'); return; }
+    if (!npn) { showErr('Please enter your NPN (National Producer Number).'); return; }
+
+    const btn = document.getElementById('apply-btn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+
+    fetch(API_URL + '/leads/web', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        first_name:  first,
+        last_name:   last,
+        email:       email,
+        phone:       phone,
+        city:        city,
+        state:       state,
+        lead_source: 'meetlifeagents-agent-apply',
+        npn:         npn,
+        years_exp:   years,
+        specialties: specialties.join(', '),
+        carriers:    carriers,
+        heard_from:  heard,
+        website:     website,
+        message:     message,
+        form_type:   'agent_application',
+      }),
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error('server error');
+        document.getElementById('apply-form-wrap').style.display = 'none';
+        document.getElementById('apply-success').style.display   = 'block';
+        window.scrollTo({ top: document.getElementById('apply').offsetTop - 40, behavior: 'smooth' });
+      })
+      .catch(function () {
+        showErr('Something went wrong. Please try again or email us directly.');
+        btn.disabled    = false;
+        btn.textContent = 'Submit application →';
+      });
+
+    function showErr(msg) {
+      errorEl.textContent    = msg;
+      errorEl.style.display  = 'block';
+      errorEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+})();
+</script>
+
+${GLOBAL_SCRIPTS}
+${footer()}
+</body>
+</html>`
+}
+
+module.exports = { notFoundPage, privacyPage, termsPage, tcpaPage, contactPage, howItWorksPage, ourVettingPage, whyIndependentPage, faqPage, glossaryPage, whyNotEthosPage, aboutPage, agentApplyPage }

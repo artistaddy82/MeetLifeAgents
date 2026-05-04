@@ -71,6 +71,7 @@ const {
   glossaryPage,
   whyNotEthosPage,
   aboutPage,
+  agentApplyPage,
 } = require('./src/templates/static-pages')
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -144,8 +145,9 @@ async function build() {
     write('dist/why-independent-agent/index.html', whyIndependentPage(config))
     write('dist/faq/index.html',          faqPage(config))
     write('dist/glossary/index.html',     glossaryPage(config))
-    write('dist/why-not-ethos/index.html', whyNotEthosPage(config))
-    write('dist/about/index.html',         aboutPage(config))
+    write('dist/why-not-ethos/index.html',  whyNotEthosPage(config))
+    write('dist/about/index.html',          aboutPage(config))
+    write('dist/agents/apply/index.html',   agentApplyPage(config))
     write('dist/match/index.html',        matchPage(config))
     write('dist/calculator/index.html',   calculatorPage(config))
     write('dist/contact/index.html',      contactPage(config))
@@ -245,6 +247,7 @@ async function build() {
       `${SITE_URL}/glossary/`,
       `${SITE_URL}/why-not-ethos/`,
       `${SITE_URL}/about/`,
+      `${SITE_URL}/agents/apply/`,
       `${SITE_URL}/match/`,
       `${SITE_URL}/calculator/`,
       `${SITE_URL}/contact/`,
