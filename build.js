@@ -62,7 +62,8 @@ const {
   tcpaPage,
   contactPage,
   howItWorksPage,
-  ourVettingPage
+  ourVettingPage,
+  whyIndependentPage
 } = require('./src/templates/static-pages')
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -121,8 +122,9 @@ async function build() {
     write('dist/index.html', homepage(markets.states, allCities, config))
 
     // 3. Static utility pages
-    write('dist/how-it-works/index.html', howItWorksPage(config))
-    write('dist/our-vetting/index.html',  ourVettingPage(config))
+    write('dist/how-it-works/index.html',        howItWorksPage(config))
+    write('dist/our-vetting/index.html',          ourVettingPage(config))
+    write('dist/why-independent-agent/index.html', whyIndependentPage(config))
     write('dist/contact/index.html',      contactPage(config))
     write('dist/privacy/index.html',      privacyPage(config))
     write('dist/terms/index.html',        termsPage(config))
@@ -184,6 +186,7 @@ async function build() {
       `${SITE_URL}/`,
       `${SITE_URL}/how-it-works/`,
       `${SITE_URL}/our-vetting/`,
+      `${SITE_URL}/why-independent-agent/`,
       `${SITE_URL}/contact/`,
       `${SITE_URL}/privacy/`,
       `${SITE_URL}/terms/`,

@@ -60,10 +60,10 @@ function howItWorksPage(config) {
      'No. All agents are independent contractors running their own businesses. MeetLifeAgents is a directory — we connect, we don\'t employ or supervise.'],
   ]
   const steps = [
-    ['Find your city',        'Use our homepage search to find your state and city. We cover 127 cities across 29 states. If yours isn\'t listed, the nearest city page will still match you with the closest verified agent.'],
-    ['Review verified agents','Every agent on the site has passed our four-point vetting: active state license, resident of the state they serve, 10+ independent carrier appointments, and a clean DOI complaint record.'],
-    ['Contact them directly', 'Click "Call Agent" to reveal the agent\'s routing extension. Second tap dials — their phone rings. Or fill in our 3-step form for a callback. Either way, you choose who you talk to.'],
-    ['We step back',          'After you connect, the conversation is between you and the agent. MeetLifeAgents doesn\'t take commissions or influence product recommendations. We connect — then get out of the way.'],
+    ['Find your city',        'Search by state and city — we cover 127 cities across 29 states. Not listed? We\'ll route you to the nearest verified agent.'],
+    ['Review verified agents','Every agent passed four checks: active state license, state resident, 10+ independent carrier appointments, clean DOI record. No exceptions.'],
+    ['Contact them directly', 'Click "Call Agent" to reveal their routing extension — second tap dials directly. Or request a callback from the city page. You choose.'],
+    ['We step back',          'Once you\'re connected, MeetLifeAgents is done. No commissions, no product steering — just you and your agent.'],
   ]
 
   return `${head({ title: 'How It Works — MeetLifeAgents', description: 'How MeetLifeAgents connects you with verified local life insurance agents. Simple, transparent, no spam.', canonical: `${siteUrl}/how-it-works/` })}
@@ -76,28 +76,34 @@ ${header()}
     <div class="hiw-hero-grid">
       <div class="hiw-hero-left">
         <p class="city-eyebrow">How it works</p>
-        <h1 class="display pg-hero-title">Meet a real agent.<br><em>No spam. No runaround.</em></h1>
+        <h1 class="display pg-hero-title">Meet a real agent.<br><em style="color:var(--gold-soft);">No spam. No runaround.</em></h1>
         <p class="pg-hero-sub">Most insurance sites sell your contact info to dozens of agents who call for weeks. We work differently — you browse, you pick, you call.</p>
         <div class="hiw-hero-btns">
           <a href="/" class="btn-ink">Find an agent →</a>
           <a href="/our-vetting/" class="btn-outline">Our vetting standard</a>
         </div>
+        <p class="hiw-hero-trust">127 cities &nbsp;·&nbsp; 29 states &nbsp;·&nbsp; 100% license-verified</p>
       </div>
       <div class="hiw-contrast-card">
-        <div class="hiw-cc-side">
+        <div class="hiw-cc-header">
           <div class="hiw-cc-label hiw-cc-label--bad">The old way</div>
-          <div class="hiw-cc-item hiw-cc-item--bad"><span class="hiw-cc-x">✗</span>Fill out a generic form</div>
-          <div class="hiw-cc-item hiw-cc-item--bad"><span class="hiw-cc-x">✗</span>Your info sold to 50 agents</div>
-          <div class="hiw-cc-item hiw-cc-item--bad"><span class="hiw-cc-x">✗</span>50 agents call for weeks</div>
-          <div class="hiw-cc-item hiw-cc-item--bad"><span class="hiw-cc-x">✗</span>You have no control</div>
-        </div>
-        <div class="hiw-cc-divider"></div>
-        <div class="hiw-cc-side">
           <div class="hiw-cc-label hiw-cc-label--good">MeetLifeAgents</div>
-          <div class="hiw-cc-item hiw-cc-item--good"><span class="hiw-cc-check">✓</span>Browse vetted local agents</div>
-          <div class="hiw-cc-item hiw-cc-item--good"><span class="hiw-cc-check">✓</span>You pick who to contact</div>
-          <div class="hiw-cc-item hiw-cc-item--good"><span class="hiw-cc-check">✓</span>One call. One agent.</div>
-          <div class="hiw-cc-item hiw-cc-item--good"><span class="hiw-cc-check">✓</span>You stay in control</div>
+        </div>
+        <div class="hiw-cc-row-item">
+          <div class="hiw-cc-bad-cell"><span class="hiw-cc-x">✗</span>Fill out a generic form</div>
+          <div class="hiw-cc-good-cell"><span class="hiw-cc-check">✓</span>Browse vetted agents</div>
+        </div>
+        <div class="hiw-cc-row-item">
+          <div class="hiw-cc-bad-cell"><span class="hiw-cc-x">✗</span>Info sold to 50 buyers</div>
+          <div class="hiw-cc-good-cell"><span class="hiw-cc-check">✓</span>You pick who to contact</div>
+        </div>
+        <div class="hiw-cc-row-item">
+          <div class="hiw-cc-bad-cell"><span class="hiw-cc-x">✗</span>50 agents call for weeks</div>
+          <div class="hiw-cc-good-cell"><span class="hiw-cc-check">✓</span>One call. One agent.</div>
+        </div>
+        <div class="hiw-cc-row-item hiw-cc-row-item--last">
+          <div class="hiw-cc-bad-cell"><span class="hiw-cc-x">✗</span>You have no control</div>
+          <div class="hiw-cc-good-cell"><span class="hiw-cc-check">✓</span>You stay in control</div>
         </div>
       </div>
     </div>
@@ -644,4 +650,156 @@ ${footer()}
 </html>`
 }
 
-module.exports = { notFoundPage, privacyPage, termsPage, tcpaPage, contactPage, howItWorksPage, ourVettingPage }
+/* ── WHY INDEPENDENT AGENT ──────────────────────────────────────────────── */
+
+function whyIndependentPage(config) {
+  const siteUrl = config.siteUrl || 'https://meetlifeagents.com'
+
+  const comparisons = [
+    { dim: 'Carrier access',   captive: 'Sells products from one company only — their employer',         indep: 'Shops 10–30+ independent carriers to find your best fit' },
+    { dim: 'Who they work for',captive: 'Employed or contracted by a single insurance carrier',           indep: 'Works for you — licensed independently, accountable to you' },
+    { dim: 'Sales pressure',   captive: 'Carries a quota from their employer — has to sell their products', indep: 'No quota from any carrier — recommends what\'s right for your situation' },
+    { dim: 'Product range',    captive: 'Limited to that company\'s term, whole, and UL lineup',           indep: 'Access to term, whole, IUL, GUL, and more across many carriers' },
+    { dim: 'If you need to switch', captive: 'You start over — new agent, new application, new relationship', indep: 'Your agent re-shops the market without you starting from scratch' },
+  ]
+
+  const benefits = [
+    { title: 'More options. Better price.',  body: 'When one agent shops 30+ carriers, you get competitive pricing without applying to 30 companies. Rates for the same coverage can vary 40% across carriers.' },
+    { title: 'No conflict of interest.',      body: 'An independent agent earns commission from whoever places your policy — so their incentive is finding the carrier that approves you at the best rate, not pushing one brand.' },
+    { title: 'One agent, your whole picture.',body: 'As your needs change — term today, whole life later, key-man coverage — an independent agent re-shops your full situation instead of you starting over.' },
+  ]
+
+  const jsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      { '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home',              item: `${siteUrl}/` },
+        { '@type': 'ListItem', position: 2, name: 'Why Independent',   item: `${siteUrl}/why-independent-agent/` },
+      ]},
+      { '@type': 'FAQPage', mainEntity: [
+        { '@type': 'Question', name: 'What is an independent life insurance agent?',
+          acceptedAnswer: { '@type': 'Answer', text: 'An independent agent is licensed to sell life insurance from multiple carriers — not employed by or contracted to a single company. They shop the market on your behalf.' } },
+        { '@type': 'Question', name: 'What is the difference between a captive and independent life insurance agent?',
+          acceptedAnswer: { '@type': 'Answer', text: 'A captive agent sells products from one carrier (their employer). An independent agent accesses 10–30+ carriers and recommends based on your needs, not a company quota.' } },
+      ]},
+    ]
+  })
+
+  return `${head({ title: 'Why Use an Independent Life Insurance Agent — MeetLifeAgents', description: 'Independent agents shop 30+ carriers for your best rate — no quotas, no brand loyalty required. See why independent beats captive for most life insurance buyers.', canonical: `${siteUrl}/why-independent-agent/`, extraHead: `<script type="application/ld+json">${jsonLd}</script>` })}
+<body>
+${header()}
+
+<!-- ── HERO: dark navy split ── -->
+<section class="wia-hero">
+  <div class="container">
+    <div class="wia-hero-grid">
+      <div class="wia-hero-left">
+        <p class="city-eyebrow" style="color:var(--gold-soft);">Why it matters</p>
+        <h1 class="display wia-hero-title">Independent agents<br>work for <em>you.</em><br>Not one company.</h1>
+        <p class="wia-hero-sub">A captive agent sells what their employer approves. An independent agent shops 30+ carriers and recommends what fits your life — with no quota to fill.</p>
+        <a href="/" class="btn-cream" style="margin-top:32px;display:inline-block;">Find a vetted independent agent →</a>
+      </div>
+      <div class="wia-hero-card">
+        <div class="wia-hero-card-label">What independence means</div>
+        <div class="wia-hero-fact">
+          <div class="wia-hero-fact-num">30+</div>
+          <div class="wia-hero-fact-text">Carriers an independent agent can access — vs. one for a captive agent</div>
+        </div>
+        <div class="wia-hero-fact">
+          <div class="wia-hero-fact-num">$0</div>
+          <div class="wia-hero-fact-text">Quota or sales target from any carrier — they earn by finding your best fit</div>
+        </div>
+        <div class="wia-hero-fact">
+          <div class="wia-hero-fact-num">1</div>
+          <div class="wia-hero-fact-text">Agent relationship — not 50 lead buyers calling for weeks</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COMPARISON: captive vs independent ── -->
+<section class="wia-compare-sec">
+  <div class="container">
+    <div class="wia-compare-head">
+      <p class="city-eyebrow">How it's different</p>
+      <h2 class="display" style="font-size:clamp(28px,3.5vw,42px);line-height:1.1;">Captive vs.<br>independent.</h2>
+    </div>
+    <div class="wia-compare-header-row">
+      <div class="wia-compare-col-label wia-compare-col-label--captive">Captive agent</div>
+      <div></div>
+      <div class="wia-compare-col-label wia-compare-col-label--indep">Independent agent</div>
+    </div>
+    ${comparisons.map(c => `<div class="wia-compare-row">
+      <div class="wia-captive-cell">${c.captive}</div>
+      <div class="wia-compare-vs"><span>vs</span></div>
+      <div class="wia-indep-cell">${c.indep}</div>
+    </div>`).join('')}
+  </div>
+</section>
+
+<!-- ── BENEFITS: 3 cards ── -->
+<section class="wia-benefits-sec">
+  <div class="container">
+    <div class="wia-benefits-head">
+      <p class="city-eyebrow">What you gain</p>
+      <h2 class="display" style="font-size:clamp(28px,3.5vw,42px);line-height:1.1;">Three reasons<br>independence wins.</h2>
+    </div>
+    <div class="wia-benefits-grid">
+      ${benefits.map((b, i) => `<div class="wia-benefit-card">
+        <div class="wia-benefit-num">${i + 1}</div>
+        <h3 class="wia-benefit-title">${b.title}</h3>
+        <p class="wia-benefit-body">${b.body}</p>
+      </div>`).join('')}
+    </div>
+  </div>
+</section>
+
+<!-- ── DARK STATS ── -->
+<section class="trust-bar">
+  <div class="container">
+    <div class="trust-grid">
+      <div class="trust-item"><div class="trust-num">30+</div><div class="trust-label">carriers per independent agent</div></div>
+      <div class="trust-item"><div class="trust-num">1</div><div class="trust-label">company a captive agent can sell</div></div>
+      <div class="trust-item"><div class="trust-num">40%</div><div class="trust-label">rate variance across carriers for same coverage</div></div>
+      <div class="trust-item"><div class="trust-num">127</div><div class="trust-label">cities with MLA-vetted independent agents</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VETTING CALLOUT ── -->
+<section class="wia-vetting-sec">
+  <div class="container">
+    <div class="wia-vetting-grid">
+      <div>
+        <p class="city-eyebrow">Our standard</p>
+        <h2 class="display" style="font-size:clamp(24px,3vw,36px);line-height:1.1;margin-bottom:16px;">Every MLA agent is<br>independently verified.</h2>
+        <p style="font-size:16px;color:var(--ink-soft);line-height:1.7;margin-bottom:28px;">We don't just take agents at their word. Every agent passes a four-point vetting check: active state license, state resident, 10+ carrier appointments, and a clean DOI record.</p>
+        <a href="/our-vetting/" style="color:var(--gold);font-weight:600;font-size:14px;text-decoration:none;">See our full vetting process →</a>
+      </div>
+      <div class="wia-vetting-card">
+        <div class="wia-vetting-card-label">Four-point check</div>
+        ${['Active state insurance license', 'Resident of the state they serve', '10+ independent carrier appointments', 'Clean DOI complaint record'].map((item, i) => `<div class="wia-vetting-item">
+          <div class="wia-vetting-item-num">${i + 1}</div>
+          <div class="wia-vetting-item-text">${item}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DARK CTA ── -->
+<section class="intake" style="padding:72px 0;text-align:center;">
+  <div class="container">
+    <h2 class="display" style="font-size:clamp(28px,4vw,46px);color:var(--cream);margin-bottom:16px;">Ready to meet a local independent agent?</h2>
+    <p style="color:rgba(250,246,238,0.75);font-size:17px;margin-bottom:36px;">127 cities. Every agent vetted. No account needed.</p>
+    <a href="/" class="btn-cream" style="font-size:16px;padding:16px 36px;">Find an agent in your city →</a>
+  </div>
+</section>
+
+${footer()}
+</body>
+</html>`
+}
+
+module.exports = { notFoundPage, privacyPage, termsPage, tcpaPage, contactPage, howItWorksPage, ourVettingPage, whyIndependentPage }
