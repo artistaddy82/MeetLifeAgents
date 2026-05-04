@@ -59,77 +59,87 @@ function howItWorksPage(config) {
     ['Are the agents employees of MeetLifeAgents?',
      'No. All agents are independent contractors running their own businesses. MeetLifeAgents is a directory — we connect, we don\'t employ or supervise.'],
   ]
+  const steps = [
+    ['Find your city',        'Use our homepage search to find your state and city. We cover 127 cities across 29 states. If yours isn\'t listed, the nearest city page will still match you with the closest verified agent.'],
+    ['Review verified agents','Every agent on the site has passed our four-point vetting: active state license, resident of the state they serve, 10+ independent carrier appointments, and a clean DOI complaint record.'],
+    ['Contact them directly', 'Click "Call Agent" to reveal the agent\'s routing extension. Second tap dials — their phone rings. Or fill in our 3-step form for a callback. Either way, you choose who you talk to.'],
+    ['We step back',          'After you connect, the conversation is between you and the agent. MeetLifeAgents doesn\'t take commissions or influence product recommendations. We connect — then get out of the way.'],
+  ]
 
   return `${head({ title: 'How It Works — MeetLifeAgents', description: 'How MeetLifeAgents connects you with verified local life insurance agents. Simple, transparent, no spam.', canonical: `${siteUrl}/how-it-works/` })}
 <body>
 ${header()}
 
-${pageHero('How it works', 'Meet a real agent.<br><em>No spam. No runaround.</em>', 'Most insurance sites sell your contact info to dozens of agents who call for weeks. MeetLifeAgents works differently — you choose a local agent, you contact them directly.')}
-
-<!-- ── 4 STEPS ───────────────────────────────────────── -->
-<section style="padding:80px 0;border-top:1px solid var(--rule);">
+<!-- ── HERO: split with old-way vs our-way contrast card ── -->
+<section class="hiw-hero">
   <div class="container">
-    <div class="hiw-steps-grid">
-
-      <div class="hiw-step-card">
-        <div class="hiw-step-num">1</div>
-        <h3>Find your city</h3>
-        <p>Use our homepage search to find your state and city. We cover 127 cities across 29 states. If yours isn't listed, the nearest city page will still match you with the closest verified agent.</p>
+    <div class="hiw-hero-grid">
+      <div class="hiw-hero-left">
+        <p class="city-eyebrow">How it works</p>
+        <h1 class="display pg-hero-title">Meet a real agent.<br><em>No spam. No runaround.</em></h1>
+        <p class="pg-hero-sub">Most insurance sites sell your contact info to dozens of agents who call for weeks. We work differently — you browse, you pick, you call.</p>
+        <div class="hiw-hero-btns">
+          <a href="/" class="btn-ink">Find an agent →</a>
+          <a href="/our-vetting/" class="btn-outline">Our vetting standard</a>
+        </div>
       </div>
-
-      <div class="hiw-step-card">
-        <div class="hiw-step-num">2</div>
-        <h3>Review verified agents</h3>
-        <p>Every agent on the site has passed our four-point vetting: active state license, resident of the state they serve, 10+ independent carrier appointments, and a clean DOI complaint record.</p>
+      <div class="hiw-contrast-card">
+        <div class="hiw-cc-side">
+          <div class="hiw-cc-label hiw-cc-label--bad">The old way</div>
+          <div class="hiw-cc-item hiw-cc-item--bad"><span class="hiw-cc-x">✗</span>Fill out a generic form</div>
+          <div class="hiw-cc-item hiw-cc-item--bad"><span class="hiw-cc-x">✗</span>Your info sold to 50 agents</div>
+          <div class="hiw-cc-item hiw-cc-item--bad"><span class="hiw-cc-x">✗</span>50 agents call for weeks</div>
+          <div class="hiw-cc-item hiw-cc-item--bad"><span class="hiw-cc-x">✗</span>You have no control</div>
+        </div>
+        <div class="hiw-cc-divider"></div>
+        <div class="hiw-cc-side">
+          <div class="hiw-cc-label hiw-cc-label--good">MeetLifeAgents</div>
+          <div class="hiw-cc-item hiw-cc-item--good"><span class="hiw-cc-check">✓</span>Browse vetted local agents</div>
+          <div class="hiw-cc-item hiw-cc-item--good"><span class="hiw-cc-check">✓</span>You pick who to contact</div>
+          <div class="hiw-cc-item hiw-cc-item--good"><span class="hiw-cc-check">✓</span>One call. One agent.</div>
+          <div class="hiw-cc-item hiw-cc-item--good"><span class="hiw-cc-check">✓</span>You stay in control</div>
+        </div>
       </div>
-
-      <div class="hiw-step-card">
-        <div class="hiw-step-num">3</div>
-        <h3>Contact them directly</h3>
-        <p>Click "Call Agent" to reveal the agent's routing extension. Second tap dials with the extension — their phone rings. Or fill in our 3-step form for a callback. Either way, you choose who you talk to.</p>
-      </div>
-
-      <div class="hiw-step-card">
-        <div class="hiw-step-num">4</div>
-        <h3>We step back</h3>
-        <p>After you connect, the conversation is between you and the agent. MeetLifeAgents doesn't take commissions or influence product recommendations. We connect — then get out of the way.</p>
-      </div>
-
     </div>
   </div>
 </section>
 
-<!-- ── DARK TRUST STRIP ──────────────────────────────── -->
+<!-- ── 4 STEPS: full-width horizontal rows ──────────────── -->
+<section class="hiw-steps-sec">
+  <div class="container">
+    <div class="hiw-steps-head">
+      <p class="city-eyebrow">The process</p>
+      <h2 class="display" style="font-size:clamp(28px,3.5vw,42px);line-height:1.1;">Four steps from search<br>to handshake.</h2>
+    </div>
+    ${steps.map(([title, text], i) => `<div class="hiw-step-row${i === steps.length - 1 ? ' hiw-step-row--last' : ''}">
+      <div class="hiw-step-num-big">${i + 1}</div>
+      <div class="hiw-step-content">
+        <h3>${title}</h3>
+        <p>${text}</p>
+      </div>
+    </div>`).join('')}
+  </div>
+</section>
+
+<!-- ── DARK TRUST STRIP ──────────────────────────────────── -->
 <section class="trust-bar">
   <div class="container">
     <div class="trust-grid">
-      <div class="trust-item">
-        <div class="trust-num">127</div>
-        <div class="trust-label">cities covered across 29 states</div>
-      </div>
-      <div class="trust-item">
-        <div class="trust-num">0</div>
-        <div class="trust-label">spam calls — your info goes to one agent</div>
-      </div>
-      <div class="trust-item">
-        <div class="trust-num">10+</div>
-        <div class="trust-label">carrier appointments required per agent</div>
-      </div>
-      <div class="trust-item">
-        <div class="trust-num">100%</div>
-        <div class="trust-label">license-verified through state DOIs</div>
-      </div>
+      <div class="trust-item"><div class="trust-num">127</div><div class="trust-label">cities covered across 29 states</div></div>
+      <div class="trust-item"><div class="trust-num">0</div><div class="trust-label">spam calls — your info goes to one agent</div></div>
+      <div class="trust-item"><div class="trust-num">10+</div><div class="trust-label">carrier appointments required per agent</div></div>
+      <div class="trust-item"><div class="trust-num">100%</div><div class="trust-label">license-verified through state DOIs</div></div>
     </div>
   </div>
 </section>
 
-<!-- ── FAQ ───────────────────────────────────────────── -->
+<!-- ── FAQ ───────────────────────────────────────────────── -->
 <section style="padding:80px 0;background:var(--cream-warm);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);">
   <div class="container">
     <div class="hiw-faq-layout">
       <div>
         <p class="city-eyebrow">Common questions</p>
-        <h2 class="display" style="font-size:clamp(28px,3.5vw,40px);line-height:1.1;">Everything you might wonder.</h2>
+        <h2 class="display" style="font-size:clamp(28px,3.5vw,40px);line-height:1.1;">Everything you<br>might wonder.</h2>
       </div>
       <div class="hiw-faq-list">
         ${faqs.map(([q,a]) => `<details class="faq-item">
@@ -141,12 +151,12 @@ ${pageHero('How it works', 'Meet a real agent.<br><em>No spam. No runaround.</em
   </div>
 </section>
 
-<!-- ── CTA ───────────────────────────────────────────── -->
-<section style="padding:80px 0;text-align:center;">
+<!-- ── DARK CTA ───────────────────────────────────────────── -->
+<section class="intake" style="padding:72px 0;text-align:center;">
   <div class="container">
-    <h2 class="display" style="font-size:clamp(28px,4vw,44px);margin-bottom:16px;">Ready to meet a local agent?</h2>
-    <p style="color:var(--ink-soft);font-size:17px;margin-bottom:36px;">No account needed. No credit card. Just find your city.</p>
-    <a href="/" class="btn-ink" style="font-size:16px;padding:16px 36px;">Find an agent in your city →</a>
+    <h2 class="display" style="font-size:clamp(28px,4vw,46px);color:var(--cream);margin-bottom:16px;">Ready to meet a local agent?</h2>
+    <p style="color:rgba(250,246,238,0.75);font-size:17px;margin-bottom:36px;">No account. No credit card. Just find your city.</p>
+    <a href="/" class="btn-cream" style="font-size:16px;padding:16px 36px;">Find an agent in your city →</a>
   </div>
 </section>
 
@@ -159,56 +169,71 @@ ${footer()}
 
 function ourVettingPage(config) {
   const siteUrl = config.siteUrl || 'https://meetlifeagents.com'
+  const checks = [
+    ['Active state insurance license',
+     'Verified directly through the state DOI\'s NIPR/SERFF lookup. Current — not expired, lapsed, or surrendered.',
+     'NIPR · State DOI lookup · NPN confirmed active'],
+    ['Resident of the state they serve',
+     'A genuine resident — not a remote agent using a non-resident license. Consumers deserve someone who knows their community.',
+     'State residence address · Non-resident license rejected'],
+    ['10+ independent carrier appointments',
+     'Truly independent agents can shop 10+ carriers for you. Fewer and they may steer toward what pays them, not what fits you.',
+     '10+ active appointments required · Carrier list verified'],
+    ['Clean DOI complaint record',
+     'We review disciplinary history on the state DOI. Any upheld complaints in the last 5 years disqualify from listing.',
+     'State DOI disciplinary history · 5-year lookback'],
+  ]
+
   return `${head({ title: 'Our Vetting Standard — MeetLifeAgents', description: 'How MeetLifeAgents vets life insurance agents. Three tiers: Verified, Premier, and Elite Top Tier.', canonical: `${siteUrl}/our-vetting/` })}
 <body>
 ${header()}
 
-${pageHero('Our vetting standard', 'Every agent on this site<br>earned their spot.', 'We check four things before any agent appears in our directory. Here is exactly what we verify — and what each tier means.')}
-
-<!-- ── BASELINE CHECKS ───────────────────────────────── -->
-<section style="padding:80px 0;border-top:1px solid var(--rule);">
-  <div class="container">
-    <div class="ov-intro-grid">
-      <div>
-        <p class="city-eyebrow">Baseline — all agents</p>
-        <h2 class="display" style="font-size:clamp(28px,3.5vw,40px);margin-bottom:16px;">Four checks. No exceptions.</h2>
-        <p style="font-size:16px;color:var(--ink-soft);line-height:1.65;">Every agent must pass all four before they appear anywhere on the site. These aren't preferences — they're requirements.</p>
+<!-- ── DARK HERO ───────────────────────────────────────── -->
+<section class="ov-dark-hero">
+  <div class="container" style="text-align:center;">
+    <p class="city-eyebrow" style="color:var(--gold-soft);">Our vetting standard</p>
+    <h1 class="display ov-dark-title">Every agent on this site<br><em>earned their spot.</em></h1>
+    <p class="ov-dark-sub">We check four things before any agent appears in our directory. Here's exactly what we verify — and what each tier means.</p>
+    <div class="ov-dark-stats">
+      <div class="ov-dark-stat">
+        <div class="ov-dark-stat-num">4</div>
+        <div class="ov-dark-stat-label">mandatory gates</div>
       </div>
-      <div class="ov-checks-grid">
-        <div class="ov-check">
-          <div class="ov-check-icon">①</div>
-          <div>
-            <strong>Active state insurance license</strong>
-            <p>Verified directly through the state DOI's NIPR/SERFF lookup. Current — not expired, lapsed, or surrendered.</p>
-          </div>
-        </div>
-        <div class="ov-check">
-          <div class="ov-check-icon">②</div>
-          <div>
-            <strong>Resident of the state they serve</strong>
-            <p>A genuine resident — not a remote agent using a non-resident license. Consumers deserve someone who knows their community.</p>
-          </div>
-        </div>
-        <div class="ov-check">
-          <div class="ov-check-icon">③</div>
-          <div>
-            <strong>10+ independent carrier appointments</strong>
-            <p>Truly independent agents can shop 10+ carriers. Fewer and they may be steering toward what pays them, not what fits you.</p>
-          </div>
-        </div>
-        <div class="ov-check">
-          <div class="ov-check-icon">④</div>
-          <div>
-            <strong>Clean DOI complaint record</strong>
-            <p>We review disciplinary history on the state DOI. Any upheld complaints in the last 5 years disqualify from listing.</p>
-          </div>
-        </div>
+      <div class="ov-dark-stat">
+        <div class="ov-dark-stat-num">3</div>
+        <div class="ov-dark-stat-label">verified tiers</div>
+      </div>
+      <div class="ov-dark-stat">
+        <div class="ov-dark-stat-num">0</div>
+        <div class="ov-dark-stat-label">exceptions made</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── TIER CARDS ────────────────────────────────────── -->
+<!-- ── FOUR CHECKS: full-width audit rows ─────────────── -->
+<section class="ov-audit-sec">
+  <div class="container">
+    <div class="ov-audit-head">
+      <p class="city-eyebrow">Baseline — all agents</p>
+      <h2 class="display" style="font-size:clamp(28px,3.5vw,42px);line-height:1.1;margin-bottom:12px;">Four checks.<br>No exceptions.</h2>
+      <p style="font-size:16px;color:var(--ink-soft);line-height:1.65;max-width:520px;">Every agent must pass all four before they appear on the site. These aren't preferences — they're requirements.</p>
+    </div>
+    ${checks.map(([title, desc, how], i) => `<div class="ov-audit-row">
+      <div class="ov-audit-num">${i + 1}</div>
+      <div class="ov-audit-main">
+        <h3>${title}</h3>
+        <p>${desc}</p>
+      </div>
+      <div class="ov-audit-how">
+        <div class="ov-audit-how-label">How we verify</div>
+        <div class="ov-audit-how-text">${how}</div>
+      </div>
+    </div>`).join('')}
+  </div>
+</section>
+
+<!-- ── TIER CARDS ─────────────────────────────────────── -->
 <section style="background:var(--cream-warm);padding:80px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);">
   <div class="container">
     <div style="text-align:center;max-width:600px;margin:0 auto 56px;">
@@ -216,7 +241,6 @@ ${pageHero('Our vetting standard', 'Every agent on this site<br>earned their spo
       <h2 class="display" style="font-size:clamp(28px,3.5vw,40px);">What each badge means.</h2>
     </div>
     <div class="ov-tiers">
-
       <div class="ov-tier ov-tier--verified">
         <div class="ov-tier-header">
           <span class="ov-tier-badge ov-badge--verified">Verified</span>
@@ -230,7 +254,6 @@ ${pageHero('Our vetting standard', 'Every agent on this site<br>earned their spo
           <li>Clean DOI complaint record</li>
         </ul>
       </div>
-
       <div class="ov-tier ov-tier--premier">
         <div class="ov-tier-header">
           <span class="ov-tier-badge ov-badge--premier">Premier</span>
@@ -241,10 +264,9 @@ ${pageHero('Our vetting standard', 'Every agent on this site<br>earned their spo
           <li>All Verified criteria</li>
           <li>5+ years licensed</li>
           <li>Documented specialty niche</li>
-          <li>24-hour response standard (platform-tracked)</li>
+          <li>24-hour response standard</li>
         </ul>
       </div>
-
       <div class="ov-tier ov-tier--elite">
         <div class="ov-tier-header">
           <span class="ov-tier-badge ov-badge--elite">Elite · Top Tier</span>
@@ -258,49 +280,41 @@ ${pageHero('Our vetting standard', 'Every agent on this site<br>earned their spo
           <li>3+ verified professional references</li>
         </ul>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ── WHAT WE DON'T DO ──────────────────────────────── -->
-<section style="padding:80px 0;">
+<!-- ── WHAT WE DON'T DO ───────────────────────────────── -->
+<section style="padding:80px 0;border-bottom:1px solid var(--rule);">
   <div class="container">
     <div class="ov-nolist-layout">
       <div>
         <p class="city-eyebrow">What we don't do — and why</p>
-        <h2 class="display" style="font-size:clamp(26px,3.2vw,36px);line-height:1.15;">The intentional omissions.</h2>
+        <h2 class="display" style="font-size:clamp(26px,3.2vw,36px);line-height:1.15;">The intentional<br>omissions.</h2>
       </div>
       <div class="ov-nolist">
         <div class="ov-no-item">
           <span class="ov-no-x">⊘</span>
-          <div>
-            <strong>No star ratings at launch.</strong>
-            <p>FTC Endorsement Guide compliance and state DOI rules require a rigorous collection process we're building toward. Misleading stars hurt consumers. We'd rather wait and do it right in 12–18 months.</p>
-          </div>
+          <div><strong>No star ratings at launch.</strong><p>FTC Endorsement Guide compliance and state DOI rules require a rigorous collection process we're building toward. Misleading stars hurt consumers.</p></div>
         </div>
         <div class="ov-no-item">
           <span class="ov-no-x">⊘</span>
-          <div>
-            <strong>No carrier logos.</strong>
-            <p>Most carriers prohibit unauthorized logo use and will send C&D letters. Listing carrier names as text is accurate and legally safe. We list names only.</p>
-          </div>
+          <div><strong>No carrier logos.</strong><p>Most carriers prohibit unauthorized logo use and will send C&D letters. Listing carrier names as text is accurate and legally safe.</p></div>
         </div>
         <div class="ov-no-item">
           <span class="ov-no-x">⊘</span>
-          <div>
-            <strong>No continuous license monitoring (yet).</strong>
-            <p>We verify at onboarding. Consumers should always click the NPN verify link on any agent card to confirm current license status directly on the state DOI.</p>
-          </div>
+          <div><strong>No continuous license monitoring (yet).</strong><p>We verify at onboarding. Click the NPN verify link on any agent card to confirm current license status directly on the state DOI.</p></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section style="padding:64px 0;text-align:center;border-top:1px solid var(--rule);background:var(--ink);">
+<!-- ── DARK CTA ───────────────────────────────────────── -->
+<section style="padding:72px 0;text-align:center;background:var(--ink);">
   <div class="container">
     <h2 class="display" style="font-size:clamp(26px,3.5vw,40px);color:var(--cream);margin-bottom:16px;">Find a vetted agent in your city.</h2>
+    <p style="color:rgba(250,246,238,0.7);font-size:17px;margin-bottom:32px;">127 cities. 29 states. Every agent license-checked.</p>
     <a href="/" class="btn-cream" style="font-size:16px;padding:16px 36px;">Search the directory →</a>
   </div>
 </section>
@@ -319,9 +333,35 @@ function contactPage(config) {
 <body>
 ${header()}
 
-${pageHero('Get in touch', 'Contact us.', 'Questions about the directory, agent vetting, or how it works? We read every message and respond within one business day.')}
+<!-- ── DARK TOP: headline + response facts ────────────── -->
+<section class="contact-top">
+  <div class="container">
+    <div class="contact-top-grid">
+      <div>
+        <p class="city-eyebrow" style="color:var(--gold-soft);">Get in touch</p>
+        <h1 class="display contact-top-title">We read<br>every message.</h1>
+        <p class="contact-top-sub">Questions about the directory, agent vetting, or how it works. Our team responds to every inquiry.</p>
+      </div>
+      <div class="contact-top-facts">
+        <div class="contact-fact">
+          <div class="contact-fact-num">1 day</div>
+          <div class="contact-fact-label">response time</div>
+        </div>
+        <div class="contact-fact">
+          <div class="contact-fact-num">M – F</div>
+          <div class="contact-fact-label">hours of operation</div>
+        </div>
+        <div class="contact-fact">
+          <div class="contact-fact-num">Human</div>
+          <div class="contact-fact-label">every reply, no bots</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<section style="padding:80px 0;border-top:1px solid var(--rule);">
+<!-- ── FORM + SIDEBAR ────────────────────────────────── -->
+<section style="padding:72px 0;">
   <div class="container">
     <div class="contact-layout">
 

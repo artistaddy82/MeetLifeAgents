@@ -51,7 +51,7 @@ function agentProfilePage(agent, market, doiUrl, config) {
 <body data-agent="${agent.slug}" data-city="${citySlug}" data-state="${stateSlug}">
 ${header()}
 
-<!-- ── AGENT HERO ─────────────────────────────────── -->
+<!-- ── AGENT HERO: 3-col (photo | info | contact card) ── -->
 <section class="ap-hero">
   <div class="container">
     <nav class="breadcrumb" style="padding-top:20px;">
@@ -61,18 +61,20 @@ ${header()}
       <span>${fullName}</span>
     </nav>
 
-    <div class="ap-hero-grid">
+    <div class="ap-hero-3col">
+      <!-- col 1: photo + tier badge -->
       <div class="ap-photo-col">
         ${agent.photo_url
           ? `<img src="${agent.photo_url}" alt="${fullName}" class="ap-photo" width="180" height="180" loading="eager">`
           : `<div class="ap-initials">${initials}</div>`}
         ${tierBadge}
       </div>
+
+      <!-- col 2: identity + stats -->
       <div class="ap-hero-info">
         <p class="city-eyebrow">${market.city_name}, ${market.state_abbr}</p>
-        <h1 class="display" style="font-size:clamp(32px,4.5vw,52px);line-height:1.05;margin-bottom:12px;">${fullName}</h1>
+        <h1 class="display" style="font-size:clamp(32px,4vw,50px);line-height:1.05;margin-bottom:12px;">${fullName}</h1>
         <p class="ap-location">📍 Based in ${agent.office_city}, ${agent.office_state} · Serving the ${market.city_name} area</p>
-
         <div class="ap-stats-row">
           <div class="city-stat">
             <span class="city-stat-num">${agent.years_licensed}</span>
@@ -87,30 +89,39 @@ ${header()}
             <span class="city-stat-label">Avg. response</span>
           </div>
         </div>
-
         ${tags ? `<div class="agent-tags" style="margin-top:20px;">${tags}</div>` : ''}
+      </div>
+
+      <!-- col 3: dark contact card -->
+      <div class="ap-contact-card">
+        <div class="ap-cc-eyebrow">Connect with</div>
+        <div class="ap-cc-name">${fullName}</div>
+        <button class="ap-cc-btn" data-ext="${agent.extension}" data-agent="${fullName}" onclick="revealCall(this)">
+          📞 Call ${agent.first_name}
+        </button>
+        <a href="/${stateSlug}/${citySlug}/#intake" class="ap-cc-link">Request a callback →</a>
+        <div class="ap-cc-divider"></div>
+        <div class="ap-cc-row">
+          <span class="ap-cc-row-label">NPN</span>
+          <span class="ap-cc-row-value">${agent.npn}</span>
+        </div>
+        <div class="ap-cc-row">
+          <span class="ap-cc-row-label">Licensed</span>
+          <span class="ap-cc-row-value">${market.state_abbr}</span>
+        </div>
+        <div class="ap-cc-row">
+          <span class="ap-cc-row-label">Carriers</span>
+          <span class="ap-cc-row-value">${agent.carrier_count}+</span>
+        </div>
+        <div class="ap-cc-row">
+          <span class="ap-cc-row-label">Tier</span>
+          <span class="ap-cc-row-value" style="text-transform:capitalize;">${agent.tier}</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── CALL CTA STRIP (dark) ─────────────────────── -->
-<div class="intake" style="padding:28px 0;">
-  <div class="container">
-    <div class="ap-cta-strip">
-      <div>
-        <p style="font-size:18px;font-family:'Fraunces',serif;font-weight:500;color:white;margin-bottom:4px;">Ready to connect with ${agent.first_name}?</p>
-        <p style="font-size:14px;color:rgba(250,246,238,0.75);">Direct call — no middlemen, no sales pressure.</p>
-      </div>
-      <div class="ap-cta-actions">
-        <button class="intake-call-btn" data-ext="${agent.extension}" data-agent="${fullName}" onclick="revealCall(this)">
-          📞 Call ${agent.first_name}
-        </button>
-        <a href="/${stateSlug}/${citySlug}/#intake" class="intake-form-link">Request a callback →</a>
-      </div>
-    </div>
-  </div>
-</div>
 <div id="call-reveal-${agent.extension}" class="call-reveal" style="display:none;background:var(--green);padding:20px 0;">
   <div class="container" style="text-align:center;">
     <p style="color:white;font-size:13px;margin-bottom:8px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;">Call routing number + extension</p>
