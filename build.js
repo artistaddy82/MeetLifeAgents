@@ -55,7 +55,8 @@ const { homepage }        = require('./src/templates/homepage')
 const { cityPage }        = require('./src/templates/city')
 const { statePage }       = require('./src/templates/state')
 const { agentProfilePage }= require('./src/templates/agent')
-const { policyPage, POLICIES } = require('./src/templates/policy')
+const { policyPage, POLICIES }   = require('./src/templates/policy')
+const { comparePage, COMPARES }  = require('./src/templates/compare')
 const {
   notFoundPage,
   privacyPage,
@@ -211,6 +212,16 @@ async function build() {
     console.log()
   }
 
+  // ── COMPARE PAGES ─────────────────────────────────────────────────────────
+  if (FULL_BUILD) {
+    const compareSlugs = Object.keys(COMPARES)
+    console.log(`Compare pages (${compareSlugs.length}):`)
+    for (const cs of compareSlugs) {
+      write(`dist/compare/${cs}/index.html`, comparePage(cs, config))
+    }
+    console.log()
+  }
+
   // ── SITEMAP + ROBOTS ───────────────────────────────────────────────────────
   if (FULL_BUILD) {
     console.log('Sitemap & robots:')
@@ -235,6 +246,9 @@ async function build() {
       }
     }
 
+    // Compare page URLs
+    const compareUrls = Object.keys(COMPARES).map(cs => `${SITE_URL}/compare/${cs}/`)
+
     // Agent profile URLs
     const agentUrls = []
     for (const market of markets.cities) {
@@ -244,7 +258,7 @@ async function build() {
       }
     }
 
-    const allUrls = [...staticUrls, ...stateUrls, ...policyUrls, ...cityUrls, ...agentUrls]
+    const allUrls = [...staticUrls, ...stateUrls, ...policyUrls, ...compareUrls, ...cityUrls, ...agentUrls]
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allUrls.map(u => `  <url><loc>${u}</loc><changefreq>weekly</changefreq></url>`).join('\n')}
