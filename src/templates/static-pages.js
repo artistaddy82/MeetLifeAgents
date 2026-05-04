@@ -805,4 +805,366 @@ ${footer()}
 </html>`
 }
 
-module.exports = { notFoundPage, privacyPage, termsPage, tcpaPage, contactPage, howItWorksPage, ourVettingPage, whyIndependentPage }
+/* ── FAQ ─────────────────────────────────────────────────────────────────── */
+
+function faqPage(config) {
+  const siteUrl = config.siteUrl || 'https://meetlifeagents.com'
+  const canonical = `${siteUrl}/faq/`
+
+  const categories = [
+    {
+      id:    'getting-started',
+      label: 'Getting started',
+      icon:  '▸',
+      faqs: [
+        {
+          q: 'Is MeetLifeAgents free for consumers?',
+          a: 'Yes — completely free. You pay nothing to browse, compare agents, or submit your information. Agents pay a small connection fee when they receive a verified lead, similar to how a contractor pays a referral network. The consumer experience is always free and carries no obligation.',
+        },
+        {
+          q: 'When is the best age to buy life insurance?',
+          a: 'Actuarially, the earlier the better. Premiums are set at the age and health you apply — and they\'re locked for the life of the term. A healthy 30-year-old might qualify for a 20-year term policy under $25/month; the same coverage applied for at 45 can cost 3–4× more. The practical trigger isn\'t age, it\'s responsibility: any time you have dependents, a mortgage, or income that others rely on, that\'s when coverage matters.',
+        },
+        {
+          q: 'How much life insurance coverage do I need?',
+          a: 'The most common starting rule: 10–12× your annual household income. But the right number depends on your specific obligations — mortgage balance, number of years until kids are independent, any outstanding debts, and how much income your family would need to maintain their standard of living. Most independent agents will walk you through a coverage needs analysis in about 10 minutes at no charge.',
+        },
+        {
+          q: 'Is my employer-sponsored life insurance enough?',
+          a: 'Almost certainly not as a standalone. Most employer group policies cover 1–2× annual salary — a fraction of the 10–12× guideline. They also travel with your job: if you leave, get laid off, or your employer drops the plan, you lose coverage with no guarantee you\'ll re-qualify at similar rates. Most agents recommend using employer coverage as a baseline and supplementing it with a personal policy you own and control regardless of employment status.',
+        },
+        {
+          q: 'Will I get spam calls after I submit my information?',
+          a: 'No. Your contact information goes to the single matched agent we connect you with — not to a waterfall of 50 buyers. You\'ll hear from one agent. We don\'t add you to any marketing list, and we don\'t sell or share your information. See our <a href="/tcpa/">TCPA disclosure</a> for the full consent language.',
+        },
+      ],
+    },
+    {
+      id:    'policy-types',
+      label: 'Policy types',
+      icon:  '▸',
+      faqs: [
+        {
+          q: 'What\'s the difference between term and permanent life insurance?',
+          a: '<strong>Term life</strong> covers you for a set period — typically 10, 15, 20, or 30 years — and pays a death benefit if you die during that term. It has no cash value and is the cheapest per dollar of coverage. <strong>Permanent life</strong> (whole life, universal life, IUL) covers you for your entire life and builds cash value you can borrow against or surrender. Permanent is typically 5–10× more expensive per dollar of death benefit, but it builds an asset. Most families use term for temporary obligations (a mortgage, children at home) and permanent for long-term estate planning. Many own both.',
+        },
+        {
+          q: 'What are the main types of life insurance?',
+          a: '<strong>Term Life:</strong> Affordable, temporary, pure death benefit — the most common choice for income replacement. <strong>Whole Life:</strong> Permanent, guaranteed cash value growth, fixed premiums — used for estate planning and guaranteed death benefit. <strong>Indexed Universal Life (IUL):</strong> Permanent, cash value tied to a market index with a 0% floor — used for tax-free retirement income. <strong>Final Expense:</strong> Small-face permanent policy ($5K–$30K), simplified issue, no medical exam — designed for burial and end-of-life costs. <strong>Mortgage Protection:</strong> Term policy sized to your loan balance — pays your mortgage if you die during the term.',
+        },
+        {
+          q: 'What\'s the best life insurance for first-time homebuyers?',
+          a: 'For homeowners, Mortgage Protection is the most targeted option — it\'s a term policy sized to cover your remaining loan balance and duration. If you die, the mortgage is paid and your family keeps the home. Many buyers pair it with a separate term policy for broader income replacement. A licensed independent agent can quote both options side-by-side in one conversation.',
+        },
+        {
+          q: 'Can I get life insurance if I have a pre-existing condition?',
+          a: 'Yes, in most cases. Even with conditions like type 2 diabetes, high blood pressure, a history of heart disease, cancer in remission, or treated mental health conditions, many applicants qualify for standard or rated (slightly higher premium) policies. Some carriers specialize in higher-risk cases and offer better rates than others — which is exactly why working with an independent agent matters. If you\'ve been declined before, guaranteed-issue final expense policies are available with automatic approval regardless of health, though premiums are higher and death benefits may be graded in the first 2–3 years.',
+        },
+      ],
+    },
+    {
+      id:    'cost-underwriting',
+      label: 'Cost & underwriting',
+      icon:  '▸',
+      faqs: [
+        {
+          q: 'How much does life insurance cost?',
+          a: 'It varies widely based on age, health, coverage amount, policy type, and carrier. A healthy 35-year-old non-smoker can get a $500,000 20-year term policy for roughly $25–$40/month. A 50-year-old with some health conditions for the same coverage might pay $120–$200/month. Permanent policies (whole life, IUL) cost significantly more per dollar of coverage but build cash value. The only accurate number is your personal quote — an independent agent will run it against multiple top-rated carriers in minutes.',
+        },
+        {
+          q: 'Do I need a medical exam to get life insurance?',
+          a: 'Not necessarily. Many top-rated carriers offer no-exam or simplified-issue policies for eligible applicants. Approval is based on your application answers, prescription database checks, and the MIB (Medical Information Bureau) — no blood draw, no nurse visit. No-exam policies can approve in 24–72 hours, sometimes same-day. The trade-off: they may carry slightly higher premiums or coverage caps compared to fully underwritten policies. Your agent will match you to the underwriting path that makes sense for your health profile.',
+        },
+        {
+          q: 'How quickly can I get life insurance coverage?',
+          a: 'Timelines vary by product. No-exam and final expense policies can approve within 24–72 hours — sometimes same-day. Fully underwritten term policies take 3–6 weeks due to medical records requests, lab work, and carrier review. Guaranteed-issue final expense has effectively instant approval. If speed matters, tell your agent — there are multiple carriers that have streamlined their underwriting significantly.',
+        },
+        {
+          q: 'Are life insurance premiums tax-deductible?',
+          a: 'For individuals, personal life insurance premiums are generally not tax-deductible at the federal level or in most states. However, the death benefit is almost always income-tax-free to the beneficiary. Business-owned life insurance (key-person coverage, buy-sell agreements) can sometimes be deductible depending on how it\'s structured. If you\'re a business owner, an independent agent who works with business clients can walk through your options.',
+        },
+        {
+          q: 'Can I own more than one life insurance policy at the same time?',
+          a: 'Yes. There\'s no limit on how many policies you can own, as long as the total coverage is proportionate to your insurable interest — generally the ceiling is 20–30× your annual income, though most families stay well below this. Many households carry both a term policy for income replacement and a smaller permanent policy for final expenses or legacy planning. Carriers will ask about existing coverage during underwriting, so be transparent on your application.',
+        },
+      ],
+    },
+    {
+      id:    'agents-process',
+      label: 'Agents & our process',
+      icon:  '▸',
+      faqs: [
+        {
+          q: 'What\'s the difference between an independent broker and a captive agent?',
+          a: 'A <strong>captive agent</strong> works for one carrier (State Farm, New York Life, etc.) and can only offer that company\'s products. An <strong>independent broker</strong> is contracted with many carriers and can shop your profile across all of them simultaneously, matching you to the carrier most likely to offer favorable underwriting for your health profile and goals. Every agent on MeetLifeAgents is an independent broker — not tied to any single carrier.',
+        },
+        {
+          q: 'How do I know the agent is actually licensed?',
+          a: 'Every agent listed on MeetLifeAgents has been verified against their state Department of Insurance records before appearing in search results. Each agent profile displays their NPN (National Producer Number) and links directly to their state DOI license lookup, so you can confirm it yourself in under a minute — no trust required.',
+        },
+        {
+          q: 'Are the agents employees of MeetLifeAgents?',
+          a: 'No. All agents are independent contractors running their own practices. MeetLifeAgents is a verified directory — we vet and connect, but we don\'t employ, supervise, or set the rates that agents quote. The agent you connect with owns their book of business and works for you, not for us.',
+        },
+        {
+          q: 'What if I don\'t like the agent I connect with?',
+          a: 'Go back to the city page and choose another — you\'re never locked in. All agents listed have passed the same vetting standards, so every option is a vetted choice. The selection is always yours, and switching agents has zero impact on your ability to get coverage.',
+        },
+        {
+          q: 'How do I verify a life insurance agent\'s license?',
+          a: 'Every licensed life insurance agent must hold an active state license issued by their state\'s Department of Insurance. You can verify any agent\'s license status for free using the NIPR (National Insurance Producer Registry) lookup at <a href="https://nipr.com" target="_blank" rel="noopener">nipr.com</a> — search by name or NPN. It\'s a public record. Every agent profile on MeetLifeAgents includes their NPN and a direct DOI verification link.',
+        },
+      ],
+    },
+    {
+      id:    'policy-details',
+      label: 'Policy details',
+      icon:  '▸',
+      faqs: [
+        {
+          q: 'What happens to my life insurance if I move to another state?',
+          a: 'Your policy travels with you. Life insurance is a contract between you and the carrier — not tied to your address. If you move, your coverage, premium, and terms remain the same. Just update your address with the carrier. The only exception is certain state-specific riders (rare) that may not be valid in all states. Your agent can confirm portability before you apply.',
+        },
+        {
+          q: 'How do I choose a beneficiary?',
+          a: 'Your beneficiary is whoever receives the death benefit when you die. Most policyholders name a spouse or partner as primary beneficiary and adult children as contingent (backup) beneficiaries. A few important rules: minors can\'t directly receive policy proceeds — name a guardian, a trust, or a custodian instead. Update your beneficiary after major life events (marriage, divorce, new child). You can name a charity or your estate, though each has different tax implications worth discussing with your agent.',
+        },
+        {
+          q: 'What policy riders should I consider?',
+          a: 'Riders let you customize a base policy. The most useful: <strong>Waiver of Premium</strong> — keeps your policy active if you become totally disabled. <strong>Accelerated Death Benefit</strong> — lets you access part of the death benefit if diagnosed with a terminal illness. <strong>Child Term Rider</strong> — inexpensive way to cover all minor children under one policy. <strong>Return of Premium</strong> — refunds all premiums paid if you outlive a term policy (costs more, but appeals to risk-averse buyers). <strong>Convertibility</strong> — lets you convert a term policy to permanent without new underwriting. Which riders make sense depends on your budget and goals.',
+        },
+        {
+          q: 'What protects my policy if my insurance carrier goes out of business?',
+          a: 'Life insurance policies are protected by each state\'s life and health guaranty association — a member of NOLHGA (National Organization of Life & Health Insurance Guaranty Associations). If a licensed carrier becomes insolvent, the guaranty association steps in to pay covered claims up to state-specified limits (often $300,000–$500,000 in death benefits per policy, varying by state). This statutory safety net exists on top of each carrier\'s own financial reserves and reinsurance programs.',
+        },
+        {
+          q: 'What is the contestability period?',
+          a: 'Most life insurance policies have a 2-year contestability period from the issue date. During this window, the carrier has the right to investigate a claim and potentially deny it if they find material misrepresentations on the original application — such as undisclosed health conditions or tobacco use. After 2 years, the policy is generally incontestable, meaning the carrier must pay valid claims regardless of application accuracy (fraud is an exception). This is why honesty on your application matters.',
+        },
+      ],
+    },
+  ]
+
+  const categoryNav = categories.map(c =>
+    `<a href="#${c.id}" class="faq-cat-link">${c.label}</a>`
+  ).join('')
+
+  const categoryBlocks = categories.map(c => `
+    <div class="faq-cat-block" id="${c.id}">
+      <h2 class="faq-cat-head display">${c.label}</h2>
+      <div class="faq-list">
+        ${c.faqs.map(f => `
+        <details class="faq-item">
+          <summary>${f.q}</summary>
+          <p>${f.a}</p>
+        </details>`).join('')}
+      </div>
+    </div>`).join('')
+
+  const totalQ = categories.reduce((n, c) => n + c.faqs.length, 0)
+
+  return `${head({
+    title:       'Life Insurance FAQ — Common Questions Answered | MeetLifeAgents',
+    description: `${totalQ} life insurance questions answered plainly — cost, coverage, medical exams, policy types, agents, riders, and more. No jargon.`,
+    canonical,
+  })}
+<body>
+${header()}
+
+<section class="pg-hero" style="border-bottom:1px solid var(--rule);padding-bottom:56px;">
+  <div class="container">
+    <p class="city-eyebrow" style="padding-top:40px;">${totalQ} questions answered</p>
+    <h1 class="display pg-hero-title">Life Insurance FAQ</h1>
+    <p class="pg-hero-sub" style="max-width:580px;">Plain answers to the questions people actually ask — no jargon, no sales pitch.</p>
+    <div class="faq-cat-nav">${categoryNav}</div>
+  </div>
+</section>
+
+<div class="container" style="padding-top:60px;padding-bottom:80px;">
+  <div class="faq-layout">
+    <nav class="faq-toc">
+      <div class="faq-toc-head">Categories</div>
+      ${categories.map(c => `<a href="#${c.id}">${c.label}</a>`).join('')}
+    </nav>
+    <div class="faq-body">
+      ${categoryBlocks}
+    </div>
+  </div>
+</div>
+
+<section class="intake" style="padding:72px 0;text-align:center;">
+  <div class="container">
+    <h2 class="display" style="font-size:clamp(28px,4vw,42px);color:var(--cream);margin-bottom:16px;">Still have questions? Ask a local agent.</h2>
+    <p style="color:rgba(250,246,238,0.75);font-size:17px;margin-bottom:36px;">Every agent on MeetLifeAgents is independent, vetted, and willing to explain anything — free of charge.</p>
+    <a href="/" class="btn-cream" style="font-size:16px;padding:16px 36px;">Find an agent near you →</a>
+  </div>
+</section>
+
+${GLOBAL_SCRIPTS}
+${footer()}
+</body>
+</html>`
+}
+
+/* ── GLOSSARY ─────────────────────────────────────────────────────────────── */
+
+function glossaryPage(config) {
+  const siteUrl = config.siteUrl || 'https://meetlifeagents.com'
+  const canonical = `${siteUrl}/glossary/`
+
+  const terms = [
+    // A
+    { term: 'Accelerated Death Benefit (ADB)', def: 'A rider that allows the policyholder to access a portion of the death benefit while still alive if diagnosed with a qualifying terminal, chronic, or critical illness. The remaining benefit is paid to beneficiaries at death. Sometimes called a "living benefit."' },
+    { term: 'Accidental Death Benefit', def: 'A rider that pays an additional death benefit — often equal to the base policy face amount — if the insured dies as a direct result of an accident. Sometimes called "double indemnity." Does not apply to illness, suicide, or high-risk activities.' },
+    { term: 'Annuity', def: 'A contract with an insurance company that provides a stream of payments over time, typically in retirement. Unlike life insurance (which pays at death), annuities are designed to be drawn down during life. They\'re a separate product from life insurance and often managed by the same carriers.' },
+    { term: 'Application', def: 'The written or electronic form submitted to a carrier requesting a life insurance policy. Requires disclosure of personal and health information. Deliberate misrepresentation on an application can give the carrier grounds to rescind the policy during the contestability period.' },
+    // B
+    { term: 'Beneficiary', def: 'The person (or entity) designated to receive the death benefit when the insured dies. A <em>primary</em> beneficiary receives the proceeds first. A <em>contingent</em> (or secondary) beneficiary receives the proceeds only if the primary predeceases the insured. You can name multiple beneficiaries and specify percentages.' },
+    { term: 'Buy-Sell Agreement', def: 'A legal agreement between business co-owners that specifies how a partner\'s share will be transferred if they die, become disabled, or leave. Often funded by life insurance policies owned by each partner on the others\' lives, ensuring the surviving partners have cash to buy out the deceased\'s share without disrupting the business.' },
+    // C
+    { term: 'Captive Agent', def: 'A licensed agent who is contracted exclusively with one insurance carrier (e.g., New York Life, State Farm). A captive agent can only offer their employer\'s products. Contrast with independent agent/broker.' },
+    { term: 'Carrier', def: 'The insurance company that underwrites and issues the policy, assumes the financial risk, and pays claims. Examples include Prudential, Pacific Life, North American, Mutual of Omaha. Your agent works with multiple carriers; your policy is with one specific carrier.' },
+    { term: 'Cash Surrender Value', def: 'The amount you receive if you voluntarily cancel a permanent life insurance policy. Usually less than the accumulated cash value in early years due to surrender charges. Increases over time as surrender charges fade. On older whole life policies it can equal or exceed total premiums paid.' },
+    { term: 'Cash Value', def: 'The savings or investment component inside a permanent life insurance policy (whole life, universal life, IUL). It grows over time on a tax-deferred basis. Policyholders can borrow against it, withdraw from it, or use it to pay premiums. Term life policies have no cash value.' },
+    { term: 'Contestability Period', def: 'A window — typically the first two years after policy issue — during which the insurance company can investigate and deny a claim if they discover material misrepresentation on the original application. After this period the policy is generally incontestable (except for outright fraud). Honest applications prevent contestability issues.' },
+    { term: 'Conversion Privilege', def: 'A feature on many term life policies that allows the policyholder to convert to a permanent policy (e.g., whole life) without undergoing new medical underwriting — regardless of current health. Especially valuable if your health has declined since the original issue. Conversions must typically be completed before a specified age or before the term ends.' },
+    { term: 'Cost of Insurance (COI)', def: 'The pure mortality cost component inside a universal life or IUL policy — essentially the pure term insurance rate the carrier charges each month. COI increases with age. In IUL and universal life policies, COI is deducted from the cash value each month.' },
+    // D
+    { term: 'Death Benefit', def: 'The amount paid to the beneficiary (or beneficiaries) when the insured dies. Usually paid as a lump sum, income-tax-free. Also called the "face amount" or "policy proceeds." The exact benefit depends on policy type — it\'s level in term and whole life, but can vary in universal and IUL policies.' },
+    { term: 'Decreasing Term', def: 'A term policy where the death benefit decreases over the policy period, typically in proportion to a declining debt balance (like a mortgage). Premium remains level while coverage shrinks. Mortgage protection insurance is often decreasing term. Compare with level term, where the death benefit stays constant.' },
+    { term: 'Dividend', def: 'A share of surplus profit returned to policyholders of <em>participating</em> whole life policies, typically issued by mutual insurance companies. Dividends are not guaranteed, but companies like MassMutual and Guardian have paid them consecutively for over a century. Can be taken as cash, used to reduce premiums, or used to buy additional paid-up insurance.' },
+    // E
+    { term: 'Elimination Period', def: 'In disability insurance and long-term care policies, the waiting period after a qualifying event before benefits begin — typically 30, 60, or 90 days. Sometimes called the "deductible period." Not typically applicable to life insurance death benefits, which are paid immediately upon claim approval.' },
+    { term: 'Endorsement', def: 'A written amendment that modifies the original terms of a policy, either expanding or restricting coverage. Endorsements are attached to and form part of the policy contract. Similar to a rider, but a rider typically adds new benefits while an endorsement modifies existing terms.' },
+    // F
+    { term: 'Face Amount', def: 'The stated death benefit on the front page of the policy — the amount the carrier agrees to pay upon the insured\'s death (absent any applicable riders or loans). Also called the "coverage amount" or "death benefit." On universal life policies, the face amount may be adjustable.' },
+    { term: 'Final Expense Insurance', def: 'A type of whole life policy with a small face amount ($5,000–$30,000) designed specifically to cover end-of-life costs: funeral, burial, medical bills, and minor outstanding debts. Uses simplified underwriting (few medical questions, no exam). Typically available for applicants ages 50–85. Premiums are higher per dollar of coverage than term, but qualification is easier.' },
+    { term: 'Free Look Period', def: 'A mandatory period — typically 10–30 days from policy delivery — during which a new policyholder can cancel the policy for any reason and receive a full premium refund. Required by law in all states, though the length varies. A no-risk window to review your policy before committing.' },
+    // G
+    { term: 'Grace Period', def: 'A period after a premium due date — typically 30 or 31 days — during which the policy remains in force even if the premium hasn\'t been paid. If the insured dies during the grace period, the carrier pays the death benefit minus the unpaid premium. After the grace period, the policy lapses.' },
+    { term: 'Graded Death Benefit', def: 'A provision in guaranteed-issue and some simplified-issue policies that limits the death benefit during the first 2–3 years of the policy. If the insured dies of natural causes during this period, beneficiaries receive the premiums paid plus interest (not the full face amount). After the graded period, the full death benefit is payable. Accidental death is often paid in full from day one.' },
+    { term: 'Group Life Insurance', def: 'Life insurance provided through an employer or association to a group of members under a single master policy. Premiums are typically lower than individual policies, and underwriting may be minimal. The major disadvantage: coverage is usually tied to employment — if you leave the job, coverage ends (though conversion rights may apply).' },
+    { term: 'Guaranteed Issue (GI)', def: 'A policy available to any applicant within the eligible age range, regardless of health status — no medical exam, no health questions. Always comes with a graded death benefit in the first 2–3 years. Premiums are the highest per dollar of coverage due to the carrier\'s adverse selection risk. Used primarily for final expense coverage when standard underwriting isn\'t available.' },
+    { term: 'Guaranteed Insurability Rider', def: 'A rider allowing the policyholder to purchase additional coverage at specified future dates without providing evidence of insurability (i.e., without new medical underwriting). Useful if you expect your insurance needs to increase over time (growing family, increasing income) and want to lock in the right to buy more regardless of future health.' },
+    // H
+    { term: 'Health Classification', def: 'The rating tier assigned by the carrier based on the applicant\'s medical underwriting. Common classifications (best to worst): Preferred Plus → Preferred → Standard Plus → Standard → Substandard (or Table-rated). Better classifications mean lower premiums. Tobacco users are placed in separate smoker classifications with significantly higher rates.' },
+    // I
+    { term: 'Impaired Risk', def: 'An applicant who has a health condition that increases their mortality risk above average. May result in a substandard (table-rated) classification with higher premiums, policy exclusions for specific conditions, or declination. Some carriers specialize in impaired-risk underwriting and may offer better terms than standard carriers for certain conditions.' },
+    { term: 'Independent Agent / Broker', def: 'A licensed insurance professional contracted with multiple carriers who can shop a client\'s profile across many companies simultaneously. Independent agents are not employed by any single carrier, so their recommendations should reflect your best option — not their employer\'s product. All agents on MeetLifeAgents are independent.' },
+    { term: 'Indexed Universal Life (IUL)', def: 'A form of permanent life insurance where the cash value earns interest linked to a market index (like the S&P 500), subject to a cap (typically 8–12%) and a floor (typically 0% — credited interest can\'t go negative). Combines permanent death benefit, flexible premiums, and market-linked (but protected) growth. More complex than term or whole life; illustration assumptions require scrutiny.' },
+    { term: 'Insurable Interest', def: 'The financial or emotional stake someone has in another person\'s continued life, which justifies owning a life insurance policy on that person. Spouses, parents of minor children, and business partners typically have clear insurable interest. You cannot take out a policy on a stranger. Must exist at policy issue; it\'s not required to persist for a claim to be paid.' },
+    // J
+    { term: 'Joint Life Policy', def: 'A policy covering two lives under a single contract. A "first-to-die" joint policy pays the death benefit when the first insured dies. A "second-to-die" (survivorship) policy pays only after both insureds have died — commonly used for estate planning to cover estate taxes due at the second death.' },
+    // K
+    { term: 'Key Person Insurance', def: 'Life insurance owned by a business on a key employee or partner whose death would create significant financial disruption. The business is the beneficiary and uses the proceeds to fund recruitment, offset lost revenue, or fund a buy-sell agreement. Premiums are generally not deductible, but proceeds are typically income-tax-free.' },
+    // L
+    { term: 'Lapse', def: 'The termination of a life insurance policy due to non-payment of premiums beyond the grace period. Once lapsed, coverage ends. Some policies include non-forfeiture options (extended term insurance, reduced paid-up insurance) that prevent total loss of value. Reinstatement may be possible within a specified period if back premiums are paid and insurability is demonstrated.' },
+    { term: 'Level Premium', def: 'A premium structure where the amount you pay remains constant for the entire policy period. Most term and whole life policies are level-premium — the rate you lock in on day one never increases during the guaranteed period. Contrast with annually renewable term, where premiums increase each year.' },
+    { term: 'Level Term', def: 'A term life policy where both the death benefit and the premium remain constant throughout the policy period (e.g., $500,000 face amount at $28/month for 20 years). The most common and straightforward form of term insurance. At the end of the term, coverage expires unless renewed or converted.' },
+    { term: 'Living Benefit', def: 'See <em>Accelerated Death Benefit</em>. A broad term for any policy feature that allows the insured to access part of the death benefit while still alive — triggered by terminal illness, chronic illness, or critical illness diagnoses. Living benefits have become standard on most modern term and permanent policies.' },
+    // M
+    { term: 'MIB (Medical Information Bureau)', def: 'A member-owned database used by life and health insurance companies to share coded medical information from past applications, helping prevent fraud and misrepresentation. When you apply for life insurance, the carrier will check MIB records. Applicants can request their own MIB file for free once per year at mib.com.' },
+    { term: 'Modified Endowment Contract (MEC)', def: 'A life insurance policy that has been funded too rapidly — beyond IRS limits — causing it to lose favorable tax treatment. Policy loans from a MEC are treated as taxable income (and potentially subject to a 10% penalty before age 59½). A properly structured policy avoids MEC status. An important consideration when over-funding IUL or universal life.' },
+    { term: 'Mortgage Protection Insurance (MPI)', def: 'A type of life insurance — usually decreasing term — specifically designed to pay off a remaining mortgage balance if the primary earner dies. The death benefit decreases in parallel with the loan balance while the premium stays level. Compare to standard level term: with term, the death benefit stays constant and your family — not the lender — receives the proceeds and can use them as they choose.' },
+    { term: 'Mutual Company', def: 'An insurance company owned by its policyholders rather than public shareholders. Mutual companies may issue dividends to participating policyholders from surplus profits. Examples include MassMutual, Guardian, Northwestern Mutual. Contrast with stock companies (owned by shareholders). Mutual company whole life policies are often participating (dividend-eligible).' },
+    // N
+    { term: 'Non-Forfeiture Options', def: 'Rights guaranteed to a permanent life policyholder who stops paying premiums, ensuring they don\'t forfeit all accumulated value. Common options: <em>Cash surrender</em> (take the surrender value in cash), <em>Reduced paid-up insurance</em> (convert to a smaller, fully paid-up policy), <em>Extended term insurance</em> (use the cash value to buy term coverage for as long as possible at the original face amount).' },
+    { term: 'NPN (National Producer Number)', def: 'A unique, permanent identifier assigned to every licensed insurance agent or broker in the United States by the NIPR (National Insurance Producer Registry). An NPN never changes even if an agent moves states or changes employers. Consumers can look up any agent\'s licensure, appointment, and complaint history using their NPN at nipr.com. Every MeetLifeAgents profile displays the agent\'s NPN.' },
+    // P
+    { term: 'Paid-Up Additions (PUAs)', def: 'Small blocks of additional whole life insurance purchased with policy dividends or optional extra premium payments. PUAs are fully paid-up at purchase, have immediate cash value, and earn their own dividends. A powerful tool for accelerating cash value growth inside a participating whole life policy without additional underwriting.' },
+    { term: 'Permanent Life Insurance', def: 'Any life insurance policy designed to remain in force for the insured\'s entire lifetime (as long as premiums are paid and the policy isn\'t surrendered). Includes whole life, universal life, indexed universal life, and variable universal life. All accumulate cash value. Contrast with term life, which expires at the end of the term.' },
+    { term: 'Policy Loan', def: 'A loan taken against the cash value of a permanent life insurance policy. Not considered taxable income (in non-MEC policies) because it\'s technically a loan, not a withdrawal. Interest accrues on the outstanding loan balance. If the loan and interest exceed the cash value, the policy lapses. Outstanding loans reduce the death benefit paid to beneficiaries.' },
+    { term: 'Premium', def: 'The amount paid to the insurance company to keep the policy in force. Can be paid monthly, quarterly, semi-annually, or annually (annual typically offers a slight discount). For term and whole life, the premium is fixed. For universal life and IUL, the premium is flexible within a range. Missing a premium payment begins the grace period.' },
+    { term: 'Primary Beneficiary', def: 'The first-in-line recipient of a life insurance death benefit upon the insured\'s death. If the primary beneficiary predeceases the insured, the proceeds pass to the contingent (secondary) beneficiary. Multiple primary beneficiaries can share the proceeds by percentage.' },
+    // R
+    { term: 'Rated Policy', def: 'A policy issued at a higher-than-standard premium because the applicant\'s health or lifestyle presents elevated risk. Ratings are expressed as "table rates" (Table 2, Table 4, etc.), each adding approximately 25% to the standard premium. A Table 4 policy costs about 2× the standard rate. Ratings can sometimes be removed if health improves.' },
+    { term: 'Return of Premium (ROP)', def: 'A rider or policy type that refunds all premiums paid if the insured outlives the term. A $500,000 20-year ROP term might cost $80/month vs. $25/month for standard term — the extra cost is essentially a forced savings vehicle. If you die during the term, the full death benefit is paid (not the premiums). Appeals to those uncomfortable with the idea of "wasting" premiums.' },
+    { term: 'Rider', def: 'An add-on provision that modifies or expands a base life insurance policy\'s coverage, usually for an additional premium. Common riders include Waiver of Premium, Accelerated Death Benefit, Child Term, Guaranteed Insurability, and Return of Premium. Riders can often be added at issue but may be difficult to add later.' },
+    // S
+    { term: 'Simplified Issue', def: 'A policy that requires answering a few health questions (but no medical exam) for approval. Faster and easier than full underwriting, with slightly higher premiums. Typically available for coverage up to $500,000 depending on carrier. Common for final expense, some term, and mortgage protection products.' },
+    { term: 'Substandard Risk', def: 'See <em>Rated Policy</em>. An applicant whose health profile, occupation, or avocation places them in a higher mortality risk category than standard. Results in higher premiums (table ratings) or policy exclusions. Some carriers specialize in substandard underwriting and may offer better terms for specific conditions.' },
+    { term: 'Surrender Charge', def: 'A fee deducted from the cash value if a permanent life insurance policy is cancelled in its early years (typically years 1–10). Surrender charges decline each year and eventually disappear. Designed to recover the carrier\'s initial cost of issuing the policy. This is why the cash surrender value in early years is less than total premiums paid.' },
+    // T
+    { term: 'Term Life Insurance', def: 'Life insurance that provides pure death benefit protection for a specified period — typically 10, 15, 20, 25, or 30 years. If the insured dies during the term, the beneficiary receives the death benefit. If the insured outlives the term, coverage expires with no payout (unless an ROP rider was purchased). No cash value. The most affordable form of life insurance per dollar of coverage.' },
+    { term: 'Terminal Illness Rider', def: 'See <em>Accelerated Death Benefit</em>. Specifically triggered by a diagnosis of terminal illness with a life expectancy typically of 12–24 months. Allows access to 25–100% of the death benefit while still alive. Now standard on most policies at no additional cost. Reduces the final death benefit by the amount accelerated.' },
+    // U
+    { term: 'Underwriting', def: 'The process by which an insurance company evaluates an applicant\'s risk profile to determine whether to issue a policy, at what premium, and under what terms. Life insurance underwriting considers age, gender, health history, current health status, family medical history, occupation, lifestyle, and existing insurance. Simplified issue uses database checks only; full underwriting may include blood work, paramedical exams, and medical records.' },
+    { term: 'Universal Life Insurance (UL)', def: 'A flexible permanent life insurance product with adjustable premiums and death benefits. Cash value earns interest at a declared rate (not market-linked like IUL). The policyholder can increase or decrease premiums within limits and sometimes adjust the death benefit. Lower premiums mean the cost of insurance is deducted from cash value; if cash value runs out, the policy lapses.' },
+    // W
+    { term: 'Waiver of Premium Rider', def: 'A rider that waives (eliminates) the premium obligation if the policyholder becomes totally disabled and cannot work. The policy remains in full force while premiums are waived. Definition of disability varies by carrier. Typically has an elimination period (90–180 days of disability before waiver kicks in). One of the most universally recommended riders for working-age policyholders.' },
+    { term: 'Whole Life Insurance', def: 'A form of permanent life insurance with a fixed death benefit, fixed premium, and guaranteed cash value growth rate. As long as premiums are paid, the policy cannot lapse and the death benefit is guaranteed. Participating whole life (from mutual companies) may also earn non-guaranteed dividends. The most predictable and conservative form of permanent insurance.' },
+  ]
+
+  // Build A-Z index
+  const byLetter = {}
+  const usedLetters = new Set()
+  for (const t of terms) {
+    const letter = t.term[0].toUpperCase()
+    if (!byLetter[letter]) byLetter[letter] = []
+    byLetter[letter].push(t)
+    usedLetters.add(letter)
+  }
+
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+
+  const letterNav = alphabet.map(l =>
+    usedLetters.has(l)
+      ? `<a href="#gl-${l}" class="gl-letter-link gl-letter-link--active">${l}</a>`
+      : `<span class="gl-letter-link gl-letter-link--empty">${l}</span>`
+  ).join('')
+
+  const termBlocks = alphabet.filter(l => byLetter[l]).map(l => `
+    <div class="gl-section" id="gl-${l}">
+      <div class="gl-letter-head">${l}</div>
+      <div class="gl-terms">
+        ${byLetter[l].map(t => `
+        <div class="gl-term">
+          <dt class="gl-term-name display">${t.term}</dt>
+          <dd class="gl-term-def">${t.def}</dd>
+        </div>`).join('')}
+      </div>
+    </div>`).join('')
+
+  return `${head({
+    title:       'Life Insurance Glossary — Terms Defined Plainly | MeetLifeAgents',
+    description: `${terms.length} life insurance terms defined clearly — from accelerated death benefit to whole life. No jargon, no padding.`,
+    canonical,
+  })}
+<body>
+${header()}
+
+<section class="pg-hero" style="border-bottom:3px solid var(--gold);background:var(--ink);color:var(--cream);padding:40px 0 60px;">
+  <div class="container">
+    <p class="city-eyebrow" style="color:var(--gold-soft);padding-top:0;">${terms.length} terms defined</p>
+    <h1 class="display" style="font-size:clamp(40px,5vw,60px);color:var(--cream);line-height:1.05;letter-spacing:-0.025em;margin-bottom:16px;">Insurance Glossary</h1>
+    <p style="font-size:18px;color:rgba(250,246,238,0.7);max-width:520px;line-height:1.55;">Every term you'll encounter shopping for life insurance — defined without the jargon.</p>
+  </div>
+</section>
+
+<div class="gl-letter-bar">
+  <div class="container">
+    <div class="gl-letter-nav">${letterNav}</div>
+  </div>
+</div>
+
+<div class="container" style="padding-top:64px;padding-bottom:100px;">
+  <dl class="gl-body">
+    ${termBlocks}
+  </dl>
+</div>
+
+<section class="intake" style="padding:72px 0;text-align:center;">
+  <div class="container">
+    <h2 class="display" style="font-size:clamp(28px,4vw,42px);color:var(--cream);margin-bottom:16px;">Ready to put this into practice?</h2>
+    <p style="color:rgba(250,246,238,0.75);font-size:17px;margin-bottom:36px;">Connect with a vetted independent agent in your city who can explain exactly how these terms apply to your situation.</p>
+    <a href="/" class="btn-cream" style="font-size:16px;padding:16px 36px;">Find an agent near you →</a>
+  </div>
+</section>
+
+${GLOBAL_SCRIPTS}
+${footer()}
+</body>
+</html>`
+}
+
+module.exports = { notFoundPage, privacyPage, termsPage, tcpaPage, contactPage, howItWorksPage, ourVettingPage, whyIndependentPage, faqPage, glossaryPage }

@@ -65,7 +65,9 @@ const {
   contactPage,
   howItWorksPage,
   ourVettingPage,
-  whyIndependentPage
+  whyIndependentPage,
+  faqPage,
+  glossaryPage,
 } = require('./src/templates/static-pages')
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -137,6 +139,8 @@ async function build() {
     write('dist/how-it-works/index.html',        howItWorksPage(config))
     write('dist/our-vetting/index.html',          ourVettingPage(config))
     write('dist/why-independent-agent/index.html', whyIndependentPage(config))
+    write('dist/faq/index.html',          faqPage(config))
+    write('dist/glossary/index.html',     glossaryPage(config))
     write('dist/contact/index.html',      contactPage(config))
     write('dist/privacy/index.html',      privacyPage(config))
     write('dist/terms/index.html',        termsPage(config))
@@ -230,6 +234,8 @@ async function build() {
       `${SITE_URL}/how-it-works/`,
       `${SITE_URL}/our-vetting/`,
       `${SITE_URL}/why-independent-agent/`,
+      `${SITE_URL}/faq/`,
+      `${SITE_URL}/glossary/`,
       `${SITE_URL}/contact/`,
       `${SITE_URL}/privacy/`,
       `${SITE_URL}/terms/`,
