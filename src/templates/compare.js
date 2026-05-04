@@ -6,8 +6,8 @@ const { head, header, footer, GLOBAL_SCRIPTS } = require('./layout')
 const COMPARES = {
 
   'term-vs-whole-life': {
-    left:    { name: 'Term Life',  slug: 'term-insurance',  color: 'var(--rust)' },
-    right:   { name: 'Whole Life', slug: 'whole-life',      color: 'var(--gold)' },
+    left:    { name: 'Term Life',  slug: 'term-insurance',  key: 'term',  color: 'var(--rust)' },
+    right:   { name: 'Whole Life', slug: 'whole-life',      key: 'whole', color: 'var(--gold)' },
     tagline: 'The most debated life insurance question — settled.',
     intro:   'Both policies pay a tax-free death benefit. That\'s where the similarity ends. Term is pure, cheap protection that expires. Whole life is a permanent contract that builds guaranteed cash value. One is right for most people. One is right for almost nobody by default — and oversold constantly.',
     rows: [
@@ -45,8 +45,8 @@ const COMPARES = {
   },
 
   'term-vs-iul': {
-    left:    { name: 'Term Life',            slug: 'term-insurance',         color: 'var(--rust)' },
-    right:   { name: 'Indexed Universal Life', slug: 'indexed-universal-life', color: 'var(--gold)' },
+    left:    { name: 'Term Life',              slug: 'term-insurance',         key: 'term', color: 'var(--rust)' },
+    right:   { name: 'Indexed Universal Life', slug: 'indexed-universal-life', key: 'iul',  color: 'var(--gold)' },
     tagline: 'Pure protection vs. tax-free retirement income — these aren\'t the same product.',
     intro:   'Agents often pitch IUL as "better than term because it builds cash value." That\'s the wrong framing. Term and IUL solve different problems. Term replaces income if you die young. IUL, when structured properly for someone who\'s already maxing traditional retirement accounts, provides tax-free retirement income with a life insurance wrapper. Confusing the two leads to expensive mistakes.',
     rows: [
@@ -84,8 +84,8 @@ const COMPARES = {
   },
 
   'whole-life-vs-iul': {
-    left:    { name: 'Whole Life',             slug: 'whole-life',              color: 'var(--gold)' },
-    right:   { name: 'Indexed Universal Life', slug: 'indexed-universal-life',  color: 'var(--rust)' },
+    left:    { name: 'Whole Life',             slug: 'whole-life',              key: 'whole', color: 'var(--gold)' },
+    right:   { name: 'Indexed Universal Life', slug: 'indexed-universal-life',  key: 'iul',   color: 'var(--rust)' },
     tagline: 'Guaranteed certainty vs. market-linked upside — two very different permanent policies.',
     intro:   'Both are permanent life insurance with cash value. But they are built on fundamentally different philosophies. Whole life prioritizes guarantees: guaranteed death benefit, guaranteed cash value growth, guaranteed premiums. IUL bets on market performance — within bounds — and gives you flexibility in exchange for uncertainty. Neither is universally better.',
     rows: [
@@ -122,8 +122,8 @@ const COMPARES = {
   },
 
   'term-vs-final-expense': {
-    left:    { name: 'Term Life',      slug: 'term-insurance', color: 'var(--rust)' },
-    right:   { name: 'Final Expense',  slug: 'final-expense',  color: 'var(--gold)' },
+    left:    { name: 'Term Life',     slug: 'term-insurance', key: 'term',  color: 'var(--rust)' },
+    right:   { name: 'Final Expense', slug: 'final-expense',  key: 'final', color: 'var(--gold)' },
     tagline: 'Income protection vs. burial coverage — completely different tools.',
     intro:   'Final expense insurance is not a "smaller term policy." It\'s a distinct product designed for one purpose: covering end-of-life costs (funeral, burial, medical bills) so your family isn\'t stuck with the bill. Term life replaces your income so survivors can maintain their standard of living. Comparing them is like comparing a screwdriver to a hammer — which is right depends entirely on what you\'re trying to fix.',
     rows: [
@@ -160,8 +160,8 @@ const COMPARES = {
   },
 
   'mortgage-protection-vs-term': {
-    left:    { name: 'Mortgage Protection', slug: 'mortgage-protection', color: 'var(--gold)' },
-    right:   { name: 'Term Life',           slug: 'term-insurance',      color: 'var(--rust)' },
+    left:    { name: 'Mortgage Protection', slug: 'mortgage-protection', key: 'mort', color: 'var(--gold)' },
+    right:   { name: 'Term Life',           slug: 'term-insurance',      key: 'term', color: 'var(--rust)' },
     tagline: 'One product tied to your lender. One that stays with your family.',
     intro:   'Mortgage protection insurance (MPI) is marketed aggressively to new homeowners. It sounds logical: if you die, the mortgage is paid off. But the devil is in the details — the death benefit decreases as your loan balance decreases, while your premium stays the same. A level term policy covers the same period, usually costs less, keeps a fixed death benefit, and pays your family instead of the lender. In almost every case, term wins.',
     rows: [
@@ -287,6 +287,64 @@ ${header()}
     <p class="cmp-hero-tagline">${c.tagline}</p>
   </div>
 </section>
+
+<!-- ── POLICY SWITCHER ────────────────────────────────────────────── -->
+<section class="cmp-switcher-sec">
+  <div class="container">
+    <div class="cmp-switcher-inner">
+      <span class="cmp-switcher-label">Compare any two policies</span>
+      <div class="cmp-switcher-controls">
+        <div class="select-wrap cmp-switcher-sel-wrap">
+          <select class="cmp-switcher-sel" id="cmp-sel-left">
+            <option value="term"  ${c.left.key === 'term'  ? 'selected' : ''}>Term Life</option>
+            <option value="whole" ${c.left.key === 'whole' ? 'selected' : ''}>Whole Life</option>
+            <option value="iul"   ${c.left.key === 'iul'   ? 'selected' : ''}>Indexed Universal Life</option>
+            <option value="final" ${c.left.key === 'final' ? 'selected' : ''}>Final Expense</option>
+            <option value="mort"  ${c.left.key === 'mort'  ? 'selected' : ''}>Mortgage Protection</option>
+          </select>
+        </div>
+        <span class="cmp-switcher-vs">VS</span>
+        <div class="select-wrap cmp-switcher-sel-wrap">
+          <select class="cmp-switcher-sel" id="cmp-sel-right">
+            <option value="term"  ${c.right.key === 'term'  ? 'selected' : ''}>Term Life</option>
+            <option value="whole" ${c.right.key === 'whole' ? 'selected' : ''}>Whole Life</option>
+            <option value="iul"   ${c.right.key === 'iul'   ? 'selected' : ''}>Indexed Universal Life</option>
+            <option value="final" ${c.right.key === 'final' ? 'selected' : ''}>Final Expense</option>
+            <option value="mort"  ${c.right.key === 'mort'  ? 'selected' : ''}>Mortgage Protection</option>
+          </select>
+        </div>
+        <button class="cmp-switcher-btn" onclick="cmpSwitcherGo()">Compare →</button>
+      </div>
+      <p class="cmp-switcher-hint" id="cmp-switcher-hint"></p>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  const MAP = {
+    'term+whole':  '/compare/term-vs-whole-life/',
+    'whole+term':  '/compare/term-vs-whole-life/',
+    'term+iul':    '/compare/term-vs-iul/',
+    'iul+term':    '/compare/term-vs-iul/',
+    'whole+iul':   '/compare/whole-life-vs-iul/',
+    'iul+whole':   '/compare/whole-life-vs-iul/',
+    'term+final':  '/compare/term-vs-final-expense/',
+    'final+term':  '/compare/term-vs-final-expense/',
+    'mort+term':   '/compare/mortgage-protection-vs-term/',
+    'term+mort':   '/compare/mortgage-protection-vs-term/',
+  };
+  window.cmpSwitcherGo = function() {
+    const l = document.getElementById('cmp-sel-left').value;
+    const r = document.getElementById('cmp-sel-right').value;
+    const hint = document.getElementById('cmp-switcher-hint');
+    if (l === r) { hint.textContent = 'Please select two different policies.'; return; }
+    const url = MAP[l + '+' + r];
+    if (url) { window.location.href = url; }
+    else { hint.textContent = 'That comparison page is coming soon. Try one of the combinations above.'; }
+  };
+})();
+</script>
 
 <!-- ── INTRO ──────────────────────────────────────────────────────── -->
 <section class="cmp-intro-sec">

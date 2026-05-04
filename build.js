@@ -57,6 +57,7 @@ const { statePage }       = require('./src/templates/state')
 const { agentProfilePage }= require('./src/templates/agent')
 const { policyPage, POLICIES }   = require('./src/templates/policy')
 const { comparePage, COMPARES }  = require('./src/templates/compare')
+const { matchPage, calculatorPage } = require('./src/templates/tools')
 const {
   notFoundPage,
   privacyPage,
@@ -141,6 +142,8 @@ async function build() {
     write('dist/why-independent-agent/index.html', whyIndependentPage(config))
     write('dist/faq/index.html',          faqPage(config))
     write('dist/glossary/index.html',     glossaryPage(config))
+    write('dist/match/index.html',        matchPage(config))
+    write('dist/calculator/index.html',   calculatorPage(config))
     write('dist/contact/index.html',      contactPage(config))
     write('dist/privacy/index.html',      privacyPage(config))
     write('dist/terms/index.html',        termsPage(config))
@@ -236,6 +239,8 @@ async function build() {
       `${SITE_URL}/why-independent-agent/`,
       `${SITE_URL}/faq/`,
       `${SITE_URL}/glossary/`,
+      `${SITE_URL}/match/`,
+      `${SITE_URL}/calculator/`,
       `${SITE_URL}/contact/`,
       `${SITE_URL}/privacy/`,
       `${SITE_URL}/terms/`,
