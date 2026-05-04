@@ -1,5 +1,5 @@
 'use strict'
-const { head, header, footer } = require('./layout')
+const { head, header, footer, GLOBAL_SCRIPTS } = require('./layout')
 
 /* ── shared helpers ─────────────────────────────────────────────────────── */
 
@@ -79,7 +79,7 @@ ${header()}
         <h1 class="display pg-hero-title">Meet a real agent.<br><em style="color:var(--gold-soft);">No spam. No runaround.</em></h1>
         <p class="pg-hero-sub">Most insurance sites sell your contact info to dozens of agents who call for weeks. We work differently — you browse, you pick, you call.</p>
         <div class="hiw-hero-btns">
-          <a href="/" class="btn-ink">Find an agent →</a>
+          <a href="/" class="btn-ink" data-find-cta>Find an agent →</a>
           <a href="/our-vetting/" class="btn-outline">Our vetting standard</a>
         </div>
         <p class="hiw-hero-trust">127 cities &nbsp;·&nbsp; 29 states &nbsp;·&nbsp; 100% license-verified</p>
@@ -162,10 +162,11 @@ ${header()}
   <div class="container">
     <h2 class="display" style="font-size:clamp(28px,4vw,46px);color:var(--cream);margin-bottom:16px;">Ready to meet a local agent?</h2>
     <p style="color:rgba(250,246,238,0.75);font-size:17px;margin-bottom:36px;">No account. No credit card. Just find your city.</p>
-    <a href="/" class="btn-cream" style="font-size:16px;padding:16px 36px;">Find an agent in your city →</a>
+    <a href="/" class="btn-cream" data-find-cta style="font-size:16px;padding:16px 36px;">Find an agent in your city →</a>
   </div>
 </section>
 
+${GLOBAL_SCRIPTS}
 ${footer()}
 </body>
 </html>`
@@ -321,10 +322,11 @@ ${header()}
   <div class="container">
     <h2 class="display" style="font-size:clamp(26px,3.5vw,40px);color:var(--cream);margin-bottom:16px;">Find a vetted agent in your city.</h2>
     <p style="color:rgba(250,246,238,0.7);font-size:17px;margin-bottom:32px;">127 cities. 29 states. Every agent license-checked.</p>
-    <a href="/" class="btn-cream" style="font-size:16px;padding:16px 36px;">Search the directory →</a>
+    <a href="/" class="btn-cream" data-find-cta style="font-size:16px;padding:16px 36px;">Search the directory →</a>
   </div>
 </section>
 
+${GLOBAL_SCRIPTS}
 ${footer()}
 </body>
 </html>`
@@ -697,7 +699,7 @@ ${header()}
         <p class="city-eyebrow" style="color:var(--gold-soft);">Why it matters</p>
         <h1 class="display wia-hero-title">Independent agents<br>work for <em>you.</em><br>Not one company.</h1>
         <p class="wia-hero-sub">A captive agent sells what their employer approves. An independent agent shops 30+ carriers and recommends what fits your life — with no quota to fill.</p>
-        <a href="/" class="btn-cream" style="margin-top:32px;display:inline-block;">Find a vetted independent agent →</a>
+        <a href="/" class="btn-cream" data-find-cta style="margin-top:32px;display:inline-block;">Find a vetted independent agent →</a>
       </div>
       <div class="wia-hero-card">
         <div class="wia-hero-card-label">What independence means</div>
@@ -793,10 +795,11 @@ ${header()}
   <div class="container">
     <h2 class="display" style="font-size:clamp(28px,4vw,46px);color:var(--cream);margin-bottom:16px;">Ready to meet a local independent agent?</h2>
     <p style="color:rgba(250,246,238,0.75);font-size:17px;margin-bottom:36px;">127 cities. Every agent vetted. No account needed.</p>
-    <a href="/" class="btn-cream" style="font-size:16px;padding:16px 36px;">Find an agent in your city →</a>
+    <a href="/" class="btn-cream" data-find-cta style="font-size:16px;padding:16px 36px;">Find an agent in your city →</a>
   </div>
 </section>
 
+${GLOBAL_SCRIPTS}
 ${footer()}
 </body>
 </html>`

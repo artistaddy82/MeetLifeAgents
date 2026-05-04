@@ -20,7 +20,7 @@ function head({ title, description, canonical, extraHead = '' }) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/main.css?v=5">
+<link rel="stylesheet" href="/css/main.css?v=6">
 ${extraHead}
 </head>`
 }
@@ -107,4 +107,7 @@ function footer({ stateSlug = '', stateName = '' } = {}) {
 </footer>`
 }
 
-module.exports = { head, header, footer }
+const GLOBAL_SCRIPTS = `<script src="/js/cities.js"></script>
+<script src="/js/global.js"></script>`
+
+module.exports = { head, header, footer, GLOBAL_SCRIPTS }

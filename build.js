@@ -109,6 +109,16 @@ async function build() {
   // 1. Copy public assets
   console.log('Assets:')
   copyDir('public', 'dist')
+
+  // Generate global cities data file (used by find-agent CTA morph on all pages)
+  const citiesByState = {}
+  for (const m of markets.cities) {
+    if (!citiesByState[m.state_slug]) citiesByState[m.state_slug] = []
+    citiesByState[m.state_slug].push({ slug: m.city_slug, name: m.city_name })
+  }
+  mkdirp('dist/js')
+  fs.writeFileSync('dist/js/cities.js', `window.MLA_CITIES=${JSON.stringify(citiesByState)};`)
+  console.log(`  ✓ dist/js/cities.js${' '.repeat(38)} (asset)`)
   console.log()
 
   const stateMap = buildStateMap()
