@@ -6,6 +6,7 @@ services:
       repo: artistaddy82/MeetLifeAgents
       branch: main
       deploy_on_push: true
+    environment_slug: node-js
     build_command: node build.js
     run_command: node server.js
     http_port: 8080
