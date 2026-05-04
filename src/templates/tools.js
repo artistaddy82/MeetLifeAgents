@@ -12,8 +12,8 @@ function matchPage(config) {
   const canonical = `${siteUrl}/match/`
 
   return `${head({
-    title:       'Match Me with an Agent — Find the Right Life Insurance | MeetLifeAgents',
-    description: 'Answer 4 quick questions and get matched with a vetted, locally-resident independent agent who specializes in exactly what you need.',
+    title:       'Match Me with a Policy & Agent — Find the Right Life Insurance | MeetLifeAgents',
+    description: 'Answer 4 quick questions and get matched with the right policy type and a vetted, locally-resident independent agent who specializes in exactly what you need.',
     canonical,
     extraHead:   `<meta name="robots" content="index,follow">`,
   })}
@@ -24,9 +24,9 @@ ${header()}
 <section class="mth-hero">
   <div class="container">
     <div class="mth-hero-inner">
-      <span class="mth-hero-eyebrow">AgentMatch™</span>
-      <h1 class="display mth-hero-title">Find your <em>exact</em> policy match.</h1>
-      <p class="mth-hero-sub">4 questions. 60 seconds. Matched with a vetted local agent who specializes in what you actually need.</p>
+      <span class="mth-hero-eyebrow">PolicyMatch™</span>
+      <h1 class="display mth-hero-title">Match me with a <em>policy</em> & agent.</h1>
+      <p class="mth-hero-sub">4 questions. 60 seconds. We'll tell you which policy fits your situation — then connect you with a vetted local agent who specializes in it.</p>
       <div class="mth-hero-pills">
         <span>✓ No spam</span>
         <span>✓ One agent, direct connection</span>
@@ -607,7 +607,7 @@ ${header()}
 </section>
 
 <!-- ── EXPLAINER STRIP ─────────────────────────────────────────── -->
-<section style="background:var(--cream-warm);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:56px 0;">
+<section class="mth-how-sec">
   <div class="container">
     <div class="mth-how-grid">
       <div class="mth-how-item">

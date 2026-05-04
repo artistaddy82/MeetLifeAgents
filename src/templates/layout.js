@@ -73,7 +73,7 @@ function footer({ stateSlug = '', stateName = '' } = {}) {
       </div>
       <div class="foot-col">
         <h5>Tools</h5>
-        <a href="/match/">Match Me with an Agent</a>
+        <a href="/match/">Match Me with a Policy & Agent</a>
         <a href="/calculator/">Premium Calculator</a>
         <a href="/faq/">FAQ</a>
         <a href="/glossary/">Insurance Glossary</a>
