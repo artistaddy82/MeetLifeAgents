@@ -334,14 +334,36 @@ ${header()}
     'mort+term':   '/compare/mortgage-protection-vs-term/',
     'term+mort':   '/compare/mortgage-protection-vs-term/',
   };
+
+  const LEFT  = document.getElementById('cmp-sel-left');
+  const RIGHT = document.getElementById('cmp-sel-right');
+
+  function syncOptions(changed, other) {
+    const picked = changed.value;
+    Array.from(other.options).forEach(o => {
+      o.disabled = (o.value === picked);
+    });
+    // If the other is currently showing the same value, bump it to first available
+    if (other.value === picked) {
+      const first = Array.from(other.options).find(o => !o.disabled);
+      if (first) other.value = first.value;
+    }
+  }
+
+  LEFT.addEventListener('change',  () => syncOptions(LEFT,  RIGHT));
+  RIGHT.addEventListener('change', () => syncOptions(RIGHT, LEFT));
+
+  // Run once on load so the initial pre-selected values are already locked
+  syncOptions(LEFT,  RIGHT);
+  syncOptions(RIGHT, LEFT);
+
   window.cmpSwitcherGo = function() {
-    const l = document.getElementById('cmp-sel-left').value;
-    const r = document.getElementById('cmp-sel-right').value;
+    const l = LEFT.value;
+    const r = RIGHT.value;
     const hint = document.getElementById('cmp-switcher-hint');
-    if (l === r) { hint.textContent = 'Please select two different policies.'; return; }
     const url = MAP[l + '+' + r];
     if (url) { window.location.href = url; }
-    else { hint.textContent = 'That comparison page is coming soon. Try one of the combinations above.'; }
+    else { hint.textContent = 'That comparison is coming soon. Try another combination.'; }
   };
 })();
 </script>
