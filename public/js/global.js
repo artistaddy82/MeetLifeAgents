@@ -122,3 +122,49 @@
     init()
   }
 })()
+
+// ── Geo auto-fill (used by /match/ and /calculator/) ─────────────────────────
+// Silently detects user's state + city via IP geolocation and pre-fills the
+// provided dropdowns. Shows a dismissable badge confirming the detected location.
+window.geoAutoFill = function (stateEl, cityEl, cities, badge) {
+  fetch('https://ipwho.is/')
+    .then(function (r) { return r.json() })
+    .then(function (d) {
+      var stateSlug = (d.region_code || '').toLowerCase()
+      var cityName  = (d.city || '').trim()
+      if (!stateSlug || !cities[stateSlug]) return
+
+      // Pre-fill state and trigger the change listener to load cities
+      stateEl.value = stateSlug
+      stateEl.dispatchEvent(new Event('change'))
+
+      // Match city name against our slug list
+      var normalised = cityName.toLowerCase().replace(/[^a-z0-9]/g, '')
+      var cityList   = cities[stateSlug] || []
+      var match      = cityList.find(function (c) {
+        return c.name.toLowerCase().replace(/[^a-z0-9]/g, '') === normalised ||
+               c.slug.replace(/-/g, '') === normalised
+      })
+      if (match) {
+        cityEl.value    = match.slug
+        cityEl.disabled = false
+      }
+
+      // Show confirmation badge
+      if (badge) {
+        var loc = match
+          ? match.name + ', ' + stateSlug.toUpperCase()
+          : stateSlug.toUpperCase()
+        badge.innerHTML =
+          '<span class="geo-badge-icon">📍</span>' +
+          '<span class="geo-badge-text">Detected: ' + loc + '</span>' +
+          '<button class="geo-badge-change" aria-label="Change location">Not you?</button>'
+        badge.style.display = 'flex'
+        badge.querySelector('.geo-badge-change').addEventListener('click', function () {
+          badge.style.display = 'none'
+          stateEl.focus()
+        })
+      }
+    })
+    .catch(function () { /* silent fail — user just fills in manually */ })
+}

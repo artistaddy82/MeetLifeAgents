@@ -211,6 +211,7 @@ ${header()}
                 </select>
               </div>
             </div>
+            <div class="geo-badge" id="mth-geo-badge" style="display:none"></div>
             <button class="mth-submit" id="mth-submit-btn" onclick="mthSubmit()">
               Connect me with a <span id="mth-btn-policy">Term Life</span> specialist →
             </button>
@@ -399,6 +400,9 @@ ${header()}
     });
     cityEl.disabled = !(cities[stateEl.value] || []).length;
   });
+
+  // ── Geo auto-fill ──────────────────────────────────────────────
+  geoAutoFill(stateEl, cityEl, cities, document.getElementById('mth-geo-badge'));
 
   // ── Submit ─────────────────────────────────────────────────────
   window.mthSubmit = function () {
@@ -592,6 +596,7 @@ ${header()}
               <select class="mth-select" id="cq-city-sel" disabled><option value="">City</option></select>
             </div>
           </div>
+          <div class="geo-badge" id="cq-geo-badge" style="display:none"></div>
           <button class="mth-submit" onclick="cqSubmit()">Get my exact quote →</button>
           <p class="mth-privacy">One agent. No spam. <a href="/tcpa/">TCPA disclosure</a>.</p>
 
@@ -771,6 +776,9 @@ ${header()}
     });
     cityEl.disabled = !(cities[stateEl.value] || []).length;
   });
+
+  // ── Geo auto-fill ──────────────────────────────────────────────
+  geoAutoFill(stateEl, cityEl, cities, document.getElementById('cq-geo-badge'));
 
   // ── Submit ─────────────────────────────────────────────────────
   window.cqSubmit = function () {
