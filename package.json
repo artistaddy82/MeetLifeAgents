@@ -4,6 +4,7 @@
   "description": "MeetLifeAgents.com — national directory of verified local life insurance agents",
   "scripts": {
     "build": "node build.js",
+    "start": "node build.js && node server.js",
     "dev": "node build.js && npx --yes serve dist -p 3000",
     "watch": "npx --yes nodemon --watch data --watch src --watch build.js --exec 'node build.js'"
   },

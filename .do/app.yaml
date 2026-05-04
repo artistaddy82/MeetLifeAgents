@@ -1,29 +1,29 @@
 name: meetlifeagents
 
-static_sites:
+services:
   - name: web
     github:
       repo: artistaddy82/MeetLifeAgents
       branch: main
       deploy_on_push: true
     build_command: node build.js
-    output_dir: dist
+    run_command: node server.js
+    http_port: 8080
+    instance_size_slug: basic-xxs
+    instance_count: 1
     envs:
       - key: SITE_URL
         value: https://meetlifeagents.com
-        scope: BUILD_TIME
+        scope: RUN_AND_BUILD_TIME
       - key: API_URL
         value: https://sidecarleads.com
-        scope: BUILD_TIME
+        scope: RUN_AND_BUILD_TIME
       - key: PLATFORM_NUMBER
         value: ""
-        scope: BUILD_TIME
+        scope: RUN_AND_BUILD_TIME
       - key: PLATFORM_DISPLAY
         value: ""
-        scope: BUILD_TIME
+        scope: RUN_AND_BUILD_TIME
       - key: MAPBOX_TOKEN
         value: ""
-        scope: BUILD_TIME
-    routes:
-      - path: /
-    error_document: 404.html
+        scope: RUN_AND_BUILD_TIME
