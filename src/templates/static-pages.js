@@ -1633,10 +1633,16 @@ ${header()}
           </div>
         </div>
 
-        <!-- Carriers -->
+        <!-- Carriers — loaded dynamically from API -->
         <div class="apply-field" style="margin-bottom:16px;">
-          <label class="apply-label" for="ap-carriers">Carriers you currently place with</label>
-          <input class="apply-input" id="ap-carriers" type="text" placeholder="e.g. Mutual of Omaha, North American, Protective…">
+          <label class="apply-label">Carriers you currently place with</label>
+          <div id="ap-carriers-wrap">
+            <div id="ap-carriers-loading" style="font-size:13px;color:var(--ink-soft);padding:10px 0;">Loading carrier list…</div>
+            <div id="ap-carriers-list" style="display:none;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>
+            <div id="ap-carriers-error" style="display:none;margin-top:8px;">
+              <input class="apply-input" id="ap-carriers-fallback" type="text" placeholder="e.g. Mutual of Omaha, North American, Protective…">
+            </div>
+          </div>
         </div>
 
         <!-- How heard + bio -->
@@ -1692,6 +1698,28 @@ ${header()}
 (function () {
   const API_URL = '${apiUrl}';
 
+  // ── Load carriers from API ────────────────────────────────────────────
+  (function loadCarriers() {
+    fetch(API_URL + '/carriers')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        const list = document.getElementById('ap-carriers-list');
+        document.getElementById('ap-carriers-loading').style.display = 'none';
+        if (!data.carriers || !data.carriers.length) throw new Error('empty');
+        data.carriers.forEach(function(c) {
+          const lbl = document.createElement('label');
+          lbl.className = 'apply-check-label';
+          lbl.innerHTML = '<input type="checkbox" class="apply-check apply-carrier-check" value="' + c.name + '"> <span>' + c.name + '</span>';
+          list.appendChild(lbl);
+        });
+        list.style.display = 'flex';
+      })
+      .catch(function() {
+        document.getElementById('ap-carriers-loading').style.display = 'none';
+        document.getElementById('ap-carriers-error').style.display   = 'block';
+      });
+  })();
+
   window.applySubmit = function () {
     const first    = document.getElementById('ap-first').value.trim();
     const last     = document.getElementById('ap-last').value.trim();
@@ -1701,14 +1729,20 @@ ${header()}
     const state    = document.getElementById('ap-state').value;
     const npn      = document.getElementById('ap-npn').value.trim();
     const years    = document.getElementById('ap-years').value;
-    const carriers = document.getElementById('ap-carriers').value.trim();
     const heard    = document.getElementById('ap-heard').value;
     const website  = document.getElementById('ap-website').value.trim();
     const message  = document.getElementById('ap-message').value.trim();
 
+    // Collect selected carriers (checkboxes or fallback text)
+    const carrierChecks = document.querySelectorAll('.apply-carrier-check:checked');
+    const fallbackInput = document.getElementById('ap-carriers-fallback');
+    const carriers = carrierChecks.length
+      ? Array.from(carrierChecks).map(function(el) { return el.value; }).join(', ')
+      : (fallbackInput ? fallbackInput.value.trim() : '');
+
     const specialties = Array.from(
-      document.querySelectorAll('.apply-check:checked')
-    ).map(el => el.value);
+      document.querySelectorAll('.apply-check:not(.apply-carrier-check):checked')
+    ).map(function(el) { return el.value; });
 
     const errorEl = document.getElementById('apply-error');
     errorEl.style.display = 'none';
@@ -1723,25 +1757,17 @@ ${header()}
     btn.disabled = true;
     btn.textContent = 'Submitting…';
 
-    fetch(API_URL + '/leads/web', {
+    fetch(API_URL + '/agents/apply', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        first_name:  first,
-        last_name:   last,
-        email:       email,
-        phone:       phone,
-        city:        city,
-        state:       state,
-        lead_source: 'meetlifeagents-agent-apply',
-        npn:         npn,
-        years_exp:   years,
+        first, last, email, phone, city, state, npn,
+        years:      years,
         specialties: specialties.join(', '),
-        carriers:    carriers,
-        heard_from:  heard,
-        website:     website,
-        message:     message,
-        form_type:   'agent_application',
+        carriers,
+        heard,
+        website,
+        message,
       }),
     })
       .then(function (r) {
