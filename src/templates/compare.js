@@ -266,10 +266,10 @@ ${header()}
 <!-- ── COMPARE HERO ────────────────────────────────────────────── -->
 <section class="cmp-hero">
   <div class="container">
-    <nav class="breadcrumb" style="padding-top:20px;opacity:0.6;">
-      <a href="/" style="color:var(--cream);">Home</a><span style="color:var(--cream);">›</span>
-      <span style="color:var(--cream);">Compare</span><span style="color:var(--cream);">›</span>
-      <span style="color:var(--gold-soft);">${c.left.name} vs. ${c.right.name}</span>
+    <nav class="breadcrumb" style="padding-top:16px;">
+      <a href="/" style="color:rgba(250,246,238,0.55);">Home</a><span style="color:rgba(250,246,238,0.35);margin:0 6px;">›</span>
+      <span style="color:rgba(250,246,238,0.55);">Compare</span><span style="color:rgba(250,246,238,0.35);margin:0 6px;">›</span>
+      <span style="color:rgba(250,246,238,0.9);">${c.left.name} vs. ${c.right.name}</span>
     </nav>
     <div class="cmp-hero-duel">
       <div class="cmp-hero-side cmp-hero-left">
@@ -285,38 +285,6 @@ ${header()}
       </div>
     </div>
     <p class="cmp-hero-tagline">${c.tagline}</p>
-  </div>
-</section>
-
-<!-- ── POLICY SWITCHER ────────────────────────────────────────────── -->
-<section class="cmp-switcher-sec">
-  <div class="container">
-    <div class="cmp-switcher-inner">
-      <span class="cmp-switcher-label">Compare any two policies</span>
-      <div class="cmp-switcher-controls">
-        <div class="select-wrap cmp-switcher-sel-wrap">
-          <select class="cmp-switcher-sel" id="cmp-sel-left">
-            <option value="term"  ${c.left.key === 'term'  ? 'selected' : ''}>Term Life</option>
-            <option value="whole" ${c.left.key === 'whole' ? 'selected' : ''}>Whole Life</option>
-            <option value="iul"   ${c.left.key === 'iul'   ? 'selected' : ''}>Indexed Universal Life</option>
-            <option value="final" ${c.left.key === 'final' ? 'selected' : ''}>Final Expense</option>
-            <option value="mort"  ${c.left.key === 'mort'  ? 'selected' : ''}>Mortgage Protection</option>
-          </select>
-        </div>
-        <span class="cmp-switcher-vs">VS</span>
-        <div class="select-wrap cmp-switcher-sel-wrap">
-          <select class="cmp-switcher-sel" id="cmp-sel-right">
-            <option value="term"  ${c.right.key === 'term'  ? 'selected' : ''}>Term Life</option>
-            <option value="whole" ${c.right.key === 'whole' ? 'selected' : ''}>Whole Life</option>
-            <option value="iul"   ${c.right.key === 'iul'   ? 'selected' : ''}>Indexed Universal Life</option>
-            <option value="final" ${c.right.key === 'final' ? 'selected' : ''}>Final Expense</option>
-            <option value="mort"  ${c.right.key === 'mort'  ? 'selected' : ''}>Mortgage Protection</option>
-          </select>
-        </div>
-        <button class="cmp-switcher-btn" onclick="cmpSwitcherGo()">Compare →</button>
-      </div>
-      <p class="cmp-switcher-hint" id="cmp-switcher-hint"></p>
-    </div>
   </div>
 </section>
 
@@ -397,6 +365,38 @@ ${header()}
           ${tableRows}
         </tbody>
       </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── POLICY SWITCHER ────────────────────────────────────────────── -->
+<section class="cmp-switcher-sec">
+  <div class="container">
+    <div class="cmp-switcher-inner">
+      <span class="cmp-switcher-label">Compare any two policies</span>
+      <div class="cmp-switcher-controls">
+        <div class="select-wrap cmp-switcher-sel-wrap">
+          <select class="cmp-switcher-sel" id="cmp-sel-left">
+            <option value="term"  ${c.left.key === 'term'  ? 'selected' : ''}>Term Life</option>
+            <option value="whole" ${c.left.key === 'whole' ? 'selected' : ''}>Whole Life</option>
+            <option value="iul"   ${c.left.key === 'iul'   ? 'selected' : ''}>Indexed Universal Life</option>
+            <option value="final" ${c.left.key === 'final' ? 'selected' : ''}>Final Expense</option>
+            <option value="mort"  ${c.left.key === 'mort'  ? 'selected' : ''}>Mortgage Protection</option>
+          </select>
+        </div>
+        <span class="cmp-switcher-vs">VS</span>
+        <div class="select-wrap cmp-switcher-sel-wrap">
+          <select class="cmp-switcher-sel" id="cmp-sel-right">
+            <option value="term"  ${c.right.key === 'term'  ? 'selected' : ''}>Term Life</option>
+            <option value="whole" ${c.right.key === 'whole' ? 'selected' : ''}>Whole Life</option>
+            <option value="iul"   ${c.right.key === 'iul'   ? 'selected' : ''}>Indexed Universal Life</option>
+            <option value="final" ${c.right.key === 'final' ? 'selected' : ''}>Final Expense</option>
+            <option value="mort"  ${c.right.key === 'mort'  ? 'selected' : ''}>Mortgage Protection</option>
+          </select>
+        </div>
+        <button class="cmp-switcher-btn" onclick="cmpSwitcherGo()">Compare →</button>
+      </div>
+      <p class="cmp-switcher-hint" id="cmp-switcher-hint"></p>
     </div>
   </div>
 </section>
