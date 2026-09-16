@@ -487,7 +487,7 @@ ${pageHero('Legal', 'Privacy Policy', 'Last updated May 1, 2026 · Template pend
         <div class="legal-notice">⚠ This is a template. Do not publish without review by a qualified insurance regulatory attorney.</div>
 
         <h2 id="who">1. Who we are</h2>
-        <p>MeetLifeAgents ("we," "our," or "us") operates MeetLifeAgents.com, an independent directory connecting consumers with independently licensed life insurance agents. We are not an insurance agency, company, or broker and do not sell or underwrite insurance policies.</p>
+        <p>MeetLifeAgents.com is operated by <strong>Addison Myers Group LLC</strong>, powered by SidecarLeads ("we," "our," or "us"). We operate MeetLifeAgents.com as an independent directory connecting consumers with independently licensed life insurance agents. We are not an insurance agency, company, or broker and do not sell or underwrite insurance policies.</p>
 
         <h2 id="collect">2. Information we collect</h2>
         <p>We collect information you voluntarily provide, including: <strong>contact form submissions</strong> (name, phone, email, coverage interest); <strong>call data</strong> (date, time, duration — not call content); and <strong>usage data</strong> via Cloudflare Web Analytics (aggregate, privacy-preserving, no cookies).</p>
@@ -505,7 +505,7 @@ ${pageHero('Legal', 'Privacy Policy', 'Last updated May 1, 2026 · Template pend
         <p>Lead form submissions are retained for up to 24 months. You may request deletion at any time via our <a href="/contact/">contact page</a>.</p>
 
         <h2 id="cookies">7. Cookies and tracking</h2>
-        <p>We do not use Google Analytics, Facebook Pixel, or behavioral trackers. Cloudflare Web Analytics uses no cookies and collects only aggregate, anonymized data.</p>
+        <p>We do not use Google Analytics, Facebook Pixel, or behavioral trackers. We use Plausible Analytics, a privacy-first tool that collects no cookies and only aggregate, anonymized data — it cannot identify individual visitors.</p>
 
         <h2 id="rights">8. Your rights</h2>
         <p>Depending on your state, you may have rights including access, correction, deletion, and opt-out of data sale (we do not sell data). Contact us via our <a href="/contact/">contact page</a> to exercise these rights.</p>

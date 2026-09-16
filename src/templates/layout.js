@@ -106,7 +106,7 @@ function footer({ stateSlug = '', stateName = '' } = {}) {
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© ${new Date().getFullYear()} MeetLifeAgents. Independent agent directory.</span>
+      <span>© ${new Date().getFullYear()} MeetLifeAgents — by Addison Myers Group LLC, powered by SidecarLeads</span>
       <span>Licensed agents in all 50 states</span>
     </div>
   </div>
