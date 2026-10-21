@@ -464,7 +464,7 @@ function privacyPage(config) {
   return `${head({ title: 'Privacy Policy — MeetLifeAgents', description: 'MeetLifeAgents privacy policy. How we collect, use, and protect your information.', canonical: `${siteUrl}/privacy/` })}
 <body>
 ${header()}
-${pageHero('Legal', 'Privacy Policy', 'Last updated May 1, 2026 · Template pending attorney review before publication.')}
+${pageHero('Legal', 'Privacy Policy', 'Last updated May 1, 2026')}
 <section style="padding:80px 0;border-top:1px solid var(--rule);">
   <div class="container">
     <div class="legal-layout">
@@ -484,8 +484,6 @@ ${pageHero('Legal', 'Privacy Policy', 'Last updated May 1, 2026 · Template pend
         <a href="#changes">12. Changes</a>
       </nav>
       <div class="legal-body">
-        <div class="legal-notice">⚠ This is a template. Do not publish without review by a qualified insurance regulatory attorney.</div>
-
         <h2 id="who">1. Who we are</h2>
         <p>MeetLifeAgents.com is operated by <strong>Addison Myers Group LLC</strong>, powered by SidecarLeads ("we," "our," or "us"). We operate MeetLifeAgents.com as an independent directory connecting consumers with independently licensed life insurance agents. We are not an insurance agency, company, or broker and do not sell or underwrite insurance policies.</p>
 
@@ -537,7 +535,7 @@ function termsPage(config) {
   return `${head({ title: 'Terms of Service — MeetLifeAgents', description: 'MeetLifeAgents terms of service. Read before using this directory.', canonical: `${siteUrl}/terms/` })}
 <body>
 ${header()}
-${pageHero('Legal', 'Terms of Service', 'Last updated May 1, 2026 · Template pending attorney review before publication.')}
+${pageHero('Legal', 'Terms of Service', 'Last updated May 1, 2026')}
 <section style="padding:80px 0;border-top:1px solid var(--rule);">
   <div class="container">
     <div class="legal-layout">
@@ -556,8 +554,6 @@ ${pageHero('Legal', 'Terms of Service', 'Last updated May 1, 2026 · Template pe
         <a href="#changes">11. Changes</a>
       </nav>
       <div class="legal-body">
-        <div class="legal-notice">⚠ This is a template. Do not publish without review by a qualified insurance regulatory attorney.</div>
-
         <h2 id="accept">1. Acceptance of terms</h2>
         <p>By accessing or using MeetLifeAgents.com ("the Site"), you agree to be bound by these Terms of Service. If you do not agree, do not use the Site.</p>
 
@@ -606,7 +602,7 @@ function tcpaPage(config) {
   return `${head({ title: 'TCPA Disclosure — MeetLifeAgents', description: 'MeetLifeAgents TCPA disclosure and consent language for telephone and text communication.', canonical: `${siteUrl}/tcpa/` })}
 <body>
 ${header()}
-${pageHero('Legal', 'TCPA Disclosure', 'Last updated May 1, 2026 · Template pending attorney review before publication.')}
+${pageHero('Legal', 'TCPA Disclosure', 'Last updated May 1, 2026')}
 <section style="padding:80px 0;border-top:1px solid var(--rule);">
   <div class="container">
     <div class="legal-layout">
@@ -621,8 +617,6 @@ ${pageHero('Legal', 'TCPA Disclosure', 'Last updated May 1, 2026 · Template pen
         <a href="#questions">7. Questions</a>
       </nav>
       <div class="legal-body">
-        <div class="legal-notice">⚠ TCPA violations carry statutory damages of $500–$1,500 per call. Do not publish without review by a qualified TCPA and insurance regulatory attorney.</div>
-
         <h2 id="what">1. What is the TCPA?</h2>
         <p>The Telephone Consumer Protection Act (TCPA), 47 U.S.C. § 227, restricts telephone solicitations and use of automated telephone equipment. It requires prior express written consent before contacting you via autodialed or prerecorded calls or texts for marketing purposes.</p>
 
