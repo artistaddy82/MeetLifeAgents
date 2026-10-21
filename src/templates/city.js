@@ -325,11 +325,12 @@ ${configScript}
   var apiUrl = (window.MLA_CONFIG && window.MLA_CONFIG.apiUrl) || 'https://sidecarleads.com';
   fetch(apiUrl + '/agents/showcase?state=' + encodeURIComponent(stateAbbr))
     .then(function(r){ return r.json(); })
-    .then(function(agents){
-      if (!agents || !agents.length) return;
+    .then(function(data){
+      var agents = Array.isArray(data) ? data : (data && data.agents ? data.agents : []);
+      if (!agents.length) return;
       grid.innerHTML = agents.map(function(a){
-        var avatar = a.photo_url
-          ? '<img src="'+a.photo_url+'" alt="'+a.name+'" width="72" height="72" loading="lazy" style="width:72px;height:72px;border-radius:50%;object-fit:cover;">'
+        var avatar = (a.photo_url || a.photoUrl)
+          ? '<img src="'+(a.photo_url||a.photoUrl)+'" alt="'+a.name+'" width="72" height="72" loading="lazy" style="width:72px;height:72px;border-radius:50%;object-fit:cover;">'
           : '<span class="fa-initials">'+a.name.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase()+'</span>';
         var npn = a.npn ? '<span class="fa-npn">NPN '+a.npn+'</span>' : '';
         var bio = a.bio ? '<p class="fa-bio">'+a.bio+'</p>' : '';
