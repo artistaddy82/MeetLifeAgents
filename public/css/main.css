@@ -323,6 +323,9 @@ h1.city-title em { font-style: italic; color: var(--rust); font-weight: 400; }
 .side-list li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
 .side-card.dark .side-list li { color: rgba(250, 246, 238, 0.92); border-bottom-color: rgba(250, 246, 238, 0.15); }
 .side-card.dark .side-list li::before { color: var(--gold-soft); }
+.side-list .side-list-mid::before { content: '◆'; color: var(--gold-soft); font-size: 10px; }
+.side-list .side-list-elite::before { content: '★'; color: var(--gold); font-size: 11px; }
+.side-list .side-list-mid, .side-list .side-list-elite { font-style: italic; }
 .promise-card { background: var(--cream-warm); border: 1px solid var(--rule); border-radius: 10px; padding: 24px; }
 .promise-card h4 { font-family: 'Fraunces', serif; font-style: italic; font-size: 18px; margin-bottom: 12px; color: var(--ink); }
 .promise-card p { font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); }

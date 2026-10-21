@@ -186,9 +186,6 @@ function ourVettingPage(config) {
     ['10+ independent carrier appointments',
      'Truly independent agents can shop 10+ carriers for you. Fewer and they may steer toward what pays them, not what fits you.',
      '10+ active appointments required · Carrier list verified'],
-    ['Clean DOI complaint record',
-     'We review disciplinary history on the state DOI. Any upheld complaints in the last 5 years disqualify from listing.',
-     'State DOI disciplinary history · 5-year lookback'],
   ]
 
   return `${head({ title: 'Our Vetting Standard — MeetLifeAgents', description: 'How MeetLifeAgents vets life insurance agents. Three tiers: Verified, Premier, and Elite Top Tier.', canonical: `${siteUrl}/our-vetting/` })}
@@ -223,8 +220,8 @@ ${header()}
   <div class="container">
     <div class="ov-audit-head">
       <p class="city-eyebrow">Baseline — all agents</p>
-      <h2 class="display" style="font-size:clamp(28px,3.5vw,42px);line-height:1.1;margin-bottom:12px;">Four checks.<br>No exceptions.</h2>
-      <p style="font-size:16px;color:var(--ink-soft);line-height:1.65;max-width:520px;">Every agent must pass all four before they appear on the site. These aren't preferences — they're requirements.</p>
+      <h2 class="display" style="font-size:clamp(28px,3.5vw,42px);line-height:1.1;margin-bottom:12px;">Three checks.<br>No exceptions.</h2>
+      <p style="font-size:16px;color:var(--ink-soft);line-height:1.65;max-width:520px;">Every agent must pass all three before they appear on the site. These aren't preferences — they're requirements.</p>
     </div>
     ${checks.map(([title, desc, how], i) => `<div class="ov-audit-row">
       <div class="ov-audit-num">${i + 1}</div>
@@ -258,17 +255,17 @@ ${header()}
           <li>Active state insurance license</li>
           <li>State resident — not virtual-only</li>
           <li>10+ independent carrier appointments</li>
-          <li>Clean DOI complaint record</li>
         </ul>
       </div>
       <div class="ov-tier ov-tier--premier">
         <div class="ov-tier-header">
           <span class="ov-tier-badge ov-badge--premier">Premier</span>
           <h3>Mid tier</h3>
-          <p>All Verified criteria, plus experience and specialty.</p>
+          <p>All Verified criteria, plus experience and a clean record.</p>
         </div>
         <ul class="side-list" style="margin-top:0;">
           <li>All Verified criteria</li>
+          <li>Clean DOI complaint record (5-year lookback)</li>
           <li>5+ years licensed</li>
           <li>Documented specialty niche</li>
           <li>24-hour response standard</li>
@@ -770,12 +767,12 @@ ${header()}
       <div>
         <p class="city-eyebrow">Our standard</p>
         <h2 class="display" style="font-size:clamp(24px,3vw,36px);line-height:1.1;margin-bottom:16px;">Every MLA agent is<br>independently verified.</h2>
-        <p style="font-size:16px;color:var(--ink-soft);line-height:1.7;margin-bottom:28px;">We don't just take agents at their word. Every agent passes a four-point vetting check: active state license, state resident, 10+ carrier appointments, and a clean DOI record.</p>
+        <p style="font-size:16px;color:var(--ink-soft);line-height:1.7;margin-bottom:28px;">We don't just take agents at their word. Every agent passes a three-point baseline check: active state license, state resident, and 10+ carrier appointments. Premier agents also clear a clean DOI record and 5+ years experience.</p>
         <a href="/our-vetting/" style="color:var(--gold);font-weight:600;font-size:14px;text-decoration:none;">See our full vetting process →</a>
       </div>
       <div class="wia-vetting-card">
         <div class="wia-vetting-card-label">Four-point check</div>
-        ${['Active state insurance license', 'Resident of the state they serve', '10+ independent carrier appointments', 'Clean DOI complaint record'].map((item, i) => `<div class="wia-vetting-item">
+        ${['Active state insurance license', 'Resident of the state they serve', '10+ independent carrier appointments'].map((item, i) => `<div class="wia-vetting-item">
           <div class="wia-vetting-item-num">${i + 1}</div>
           <div class="wia-vetting-item-text">${item}</div>
         </div>`).join('')}

@@ -251,14 +251,16 @@ ${header()}
     <aside class="sidebar">
       <div class="side-card dark">
         <h4>The MeetLifeAgents standard</h4>
-        <p>Every agent listed on this page has cleared three independent verification steps before appearing in your search.</p>
+        <p>Every agent listed here passed our baseline check. Premier and Elite agents clear additional criteria.</p>
         <ul class="side-list" style="margin-top:18px;">
-          <li>Active state license verified through ${state_name} DOI</li>
-          <li>Verified ${state_name} resident with local address</li>
-          <li>Minimum 4 years of licensed practice</li>
-          <li>Carrier appointment diversity confirmed</li>
-          <li>No upheld consumer complaints on record</li>
+          <li>Active ${state_abbr} license — DOI verified</li>
+          <li>${state_name} resident · no virtual-only agents</li>
+          <li>10+ independent carrier appointments</li>
+          <li class="side-list-mid">Premier+: Clean DOI record (5-yr lookback)</li>
+          <li class="side-list-mid">Premier+: 5+ years licensed</li>
+          <li class="side-list-elite">Elite: Advanced designation (CLU, ChFC, CFP)</li>
         </ul>
+        <a href="/our-vetting/" style="display:inline-block;margin-top:16px;font-size:12px;font-weight:600;color:var(--gold-soft);text-decoration:none;">Full vetting breakdown →</a>
       </div>
       <div class="promise-card">
         <h4>Our promise to you.</h4>
