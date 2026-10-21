@@ -1838,11 +1838,11 @@ function quotePage(config) {
     <!-- Progress indicator -->
     <div id="progress-wrap" style="margin-bottom:36px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <span id="step-label" style="font-size:13px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:0.8px;">Step 1 of 4</span>
-        <span id="step-pct" style="font-size:13px;color:var(--ink-soft);">25%</span>
+        <span id="step-label" style="font-size:13px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:0.8px;">Step 1 of 5</span>
+        <span id="step-pct" style="font-size:13px;color:var(--ink-soft);">20%</span>
       </div>
       <div style="height:4px;background:var(--rule);border-radius:2px;">
-        <div id="progress-bar" style="height:4px;background:var(--gold);border-radius:2px;width:25%;transition:width 0.3s;"></div>
+        <div id="progress-bar" style="height:4px;background:var(--gold);border-radius:2px;width:20%;transition:width 0.3s;"></div>
       </div>
     </div>
 
@@ -1888,8 +1888,35 @@ function quotePage(config) {
       <button class="q-back" onclick="goQ(1)">← Back</button>
     </div>
 
-    <!-- Step 3: State -->
+    <!-- Step 3: Age & health -->
     <div class="q-step" id="step-3">
+      <h2 class="display" style="font-size:clamp(26px,4vw,36px);margin-bottom:8px;">A bit about you.</h2>
+      <p style="color:var(--ink-soft);font-size:15px;margin-bottom:32px;">These two questions let your agent find the best rates before they call.</p>
+      <div style="margin-bottom:20px;">
+        <label class="q-label">Your age <span style="color:var(--gold);">*</span></label>
+        <input class="q-input" id="q-age" type="number" min="18" max="85" placeholder="e.g. 42">
+      </div>
+      <div style="margin-bottom:12px;">
+        <label class="q-label" style="margin-bottom:12px;">Tobacco use in the last 12 months? <span style="color:var(--gold);">*</span></label>
+        <div class="q-options" style="flex-direction:row;gap:10px;">
+          <button class="q-opt q-opt-inline" data-value="no" onclick="pickTobacco(this)"><strong>No</strong></button>
+          <button class="q-opt q-opt-inline" data-value="yes" onclick="pickTobacco(this)"><strong>Yes</strong></button>
+        </div>
+      </div>
+      <div style="margin-bottom:28px;">
+        <label class="q-label" style="margin-bottom:12px;">Overall health</label>
+        <div class="q-options">
+          <button class="q-opt" data-value="excellent" onclick="pickHealth(this)"><strong>Excellent</strong><span>No major conditions, very active</span></button>
+          <button class="q-opt" data-value="good" onclick="pickHealth(this)"><strong>Good</strong><span>Minor conditions, well-managed</span></button>
+          <button class="q-opt" data-value="fair" onclick="pickHealth(this)"><strong>Fair</strong><span>Some health challenges</span></button>
+        </div>
+      </div>
+      <button class="q-btn-primary" onclick="pickHealthContinue()">Continue →</button>
+      <button class="q-back" onclick="goQ(2)">← Back</button>
+    </div>
+
+    <!-- Step 4: State -->
+    <div class="q-step" id="step-4">
       <h2 class="display" style="font-size:clamp(26px,4vw,36px);margin-bottom:8px;">What state<br>do you live in?</h2>
       <p style="color:var(--ink-soft);font-size:15px;margin-bottom:32px;">We'll match you with a licensed agent in your state.</p>
       <select id="q-state" class="q-select">
@@ -1897,11 +1924,11 @@ function quotePage(config) {
         ${stateOptions}
       </select>
       <button class="q-btn-primary" onclick="pickState()" style="margin-top:16px;">Continue →</button>
-      <button class="q-back" onclick="goQ(2)">← Back</button>
+      <button class="q-back" onclick="goQ(3)">← Back</button>
     </div>
 
-    <!-- Step 4: Contact info -->
-    <div class="q-step" id="step-4">
+    <!-- Step 5: Contact info -->
+    <div class="q-step" id="step-5">
       <h2 class="display" style="font-size:clamp(26px,4vw,36px);margin-bottom:8px;">Where should your<br>agent reach you?</h2>
       <p style="color:var(--ink-soft);font-size:15px;margin-bottom:32px;">Your information goes to one agent — not a call center list.</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
@@ -1923,7 +1950,7 @@ function quotePage(config) {
         <input class="q-input" id="q-email" type="email" placeholder="jane@example.com" autocomplete="email">
       </div>
       <button class="q-btn-primary" id="q-submit" onclick="submitQuote()">Get My Free Quote →</button>
-      <button class="q-back" onclick="goQ(3)">← Back</button>
+      <button class="q-back" onclick="goQ(4)">← Back</button>
       <p style="font-size:12px;color:var(--ink-soft);margin-top:20px;line-height:1.6;">By submitting you agree to be contacted by a licensed agent or Addison Myers Group LLC. We never sell your information. See our <a href="/tcpa/" style="color:inherit;">TCPA Disclosure</a> and <a href="/privacy/" style="color:inherit;">Privacy Policy</a>.</p>
     </div>
 
@@ -1974,6 +2001,7 @@ function quotePage(config) {
 .q-btn-primary:hover { background:#243558; }
 .q-back { background:none; border:none; color:var(--ink-soft); font-size:14px; cursor:pointer; margin-top:14px; padding:0; font-family:inherit; }
 .q-back:hover { color:var(--ink); }
+.q-opt-inline { flex-direction:row; align-items:center; padding:14px 28px; flex:1; justify-content:center; }
 @media (max-width:520px) {
   div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns:1fr !important; }
 }
@@ -1981,10 +2009,10 @@ function quotePage(config) {
 
 <script>
 const API_URL = '${apiUrl}';
-const qData = { coverage:null, amount:null, state:null, firstName:null, lastName:null, phone:null, email:null };
-const steps = ['step-1','step-2','step-3','step-4','step-success'];
-const pcts  = [25, 50, 75, 100, 100];
-const labels= ['Step 1 of 4','Step 2 of 4','Step 3 of 4','Step 4 of 4','Done'];
+const qData = { coverage:null, amount:null, age:null, tobacco:null, health:null, state:null, firstName:null, lastName:null, phone:null, email:null };
+const steps = ['step-1','step-2','step-3','step-4','step-5','step-success'];
+const pcts  = [20, 40, 60, 80, 100, 100];
+const labels= ['Step 1 of 5','Step 2 of 5','Step 3 of 5','Step 4 of 5','Step 5 of 5','Done'];
 
 function goQ(n) {
   steps.forEach(id => { var el=document.getElementById(id); if(el) el.classList.remove('active'); });
@@ -1994,7 +2022,7 @@ function goQ(n) {
   var pct   = document.getElementById('step-pct');
   var label = document.getElementById('step-label');
   var pw    = document.getElementById('progress-wrap');
-  var idx   = n === 'success' ? 4 : n - 1;
+  var idx   = n === 'success' ? 5 : n - 1;
   if (bar)   bar.style.width   = pcts[idx] + '%';
   if (pct)   pct.textContent   = pcts[idx] + '%';
   if (label) label.textContent = labels[idx];
@@ -2016,11 +2044,31 @@ function pickAmount(btn) {
   setTimeout(function(){ goQ(3); }, 180);
 }
 
+function pickTobacco(btn) {
+  document.querySelectorAll('#step-3 .q-opt-inline').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  qData.tobacco = btn.dataset.value;
+}
+
+function pickHealth(btn) {
+  document.querySelectorAll('#step-3 .q-opt:not(.q-opt-inline)').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  qData.health = btn.dataset.value;
+}
+
+function pickHealthContinue() {
+  var age = document.getElementById('q-age').value.trim();
+  if (!age) { document.getElementById('q-age').style.borderColor='var(--gold)'; document.getElementById('q-age').focus(); return; }
+  if (!qData.tobacco) { alert('Please select your tobacco use.'); return; }
+  qData.age = age;
+  goQ(4);
+}
+
 function pickState() {
   var sel = document.getElementById('q-state');
   if (!sel.value) { sel.style.borderColor='var(--gold)'; sel.focus(); return; }
   qData.state = sel.value;
-  goQ(4);
+  goQ(5);
 }
 
 function submitQuote() {
@@ -2044,12 +2092,12 @@ function submitQuote() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(qData),
   }).finally(function() {
-    var labels = {
+    var coverageLabels = {
       'term':'Term Life','whole':'Whole Life','final-expense':'Final Expense',
       'mortgage-protection':'Mortgage Protection','not-sure':'life insurance'
     };
     var el = document.getElementById('success-coverage');
-    if (el) el.textContent = labels[qData.coverage] || 'your coverage type';
+    if (el) el.textContent = coverageLabels[qData.coverage] || 'your coverage type';
     goQ('success');
   });
 }
