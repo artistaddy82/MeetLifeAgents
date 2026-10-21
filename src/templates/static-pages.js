@@ -1924,7 +1924,7 @@ function quotePage(config) {
       </div>
       <button class="q-btn-primary" id="q-submit" onclick="submitQuote()">Get My Free Quote →</button>
       <button class="q-back" onclick="goQ(3)">← Back</button>
-      <p style="font-size:12px;color:var(--ink-soft);margin-top:20px;line-height:1.6;">By submitting you agree to be contacted by a licensed agent. We never sell your information. See our <a href="/tcpa/" style="color:inherit;">TCPA Disclosure</a>.</p>
+      <p style="font-size:12px;color:var(--ink-soft);margin-top:20px;line-height:1.6;">By submitting you agree to be contacted by a licensed agent or Addison Myers Group LLC. We never sell your information. See our <a href="/tcpa/" style="color:inherit;">TCPA Disclosure</a> and <a href="/privacy/" style="color:inherit;">Privacy Policy</a>.</p>
     </div>
 
     <!-- Success -->
