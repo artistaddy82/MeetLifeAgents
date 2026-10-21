@@ -1825,7 +1825,10 @@ function quotePage(config) {
       <span style="width:32px;height:32px;background:var(--ink);color:var(--cream);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">M</span>
       MeetLifeAgents
     </a>
-    <span style="font-size:13px;color:var(--ink-soft);">🔒 Secure &amp; Private</span>
+    <a href="tel:${config.platformNumber || '+18005550199'}" style="font-size:13px;color:var(--ink-soft);text-decoration:none;display:flex;align-items:center;gap:6px;">
+      <span style="font-size:15px;">📞</span>
+      <span>Prefer to talk? <strong style="color:var(--ink);">${config.platformDisplay || '(800) 555-0199'}</strong></span>
+    </a>
   </div>
 </header>
 
