@@ -21,7 +21,7 @@ function statePage(stateData, cities, config) {
     return `<a class="sc-card" href="/${slug}/${m.city_slug}/">
   <span class="sc-name">${m.city_name}</span>
   ${m.population ? `<span class="sc-pop">Pop. ${m.population}</span>` : ''}
-  <span class="sc-agents">${agents || 'Agents coming soon'} ${agents ? (agents === 1 ? 'agent →' : 'agents →') : ''}</span>
+  ${agents > 0 ? `<span class="sc-agents">${agents === 1 ? '1 agent →' : agents + ' agents →'}</span>` : ''}
 </a>`
   }).join('\n')
 

@@ -7,10 +7,13 @@ function stateGrid(states, markets) {
   for (const m of markets) {
     counts[m.state_slug] = (counts[m.state_slug] || 0) + (m.agent_count || 0)
   }
-  return states.map(s => `<a class="state-link" href="/${s.slug}/">
+  return states.map(s => {
+    const cnt = counts[s.slug] || 0
+    return `<a class="state-link" href="/${s.slug}/">
   <span class="state-name">${s.name}</span>
-  <span class="state-count">${counts[s.slug] || 0} agent${(counts[s.slug] || 0) !== 1 ? 's' : ''}</span>
-</a>`).join('\n')
+  ${cnt > 0 ? `<span class="state-count">${cnt} agent${cnt !== 1 ? 's' : ''}</span>` : ''}
+</a>`
+  }).join('\n')
 }
 
 function cityOptionsByState(markets) {

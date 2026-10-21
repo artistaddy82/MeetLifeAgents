@@ -111,14 +111,14 @@ ${header()}
         </p>
       </div>
       <div class="city-stats">
-        <div class="city-stat">
+        ${market.agent_count > 0 ? `<div class="city-stat">
           <div class="city-stat-num">${market.agent_count}</div>
           <div class="city-stat-label">Verified agents</div>
-        </div>
-        <div class="city-stat">
+        </div>` : ''}
+        ${market.vetted_count > 0 ? `<div class="city-stat">
           <div class="city-stat-num">${market.vetted_count}</div>
           <div class="city-stat-label">Top-tier vetted</div>
-        </div>
+        </div>` : ''}
         ${market.avg_distance ? `<div class="city-stat">
           <div class="city-stat-num">${market.avg_distance}</div>
           <div class="city-stat-label">Avg. distance from city center</div>
@@ -139,6 +139,49 @@ ${header()}
     </div>
   </div>
 </section>
+
+<!-- ── FEATURED PLATFORM AGENTS ──────────────────────────────── -->
+<section class="featured-agents-sec" id="featured-agents-sec" style="display:none;">
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="display" style="font-size:clamp(24px,3vw,34px);">Talk to a licensed agent in ${state_name}</h2>
+    </div>
+    <div class="featured-agents-grid" id="featured-agents-grid"></div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var sec = document.getElementById('featured-agents-sec');
+  var grid = document.getElementById('featured-agents-grid');
+  var stateAbbr = '${state_abbr}';
+  var apiUrl = (window.MLA_CONFIG && window.MLA_CONFIG.apiUrl) || 'https://sidecarleads.com';
+  fetch(apiUrl + '/agents/showcase?state=' + encodeURIComponent(stateAbbr))
+    .then(function(r){ return r.json(); })
+    .then(function(agents){
+      if (!agents || !agents.length) return;
+      grid.innerHTML = agents.map(function(a){
+        var avatar = a.photo_url
+          ? '<img src="'+a.photo_url+'" alt="'+a.name+'" width="72" height="72" loading="lazy" style="width:72px;height:72px;border-radius:50%;object-fit:cover;">'
+          : '<span class="fa-initials">'+a.name.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase()+'</span>';
+        var npn = a.npn ? '<span class="fa-npn">NPN '+a.npn+'</span>' : '';
+        var bio = a.bio ? '<p class="fa-bio">'+a.bio+'</p>' : '';
+        return '<div class="fa-card">'
+          +'<span class="fa-badge-featured">⭐ Featured Agent</span>'
+          +'<span class="fa-badge-verified">License Verified</span>'
+          +'<div class="fa-avatar">'+avatar+'</div>'
+          +'<div class="fa-name">'+a.name+'</div>'
+          +npn
+          +'<span class="fa-state">Licensed in ${state_abbr}</span>'
+          +bio
+          +'<div class="fa-ctas"><a href="'+apiUrl+'/form?agentId='+encodeURIComponent(a.id)+'" class="fa-btn-quote" target="_blank" rel="noopener">Instant Online Quote</a></div>'
+          +'</div>';
+      }).join('');
+      sec.style.display = '';
+    })
+    .catch(function(){});
+})();
+</script>
 
 <section class="intake">
   <div class="container">

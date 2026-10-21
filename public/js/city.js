@@ -34,7 +34,7 @@ function revealCall(btn) {
   btn.classList.add('revealed');
   btn.innerHTML = `
     <span class="call-btn-label">Tap again to dial</span>
-    <span class="call-btn-ext">${PLATFORM_DISPLAY} · Ext. ${ext}</span>
+    <span class="call-btn-ext">${PLATFORM_DISPLAY}</span>
   `;
   // Auto-collapse after 30s
   btn._collapseTimer = setTimeout(() => {
