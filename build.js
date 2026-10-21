@@ -72,6 +72,7 @@ const {
   whyNotEthosPage,
   aboutPage,
   agentApplyPage,
+  quotePage,
 } = require('./src/templates/static-pages')
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -148,6 +149,7 @@ async function build() {
     write('dist/why-not-ethos/index.html',  whyNotEthosPage(config))
     write('dist/about/index.html',          aboutPage(config))
     write('dist/agents/apply/index.html',   agentApplyPage(config))
+    write('dist/quote/index.html',          quotePage(config))
     write('dist/match/index.html',        matchPage(config))
     write('dist/calculator/index.html',   calculatorPage(config))
     write('dist/contact/index.html',      contactPage(config))

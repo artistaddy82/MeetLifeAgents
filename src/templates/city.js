@@ -342,7 +342,7 @@ ${configScript}
           +npn
           +'<span class="fa-state">Licensed in ${state_abbr}</span>'
           +bio
-          +'<div class="fa-ctas"><a href="#quote" class="fa-btn-quote">Instant Online Quote</a></div>'
+          +'<div class="fa-ctas"><a href="/quote/" class="fa-btn-quote">Instant Online Quote</a></div>'
           +'</div>';
       }).join('');
       sec.style.display = '';

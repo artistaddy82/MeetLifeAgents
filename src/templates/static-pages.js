@@ -1791,4 +1791,269 @@ ${footer()}
 </html>`
 }
 
-module.exports = { notFoundPage, privacyPage, termsPage, tcpaPage, contactPage, howItWorksPage, ourVettingPage, whyIndependentPage, faqPage, glossaryPage, whyNotEthosPage, aboutPage, agentApplyPage }
+function quotePage(config) {
+  const siteUrl  = config.siteUrl || 'https://meetlifeagents.com'
+  const apiUrl   = config.apiUrl  || 'https://sidecarleads.com'
+  const canonical = `${siteUrl}/quote/`
+  const stateNames = {
+    AL:'Alabama',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',
+    CT:'Connecticut',DE:'Delaware',FL:'Florida',GA:'Georgia',ID:'Idaho',
+    IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',
+    LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',
+    MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',
+    NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',
+    NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',OR:'Oregon',
+    PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',
+    TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',
+    WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming'
+  }
+  const stateOptions = Object.entries(stateNames)
+    .map(([v,n]) => `<option value="${v}">${n}</option>`).join('')
+
+  return `${head({
+    title: 'Instant Online Quote — MeetLifeAgents',
+    description: 'Get matched with a verified local life insurance agent in minutes. Tell us what you need and a licensed agent will reach out within 15 minutes.',
+    canonical,
+    extraHead: `<meta name="robots" content="noindex">`,
+  })}
+<body>
+
+<!-- Minimal dead-end header — no distractions -->
+<header style="border-bottom:1px solid var(--rule);padding:0 24px;">
+  <div style="max-width:1080px;margin:0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:'Fraunces',serif;font-size:18px;font-weight:700;">
+      <span style="width:32px;height:32px;background:var(--ink);color:var(--cream);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">M</span>
+      MeetLifeAgents
+    </a>
+    <span style="font-size:13px;color:var(--ink-soft);">🔒 Secure &amp; Private</span>
+  </div>
+</header>
+
+<div style="min-height:calc(100vh - 64px);background:var(--cream);display:flex;align-items:flex-start;justify-content:center;padding:56px 24px 80px;">
+  <div style="width:100%;max-width:560px;">
+
+    <!-- Progress indicator -->
+    <div id="progress-wrap" style="margin-bottom:36px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span id="step-label" style="font-size:13px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:0.8px;">Step 1 of 4</span>
+        <span id="step-pct" style="font-size:13px;color:var(--ink-soft);">25%</span>
+      </div>
+      <div style="height:4px;background:var(--rule);border-radius:2px;">
+        <div id="progress-bar" style="height:4px;background:var(--gold);border-radius:2px;width:25%;transition:width 0.3s;"></div>
+      </div>
+    </div>
+
+    <!-- Step 1: Coverage type -->
+    <div class="q-step active" id="step-1">
+      <h1 class="display" style="font-size:clamp(26px,4vw,36px);margin-bottom:8px;">What type of coverage<br>are you looking for?</h1>
+      <p style="color:var(--ink-soft);font-size:15px;margin-bottom:32px;">Select the option that best fits your situation.</p>
+      <div class="q-options">
+        <button class="q-opt" data-value="term" onclick="pickCoverage(this)">
+          <strong>Term Life</strong>
+          <span>Affordable protection for 10, 20, or 30 years</span>
+        </button>
+        <button class="q-opt" data-value="whole" onclick="pickCoverage(this)">
+          <strong>Whole Life</strong>
+          <span>Lifelong coverage with growing cash value</span>
+        </button>
+        <button class="q-opt" data-value="final-expense" onclick="pickCoverage(this)">
+          <strong>Final Expense</strong>
+          <span>Burial &amp; end-of-life costs, simplified approval</span>
+        </button>
+        <button class="q-opt" data-value="mortgage-protection" onclick="pickCoverage(this)">
+          <strong>Mortgage Protection</strong>
+          <span>Coverage tied to your loan balance</span>
+        </button>
+        <button class="q-opt" data-value="not-sure" onclick="pickCoverage(this)">
+          <strong>Not Sure Yet</strong>
+          <span>An agent will help you figure out the right fit</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Coverage amount -->
+    <div class="q-step" id="step-2">
+      <h2 class="display" style="font-size:clamp(26px,4vw,36px);margin-bottom:8px;">How much coverage<br>do you need?</h2>
+      <p style="color:var(--ink-soft);font-size:15px;margin-bottom:32px;">A rough estimate is fine — your agent will help dial it in.</p>
+      <div class="q-options">
+        <button class="q-opt" data-value="under-250k" onclick="pickAmount(this)">Under $250,000</button>
+        <button class="q-opt" data-value="250k-500k" onclick="pickAmount(this)">$250,000 – $500,000</button>
+        <button class="q-opt" data-value="500k-1m" onclick="pickAmount(this)">$500,000 – $1,000,000</button>
+        <button class="q-opt" data-value="over-1m" onclick="pickAmount(this)">Over $1,000,000</button>
+        <button class="q-opt" data-value="not-sure-amount" onclick="pickAmount(this)">Not sure yet</button>
+      </div>
+      <button class="q-back" onclick="goQ(1)">← Back</button>
+    </div>
+
+    <!-- Step 3: State -->
+    <div class="q-step" id="step-3">
+      <h2 class="display" style="font-size:clamp(26px,4vw,36px);margin-bottom:8px;">What state<br>do you live in?</h2>
+      <p style="color:var(--ink-soft);font-size:15px;margin-bottom:32px;">We'll match you with a licensed agent in your state.</p>
+      <select id="q-state" class="q-select">
+        <option value="">Select your state</option>
+        ${stateOptions}
+      </select>
+      <button class="q-btn-primary" onclick="pickState()" style="margin-top:16px;">Continue →</button>
+      <button class="q-back" onclick="goQ(2)">← Back</button>
+    </div>
+
+    <!-- Step 4: Contact info -->
+    <div class="q-step" id="step-4">
+      <h2 class="display" style="font-size:clamp(26px,4vw,36px);margin-bottom:8px;">Where should your<br>agent reach you?</h2>
+      <p style="color:var(--ink-soft);font-size:15px;margin-bottom:32px;">Your information goes to one agent — not a call center list.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label class="q-label">First name <span style="color:var(--gold);">*</span></label>
+          <input class="q-input" id="q-first" type="text" placeholder="Jane" autocomplete="given-name">
+        </div>
+        <div>
+          <label class="q-label">Last name <span style="color:var(--gold);">*</span></label>
+          <input class="q-input" id="q-last" type="text" placeholder="Smith" autocomplete="family-name">
+        </div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label class="q-label">Phone number <span style="color:var(--gold);">*</span></label>
+        <input class="q-input" id="q-phone" type="tel" placeholder="(555) 555-5555" autocomplete="tel">
+      </div>
+      <div style="margin-bottom:24px;">
+        <label class="q-label">Email <span style="color:var(--ink-soft);font-weight:400;">(optional)</span></label>
+        <input class="q-input" id="q-email" type="email" placeholder="jane@example.com" autocomplete="email">
+      </div>
+      <button class="q-btn-primary" id="q-submit" onclick="submitQuote()">Get My Free Quote →</button>
+      <button class="q-back" onclick="goQ(3)">← Back</button>
+      <p style="font-size:12px;color:var(--ink-soft);margin-top:20px;line-height:1.6;">By submitting you agree to be contacted by a licensed agent. We never sell your information. See our <a href="/tcpa/" style="color:inherit;">TCPA Disclosure</a>.</p>
+    </div>
+
+    <!-- Success -->
+    <div class="q-step" id="step-success" style="text-align:center;padding:40px 0;">
+      <div style="font-size:52px;margin-bottom:20px;">✓</div>
+      <h2 class="display" style="font-size:clamp(28px,4vw,40px);margin-bottom:12px;">You're all set.</h2>
+      <p style="color:var(--ink-soft);font-size:17px;line-height:1.65;max-width:400px;margin:0 auto 32px;">A licensed agent specializing in <strong id="success-coverage">your coverage type</strong> will reach out within 15 minutes.</p>
+      <a href="/" style="font-size:14px;color:var(--gold);font-weight:600;text-decoration:none;">← Back to MeetLifeAgents</a>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.q-step { display:none; }
+.q-step.active { display:block; }
+.q-options { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+.q-opt {
+  display:flex; flex-direction:column; align-items:flex-start; gap:3px;
+  padding:16px 20px; border:1.5px solid var(--rule); border-radius:10px;
+  background:var(--cream); cursor:pointer; text-align:left;
+  transition:border-color 0.15s, background 0.15s; font-family:inherit;
+}
+.q-opt strong { font-size:16px; color:var(--ink); font-weight:600; }
+.q-opt span   { font-size:13.5px; color:var(--ink-soft); }
+.q-opt:hover  { border-color:var(--gold); background:#fffaf0; }
+.q-opt.selected { border-color:var(--gold); background:#fffaf0; box-shadow:0 0 0 3px rgba(176,141,58,0.12); }
+.q-select {
+  width:100%; padding:14px 16px; border:1.5px solid var(--rule); border-radius:10px;
+  background:var(--cream); font-family:inherit; font-size:15px; color:var(--ink);
+  cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%231a2640' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 16px center;
+}
+.q-select:focus { outline:none; border-color:var(--gold); }
+.q-input {
+  width:100%; padding:13px 16px; border:1.5px solid var(--rule); border-radius:10px;
+  background:var(--cream); font-family:inherit; font-size:15px; color:var(--ink);
+  box-sizing:border-box;
+}
+.q-input:focus { outline:none; border-color:var(--gold); }
+.q-label { display:block; font-size:13px; font-weight:600; color:var(--ink); margin-bottom:6px; }
+.q-btn-primary {
+  width:100%; padding:16px; background:var(--ink); color:var(--cream);
+  font-family:'Fraunces',serif; font-size:17px; font-weight:600; border:none;
+  border-radius:10px; cursor:pointer; transition:background 0.15s;
+}
+.q-btn-primary:hover { background:#243558; }
+.q-back { background:none; border:none; color:var(--ink-soft); font-size:14px; cursor:pointer; margin-top:14px; padding:0; font-family:inherit; }
+.q-back:hover { color:var(--ink); }
+@media (max-width:520px) {
+  div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns:1fr !important; }
+}
+</style>
+
+<script>
+const API_URL = '${apiUrl}';
+const qData = { coverage:null, amount:null, state:null, firstName:null, lastName:null, phone:null, email:null };
+const steps = ['step-1','step-2','step-3','step-4','step-success'];
+const pcts  = [25, 50, 75, 100, 100];
+const labels= ['Step 1 of 4','Step 2 of 4','Step 3 of 4','Step 4 of 4','Done'];
+
+function goQ(n) {
+  steps.forEach(id => { var el=document.getElementById(id); if(el) el.classList.remove('active'); });
+  var target = document.getElementById('step-'+n);
+  if (target) target.classList.add('active');
+  var bar   = document.getElementById('progress-bar');
+  var pct   = document.getElementById('step-pct');
+  var label = document.getElementById('step-label');
+  var pw    = document.getElementById('progress-wrap');
+  var idx   = n === 'success' ? 4 : n - 1;
+  if (bar)   bar.style.width   = pcts[idx] + '%';
+  if (pct)   pct.textContent   = pcts[idx] + '%';
+  if (label) label.textContent = labels[idx];
+  if (pw && n === 'success') pw.style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function pickCoverage(btn) {
+  document.querySelectorAll('#step-1 .q-opt').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  qData.coverage = btn.dataset.value;
+  setTimeout(function(){ goQ(2); }, 180);
+}
+
+function pickAmount(btn) {
+  document.querySelectorAll('#step-2 .q-opt').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  qData.amount = btn.dataset.value;
+  setTimeout(function(){ goQ(3); }, 180);
+}
+
+function pickState() {
+  var sel = document.getElementById('q-state');
+  if (!sel.value) { sel.style.borderColor='var(--gold)'; sel.focus(); return; }
+  qData.state = sel.value;
+  goQ(4);
+}
+
+function submitQuote() {
+  var first = document.getElementById('q-first').value.trim();
+  var last  = document.getElementById('q-last').value.trim();
+  var phone = document.getElementById('q-phone').value.trim();
+  var email = document.getElementById('q-email').value.trim();
+  if (!first || !last || !phone) {
+    if (!first) document.getElementById('q-first').style.borderColor='var(--gold)';
+    if (!last)  document.getElementById('q-last').style.borderColor='var(--gold)';
+    if (!phone) document.getElementById('q-phone').style.borderColor='var(--gold)';
+    return;
+  }
+  qData.firstName = first; qData.lastName = last; qData.phone = phone; qData.email = email;
+  qData.timestamp = new Date().toISOString();
+  qData.source    = 'meetlifeagents-quote';
+  var btn = document.getElementById('q-submit');
+  btn.textContent = 'Submitting…'; btn.disabled = true;
+  fetch(API_URL + '/leads/web', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(qData),
+  }).finally(function() {
+    var labels = {
+      'term':'Term Life','whole':'Whole Life','final-expense':'Final Expense',
+      'mortgage-protection':'Mortgage Protection','not-sure':'life insurance'
+    };
+    var el = document.getElementById('success-coverage');
+    if (el) el.textContent = labels[qData.coverage] || 'your coverage type';
+    goQ('success');
+  });
+}
+</script>
+
+</body>
+</html>`
+}
+
+module.exports = { notFoundPage, privacyPage, termsPage, tcpaPage, contactPage, howItWorksPage, ourVettingPage, whyIndependentPage, faqPage, glossaryPage, whyNotEthosPage, aboutPage, agentApplyPage, quotePage }
