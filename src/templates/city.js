@@ -43,12 +43,13 @@ function agentCard(agent, stateSlug, citySlug, stateDoiUrl) {
  */
 function nearbyLink(city) {
   const href = city.slug ? `/${city.state}/${city.slug}/` : `/${city.state}/`
-  const meta = city.distance === 'statewide'
-    ? `${city.agent_count} verified agents statewide`
-    : `${city.agent_count} verified agents · ${city.distance}`
+  const cnt = city.agent_count || 0
+  const meta = cnt > 0
+    ? (city.distance === 'statewide' ? `${cnt} verified agents statewide` : `${cnt} verified agents · ${city.distance}`)
+    : (city.distance && city.distance !== 'statewide' ? city.distance : '')
   return `<a class="nearby-link" href="${href}">
   <div class="nearby-name">${city.name}</div>
-  <div class="nearby-meta">${meta}</div>
+  ${meta ? `<div class="nearby-meta">${meta}</div>` : ''}
 </a>`
 }
 
@@ -140,49 +141,6 @@ ${header()}
   </div>
 </section>
 
-<!-- ── FEATURED PLATFORM AGENTS ──────────────────────────────── -->
-<section class="featured-agents-sec" id="featured-agents-sec" style="display:none;">
-  <div class="container">
-    <div class="sec-head">
-      <h2 class="display" style="font-size:clamp(24px,3vw,34px);">Talk to a licensed agent in ${state_name}</h2>
-    </div>
-    <div class="featured-agents-grid" id="featured-agents-grid"></div>
-  </div>
-</section>
-
-<script>
-(function(){
-  var sec = document.getElementById('featured-agents-sec');
-  var grid = document.getElementById('featured-agents-grid');
-  var stateAbbr = '${state_abbr}';
-  var apiUrl = (window.MLA_CONFIG && window.MLA_CONFIG.apiUrl) || 'https://sidecarleads.com';
-  fetch(apiUrl + '/agents/showcase?state=' + encodeURIComponent(stateAbbr))
-    .then(function(r){ return r.json(); })
-    .then(function(agents){
-      if (!agents || !agents.length) return;
-      grid.innerHTML = agents.map(function(a){
-        var avatar = a.photo_url
-          ? '<img src="'+a.photo_url+'" alt="'+a.name+'" width="72" height="72" loading="lazy" style="width:72px;height:72px;border-radius:50%;object-fit:cover;">'
-          : '<span class="fa-initials">'+a.name.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase()+'</span>';
-        var npn = a.npn ? '<span class="fa-npn">NPN '+a.npn+'</span>' : '';
-        var bio = a.bio ? '<p class="fa-bio">'+a.bio+'</p>' : '';
-        return '<div class="fa-card">'
-          +'<span class="fa-badge-featured">⭐ Featured Agent</span>'
-          +'<span class="fa-badge-verified">License Verified</span>'
-          +'<div class="fa-avatar">'+avatar+'</div>'
-          +'<div class="fa-name">'+a.name+'</div>'
-          +npn
-          +'<span class="fa-state">Licensed in ${state_abbr}</span>'
-          +bio
-          +'<div class="fa-ctas"><a href="'+apiUrl+'/form?agentId='+encodeURIComponent(a.id)+'" class="fa-btn-quote" target="_blank" rel="noopener">Instant Online Quote</a></div>'
-          +'</div>';
-      }).join('');
-      sec.style.display = '';
-    })
-    .catch(function(){});
-})();
-</script>
-
 <section class="intake">
   <div class="container">
     <div class="intake-grid">
@@ -267,6 +225,14 @@ ${header()}
 <div class="container">
   <div class="main">
     <main>
+      <!-- Platform featured agents (client-side) -->
+      <div id="fa-section" style="display:none;margin-bottom:40px;">
+        <div class="sec-head">
+          <h2 class="display">Licensed agents in ${city_name}</h2>
+        </div>
+        <div class="featured-agents-grid" id="featured-agents-grid"></div>
+      </div>
+
       ${eliteAgents.length ? `
       <div class="sec-head">
         <h2 class="display">Vetted agents in ${city_name}</h2>
@@ -350,6 +316,39 @@ ${market.community_text ? `
 ${footer({ stateSlug: state_slug, stateName: state_name })}
 
 ${configScript}
+<script>
+(function(){
+  var sec = document.getElementById('fa-section');
+  var grid = document.getElementById('featured-agents-grid');
+  if (!sec || !grid) return;
+  var stateAbbr = '${state_abbr}';
+  var apiUrl = (window.MLA_CONFIG && window.MLA_CONFIG.apiUrl) || 'https://sidecarleads.com';
+  fetch(apiUrl + '/agents/showcase?state=' + encodeURIComponent(stateAbbr))
+    .then(function(r){ return r.json(); })
+    .then(function(agents){
+      if (!agents || !agents.length) return;
+      grid.innerHTML = agents.map(function(a){
+        var avatar = a.photo_url
+          ? '<img src="'+a.photo_url+'" alt="'+a.name+'" width="72" height="72" loading="lazy" style="width:72px;height:72px;border-radius:50%;object-fit:cover;">'
+          : '<span class="fa-initials">'+a.name.split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase()+'</span>';
+        var npn = a.npn ? '<span class="fa-npn">NPN '+a.npn+'</span>' : '';
+        var bio = a.bio ? '<p class="fa-bio">'+a.bio+'</p>' : '';
+        return '<div class="fa-card">'
+          +'<span class="fa-badge-featured">⭐ Featured Agent</span>'
+          +'<span class="fa-badge-verified">License Verified</span>'
+          +'<div class="fa-avatar">'+avatar+'</div>'
+          +'<div class="fa-name">'+a.name+'</div>'
+          +npn
+          +'<span class="fa-state">Licensed in ${state_abbr}</span>'
+          +bio
+          +'<div class="fa-ctas"><a href="'+apiUrl+'/form?agentId='+encodeURIComponent(a.id)+'" class="fa-btn-quote" target="_blank" rel="noopener">Instant Online Quote</a></div>'
+          +'</div>';
+      }).join('');
+      sec.style.display = '';
+    })
+    .catch(function(){});
+})();
+</script>
 <script src="/js/city.js" defer></script>
 </body>
 </html>`

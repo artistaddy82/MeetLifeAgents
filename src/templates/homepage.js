@@ -93,7 +93,7 @@ ${header()}
       <div class="map-wrap">
         <div id="map"></div>
         <div class="map-overlay">
-          <strong>${totalCities} cities · ${totalAgents}+ agents</strong>
+          <strong>${totalCities} cities</strong>
           Click your state to browse verified life insurance agents in your area.
         </div>
       </div>

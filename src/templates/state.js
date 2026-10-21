@@ -65,10 +65,10 @@ ${header()}
             <span class="pg-stat-num">${cityCount}</span>
             <span class="pg-stat-label">Cities covered</span>
           </div>
-          <div class="pg-stat">
-            <span class="pg-stat-num">${totalAgents || '—'}</span>
+          ${totalAgents > 0 ? `<div class="pg-stat">
+            <span class="pg-stat-num">${totalAgents}</span>
             <span class="pg-stat-label">Verified agents</span>
-          </div>
+          </div>` : ''}
           <div class="pg-stat">
             <span class="pg-stat-num">${guaranty_amount}</span>
             <span class="pg-stat-label">Guaranty protection</span>

@@ -41,7 +41,6 @@ function header() {
     <div class="nav-links">
       <a href="/how-it-works/">How it works</a>
       <a href="/our-vetting/">Our vetting</a>
-      <a href="https://sidecarleads.com/login" target="_blank" rel="noopener">Agent login</a>
       <a href="/#search" class="nav-cta">Find an agent</a>
     </div>
   </div>

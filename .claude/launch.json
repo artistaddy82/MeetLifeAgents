@@ -2,10 +2,11 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "meetlifeagents",
+      "name": "MeetLifeAgents",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4321", "--directory", "dist"],
-      "port": 4321
+      "runtimeArgs": ["-m", "http.server", "4322", "--directory", "dist"],
+      "port": 4322,
+      "autoPort": true
     }
   ]
 }
