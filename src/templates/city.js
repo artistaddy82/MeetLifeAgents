@@ -254,8 +254,8 @@ ${header()}
         <p>Every agent listed here passed our baseline check. Premier and Elite agents clear additional criteria.</p>
         <ul class="side-list" style="margin-top:18px;">
           <li>Active ${state_abbr} license — DOI verified</li>
-          <li>${state_name} resident · no virtual-only agents</li>
           <li>10+ independent carrier appointments</li>
+          <li class="side-list-mid">Premier+: ${state_name} resident · no virtual-only</li>
           <li class="side-list-mid">Premier+: Clean DOI record (5-yr lookback)</li>
           <li class="side-list-mid">Premier+: 5+ years licensed</li>
           <li class="side-list-elite">Elite: Advanced designation (CLU, ChFC, CFP)</li>

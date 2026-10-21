@@ -180,9 +180,6 @@ function ourVettingPage(config) {
     ['Active state insurance license',
      'Verified directly through the state DOI\'s NIPR/SERFF lookup. Current — not expired, lapsed, or surrendered.',
      'NIPR · State DOI lookup · NPN confirmed active'],
-    ['Resident of the state they serve',
-     'A genuine resident — not a remote agent using a non-resident license. Consumers deserve someone who knows their community.',
-     'State residence address · Non-resident license rejected'],
     ['10+ independent carrier appointments',
      'Truly independent agents can shop 10+ carriers for you. Fewer and they may steer toward what pays them, not what fits you.',
      '10+ active appointments required · Carrier list verified'],
@@ -221,7 +218,7 @@ ${header()}
     <div class="ov-audit-head">
       <p class="city-eyebrow">Baseline — all agents</p>
       <h2 class="display" style="font-size:clamp(28px,3.5vw,42px);line-height:1.1;margin-bottom:12px;">Three checks.<br>No exceptions.</h2>
-      <p style="font-size:16px;color:var(--ink-soft);line-height:1.65;max-width:520px;">Every agent must pass all three before they appear on the site. These aren't preferences — they're requirements.</p>
+      <p style="font-size:16px;color:var(--ink-soft);line-height:1.65;max-width:520px;">Every agent must pass both checks before they appear on the site. These aren't preferences — they're requirements.</p>
     </div>
     ${checks.map(([title, desc, how], i) => `<div class="ov-audit-row">
       <div class="ov-audit-num">${i + 1}</div>
@@ -249,11 +246,10 @@ ${header()}
         <div class="ov-tier-header">
           <span class="ov-tier-badge ov-badge--verified">Verified</span>
           <h3>Baseline tier</h3>
-          <p>All four requirements above. The floor, not the ceiling.</p>
+          <p>All baseline requirements above. The floor, not the ceiling.</p>
         </div>
         <ul class="side-list" style="margin-top:0;">
           <li>Active state insurance license</li>
-          <li>State resident — not virtual-only</li>
           <li>10+ independent carrier appointments</li>
         </ul>
       </div>
@@ -261,10 +257,11 @@ ${header()}
         <div class="ov-tier-header">
           <span class="ov-tier-badge ov-badge--premier">Premier</span>
           <h3>Mid tier</h3>
-          <p>All Verified criteria, plus experience and a clean record.</p>
+          <p>All Verified criteria, plus residency, experience, and a clean record.</p>
         </div>
         <ul class="side-list" style="margin-top:0;">
           <li>All Verified criteria</li>
+          <li>State resident — not virtual-only</li>
           <li>Clean DOI complaint record (5-year lookback)</li>
           <li>5+ years licensed</li>
           <li>Documented specialty niche</li>
