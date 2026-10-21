@@ -141,7 +141,7 @@ ${header()}
   </div>
 </section>
 
-<section class="intake">
+<section class="intake" id="quote">
   <div class="container">
     <div class="intake-grid">
       <div class="intake-left">
@@ -342,7 +342,7 @@ ${configScript}
           +npn
           +'<span class="fa-state">Licensed in ${state_abbr}</span>'
           +bio
-          +'<div class="fa-ctas"><a href="'+apiUrl+'/form?agentId='+encodeURIComponent(a.id)+'" class="fa-btn-quote" target="_blank" rel="noopener">Instant Online Quote</a></div>'
+          +'<div class="fa-ctas"><a href="#quote" class="fa-btn-quote" onclick="document.getElementById(\'quote\').scrollIntoView({behavior:\'smooth\'});return false;">Instant Online Quote</a></div>'
           +'</div>';
       }).join('');
       sec.style.display = '';
