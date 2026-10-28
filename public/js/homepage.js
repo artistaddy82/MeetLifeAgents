@@ -47,7 +47,7 @@ if (searchBtn) {
   mapboxgl.accessToken = token;
   const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/light-v11',
+    style: 'mapbox://styles/addison82/cjsdfy9xz14c81fmfgf1onj1z',
     center: [-96, 38.5],
     zoom: 3.4,
     interactive: true,
