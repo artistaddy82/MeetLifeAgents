@@ -121,12 +121,16 @@ async function build() {
 
   // Generate global cities data file (used by find-agent CTA morph on all pages)
   const citiesByState = {}
+  const mapMarkers = []
   for (const m of markets.cities) {
     if (!citiesByState[m.state_slug]) citiesByState[m.state_slug] = []
     citiesByState[m.state_slug].push({ slug: m.city_slug, name: m.city_name })
+    if (m.lat && m.lng) {
+      mapMarkers.push({ lat: m.lat, lng: m.lng, city: m.city_name, state: m.state_abbr, slug: m.city_slug, stateSlug: m.state_slug })
+    }
   }
   mkdirp('dist/js')
-  fs.writeFileSync('dist/js/cities.js', `window.MLA_CITIES=${JSON.stringify(citiesByState)};`)
+  fs.writeFileSync('dist/js/cities.js', `window.MLA_CITIES=${JSON.stringify(citiesByState)};window.MLA_MARKERS=${JSON.stringify(mapMarkers)};`)
   console.log(`  ✓ dist/js/cities.js${' '.repeat(38)} (asset)`)
   console.log()
 

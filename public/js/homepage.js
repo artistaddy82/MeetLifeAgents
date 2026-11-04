@@ -52,9 +52,27 @@ if (searchBtn) {
     zoom: 3.4,
     interactive: true,
     attributionControl: false,
+    logoPosition: 'bottom-right',
   });
-  // Click a state on the map → navigate
+
+  // Hide Mapbox logo
   map.on('load', () => {
-    map.getCanvas().style.cursor = 'pointer';
+    map.getCanvas().style.cursor = 'default';
+    const logo = map.getContainer().querySelector('.mapboxgl-ctrl-logo');
+    if (logo) logo.style.display = 'none';
+
+    // Drop a marker for every city
+    const markers = window.MLA_MARKERS || [];
+    markers.forEach(m => {
+      const el = document.createElement('div');
+      el.style.cssText = 'width:8px;height:8px;border-radius:50%;background:#c86519;border:2px solid #fff;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.4);transition:transform .15s';
+      el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.8)'; el.style.zIndex = '10'; });
+      el.addEventListener('mouseleave', () => { el.style.transform = ''; el.style.zIndex = ''; });
+      el.addEventListener('click', () => { window.location.href = `/${m.stateSlug}/${m.slug}/`; });
+      el.title = `${m.city}, ${m.state}`;
+      new mapboxgl.Marker({ element: el })
+        .setLngLat([m.lng, m.lat])
+        .addTo(map);
+    });
   });
 })();
