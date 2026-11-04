@@ -37,6 +37,10 @@ function homepage(states, markets, config = {}) {
     `<option value="${s.slug}">${s.name}</option>`
   ).join('\n')
 
+  const mapMarkers = markets
+    .filter(m => m.lat && m.lng)
+    .map(m => ({ lat: m.lat, lng: m.lng, city: m.city_name, state: m.state_abbr, slug: m.city_slug, stateSlug: m.state_slug }))
+
   const configScript = `<script>
 window.MLA_CONFIG  = ${JSON.stringify({
     mapboxToken:     config.mapboxToken     || '',
@@ -44,7 +48,8 @@ window.MLA_CONFIG  = ${JSON.stringify({
     platformDisplay: config.platformDisplay || '(800) 555-0199',
     apiUrl:          config.apiUrl          || 'https://sidecarleads.com',
   })};
-window.MLA_CITIES = ${JSON.stringify(citiesByState)};
+window.MLA_CITIES  = ${JSON.stringify(citiesByState)};
+window.MLA_MARKERS = ${JSON.stringify(mapMarkers)};
 </script>`
 
   const extraHead = config.mapboxToken
