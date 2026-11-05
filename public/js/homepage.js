@@ -124,7 +124,10 @@ function glowState(code) {
   if (!wrap) return;
   const apiUrl = (window.MLA_CONFIG || {}).apiUrl || 'https://sidecarleads.com';
 
-  function agentCard(a) {
+  // Agent data array kept for modal access
+  let _featuredAgents = [];
+
+  function agentCard(a, idx) {
     const name = a.name || '';
     if (!name) return '';
     const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -144,13 +147,9 @@ function glowState(code) {
       statParts.push(`<div class="fa-stat-npn">NPN ${a.npn}</div>`);
     }
     const statsHtml = statParts.length ? `<div class="fa-stats">${statParts.join('')}</div>` : '';
-
-    const stateSlug   = (a.residentState || '').toLowerCase();
     const locationHtml = a.residentState ? `<div class="fa-location">${a.residentState}</div>` : '';
-    const href   = a.calendarUrl || (stateSlug ? `/${stateSlug}/` : '/agents/apply/');
-    const target = a.calendarUrl ? ' target="_blank" rel="noopener"' : '';
 
-    return `<a class="fa-card" href="${href}"${target}>
+    return `<div class="fa-card" role="button" tabindex="0" data-idx="${idx}" onclick="window._mlaOpenAgent(${idx})" onkeydown="if(event.key==='Enter')window._mlaOpenAgent(${idx})">
   <div class="fa-card-top">
     <div class="fa-initials">${initials}</div>
     <div>
@@ -161,24 +160,113 @@ function glowState(code) {
   ${statsHtml}
   ${specsHtml ? `<div class="fa-specs">${specsHtml}</div>` : ''}
   <div class="fa-cta">View agent →</div>
-</a>`;
+</div>`;
   }
 
   function render(agents, stateLabel) {
-    const cards = agents.slice(0, 3).map(agentCard).filter(Boolean);
+    _featuredAgents = agents.slice(0, 3);
+    const cards = _featuredAgents.map((a, i) => agentCard(a, i)).filter(Boolean);
     if (!cards.length) return;
-    const label = stateLabel ? `⭐ Featured agents in ${stateLabel}` : '⭐ Featured agents';
+    const stateName = stateLabel || 'your state';
     wrap.innerHTML = `<section class="featured-agents">
   <div class="container">
     <div class="fa-head">
-      <div class="eyebrow">${label}</div>
-      <h2 class="display">Verified agents ready to help.</h2>
-      <p>License-verified, locally resident, independently vetted — each agent below has cleared our full review. Contact them directly.</p>
+      <div class="fa-eyebrow">⭐ Featured Agents in <span class="fa-eyebrow-state">${stateName}</span></div>
     </div>
     <div class="fa-grid">${cards.join('')}</div>
   </div>
 </section>`;
   }
+
+  // ── Agent modal ───────────────────────────────────────────────────────────
+  function buildModal() {
+    if (document.getElementById('mla-agent-modal')) return;
+    const el = document.createElement('div');
+    el.id = 'mla-agent-modal';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.innerHTML = `
+<div class="mla-modal-backdrop" id="mla-modal-backdrop"></div>
+<div class="mla-modal-box" id="mla-modal-box">
+  <button class="mla-modal-close" id="mla-modal-close" aria-label="Close">✕</button>
+  <div id="mla-modal-body"></div>
+</div>`;
+    document.body.appendChild(el);
+    document.getElementById('mla-modal-backdrop').addEventListener('click', closeModal);
+    document.getElementById('mla-modal-close').addEventListener('click', closeModal);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('mla-agent-modal');
+    if (modal) { modal.classList.remove('open'); document.body.style.overflow = ''; }
+  }
+
+  window._mlaOpenAgent = function(idx) {
+    const a = _featuredAgents[idx];
+    if (!a) return;
+    buildModal();
+    const modal = document.getElementById('mla-agent-modal');
+    const body  = document.getElementById('mla-modal-body');
+
+    const name     = a.name || '';
+    const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const specs    = Array.isArray(a.specialties) ? a.specialties : [];
+    const firstName = name.split(' ')[0] || 'this agent';
+
+    const statLine = [a.residentState, a.npn ? `NPN ${a.npn}` : ''].filter(Boolean).join(' · ');
+    const stats = [];
+    if (a.yearsLicensed > 0) stats.push(`<div class="mla-ms"><strong>${a.yearsLicensed}</strong><span>yrs licensed</span></div>`);
+    if (a.carrierCountRange) stats.push(`<div class="mla-ms"><strong>${a.carrierCountRange}</strong><span>carriers</span></div>`);
+    const specsHtml = specs.length ? `<div class="mla-modal-specs">${specs.map(s=>`<span>${s}</span>`).join('')}</div>` : '';
+    const calBtn = a.calendarUrl ? `<div class="mla-modal-or"><span>or</span></div><a href="${a.calendarUrl}" target="_blank" rel="noopener" class="mla-btn-cal">📅 Book directly on ${firstName}'s calendar</a>` : '';
+
+    body.innerHTML = `
+<div class="mla-modal-avatar">${initials}</div>
+<div class="mla-modal-name">${name}</div>
+<div class="mla-modal-meta">${statLine}</div>
+${stats.length ? `<div class="mla-modal-stats">${stats.join('<div class="mla-ms-sep"></div>')}</div>` : ''}
+${specsHtml}
+<form class="mla-modal-form" id="mla-lead-form" onsubmit="window._mlaSubmitLead(event,${JSON.stringify(a.id||'')},${JSON.stringify(a.residentState||'')},${JSON.stringify(firstName)})">
+  <input name="firstName" type="text" placeholder="Your first name" required autocomplete="given-name"/>
+  <input name="phone" type="tel" placeholder="Best phone number" required autocomplete="tel"/>
+  <button type="submit" class="mla-btn-submit">Request a call from ${firstName} →</button>
+</form>
+<div id="mla-lead-thanks" class="mla-lead-thanks" hidden>
+  <div class="mla-thanks-icon">✓</div>
+  <strong>Request sent!</strong>
+  <p>${firstName} will reach out to you shortly.</p>
+</div>
+${calBtn}`;
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window._mlaSubmitLead = async function(e, agentId, state, agentFirstName) {
+    e.preventDefault();
+    const form = e.target;
+    const btn  = form.querySelector('[type=submit]');
+    const data = new FormData(form);
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+    try {
+      await fetch(apiUrl + '/leads/form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          consumerFirstName: data.get('firstName'),
+          consumerPhone:     data.get('phone'),
+          agentId:           agentId || undefined,
+          state:             state   || undefined,
+          source:            'web',
+          domain:            'meetlifeagents.com',
+        }),
+      });
+    } catch {}
+    form.hidden = true;
+    document.getElementById('mla-lead-thanks').hidden = false;
+  };
 
   function fetchAgents(code, label) {
     if (!code) return;
