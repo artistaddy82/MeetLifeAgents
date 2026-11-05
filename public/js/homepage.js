@@ -40,6 +40,72 @@ if (searchBtn) {
   });
 }
 
+// Featured agents — geo-detect state, render matching agents
+(function initFeatured() {
+  const wrap = document.getElementById('featured-agents-wrap');
+  if (!wrap) return;
+  const all = window.MLA_FEATURED || {};
+  const allAgents = Object.values(all).flat();
+  if (!allAgents.length) return;
+
+  function render(agents, stateLabel) {
+    const label = stateLabel ? `⭐ Featured agents in ${stateLabel}` : '⭐ Featured agents';
+    const cards = agents.slice(0, 3).map(a => {
+      const initials = a.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+      const tierBadge = a.tier === 'elite'
+        ? '<span class="fa-badge">Elite</span>' : '';
+      const specsHtml = (a.specs || []).map(s => `<span class="fa-spec">${s}</span>`).join('');
+      return `<a class="fa-card" href="/${a.stateSlug}/${a.citySlug}/${a.slug}/">
+  <div class="fa-card-top">
+    <div class="fa-initials">${initials}</div>
+    <div>
+      ${tierBadge}
+      <div class="fa-name">${a.name}</div>
+      <div class="fa-location">${a.city}, ${a.state}</div>
+    </div>
+  </div>
+  <div class="fa-stats">
+    <div class="fa-stat"><strong>${a.years}</strong><span>yrs</span></div>
+    <div class="fa-stat-sep"></div>
+    <div class="fa-stat"><strong>${a.carriers}</strong><span>carriers</span></div>
+    <div class="fa-stat-sep"></div>
+    <div class="fa-stat-npn">NPN ${a.npn}</div>
+  </div>
+  ${specsHtml ? `<div class="fa-specs">${specsHtml}</div>` : ''}
+  <div class="fa-cta">View profile →</div>
+</a>`;
+    }).join('');
+
+    wrap.innerHTML = `<section class="featured-agents">
+  <div class="container">
+    <div class="fa-head">
+      <div class="eyebrow">${label}</div>
+      <h2 class="display">Verified agents ready to help.</h2>
+      <p>License-verified, locally resident, independently vetted — each agent below has cleared our full review. Contact them directly.</p>
+    </div>
+    <div class="fa-grid">${cards}</div>
+  </div>
+</section>`;
+  }
+
+  // Try IP geo to detect state
+  const controller = new AbortController();
+  const tid = setTimeout(() => controller.abort(), 3500);
+  fetch('https://ipapi.co/json/', { signal: controller.signal })
+    .then(r => r.json())
+    .then(geo => {
+      clearTimeout(tid);
+      const stateCode = (geo.region_code || '').toLowerCase();
+      const stateAgents = all[stateCode] || [];
+      if (stateAgents.length) {
+        render(stateAgents, geo.region || geo.region_code);
+      } else {
+        render(allAgents);
+      }
+    })
+    .catch(() => { render(allAgents); });
+})();
+
 // Mapbox — only init if token is set
 (function initMap() {
   const token = window.MLA_CONFIG?.mapboxToken;

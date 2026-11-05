@@ -25,7 +25,7 @@ function cityOptionsByState(markets) {
   return byState
 }
 
-function homepage(states, markets, config = {}) {
+function homepage(states, markets, config = {}, agentsDb = {}) {
   const title       = 'MeetLifeAgents — Find a Verified Local Life Insurance Agent'
   const description = 'Find verified, locally resident life insurance agents in your city. Every agent is license-verified through your state DOI. Direct contact, no spam, no call centers.'
   const canonical   = config.siteUrl || 'https://meetlifeagents.com'
@@ -41,6 +41,30 @@ function homepage(states, markets, config = {}) {
     .filter(m => m.lat && m.lng)
     .map(m => ({ lat: m.lat, lng: m.lng, city: m.city_name, state: m.state_abbr, slug: m.city_slug, stateSlug: m.state_slug }))
 
+  // Build featured agents by state for client-side geo lookup
+  const featuredByState = {}
+  for (const [key, agents] of Object.entries(agentsDb)) {
+    const parts = key.split('_')
+    const stateSlug = parts[parts.length - 1]
+    const citySlug  = parts.slice(0, -1).join('_')
+    if (!featuredByState[stateSlug]) featuredByState[stateSlug] = []
+    for (const a of agents.slice(0, 3)) {
+      featuredByState[stateSlug].push({
+        name:       `${a.first_name} ${a.last_name}`,
+        slug:       a.slug,
+        citySlug,
+        stateSlug,
+        city:       a.office_city,
+        state:      a.office_state,
+        years:      a.years_licensed,
+        carriers:   a.carrier_count,
+        tier:       a.tier,
+        specs:      (a.specialties || []).slice(0, 2),
+        npn:        a.npn,
+      })
+    }
+  }
+
   const configScript = `<script>
 window.MLA_CONFIG  = ${JSON.stringify({
     mapboxToken:     config.mapboxToken     || '',
@@ -48,8 +72,9 @@ window.MLA_CONFIG  = ${JSON.stringify({
     platformDisplay: config.platformDisplay || '(800) 555-0199',
     apiUrl:          config.apiUrl          || 'https://sidecarleads.com',
   })};
-window.MLA_CITIES  = ${JSON.stringify(citiesByState)};
-window.MLA_MARKERS = ${JSON.stringify(mapMarkers)};
+window.MLA_CITIES    = ${JSON.stringify(citiesByState)};
+window.MLA_MARKERS   = ${JSON.stringify(mapMarkers)};
+window.MLA_FEATURED  = ${JSON.stringify(featuredByState)};
 </script>`
 
   const extraHead = config.mapboxToken
@@ -128,6 +153,8 @@ ${header()}
     </div>
   </div>
 </section>
+
+<div id="featured-agents-wrap"></div>
 
 <section class="diff" id="vetting">
   <div class="container">
