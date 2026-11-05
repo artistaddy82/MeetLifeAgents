@@ -40,42 +40,57 @@ if (searchBtn) {
   });
 }
 
-// Featured agents — geo-detect state, render matching agents
+// Featured agents — geo-detect state, fetch from live API
 (function initFeatured() {
   const wrap = document.getElementById('featured-agents-wrap');
   if (!wrap) return;
-  const all = window.MLA_FEATURED || {};
-  const allAgents = Object.values(all).flat();
-  if (!allAgents.length) return;
+  const apiUrl = (window.MLA_CONFIG || {}).apiUrl || 'https://sidecarleads.com';
 
-  function render(agents, stateLabel) {
-    const label = stateLabel ? `⭐ Featured agents in ${stateLabel}` : '⭐ Featured agents';
-    const cards = agents.slice(0, 3).map(a => {
-      const initials = a.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-      const tierBadge = a.tier === 'elite'
-        ? '<span class="fa-badge">Elite</span>' : '';
-      const specsHtml = (a.specs || []).map(s => `<span class="fa-spec">${s}</span>`).join('');
-      return `<a class="fa-card" href="/${a.stateSlug}/${a.citySlug}/${a.slug}/">
+  function agentCard(a) {
+    const name = [a.first_name, a.last_name].filter(Boolean).join(' ') || a.name || '';
+    if (!name) return '';
+    const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const tierBadge = a.tier === 'elite' ? '<span class="fa-badge">Elite</span>' : '';
+    const specs = Array.isArray(a.specialties) ? a.specialties.slice(0, 2) : [];
+    const specsHtml = specs.map(s => `<span class="fa-spec">${s}</span>`).join('');
+
+    const statParts = [];
+    if (a.yearsLicensed != null && a.yearsLicensed > 0) {
+      statParts.push(`<div class="fa-stat"><strong>${a.yearsLicensed}</strong><span>yrs</span></div>`);
+    }
+    if (a.carrierCountRange) {
+      statParts.push(`<div class="fa-stat-sep"></div><div class="fa-stat"><strong>${a.carrierCountRange}</strong><span>carriers</span></div>`);
+    }
+    if (a.npn) {
+      statParts.push(`<div class="fa-stat-sep"></div><div class="fa-stat-npn">NPN ${a.npn}</div>`);
+    }
+    const statsHtml = statParts.length ? `<div class="fa-stats">${statParts.join('')}</div>` : '';
+
+    const citySlug  = (a.office_city || '').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    const stateSlug = (a.resident_state || '').toLowerCase();
+    const city  = a.office_city  || '';
+    const state = a.resident_state || '';
+    const locationHtml = (city || state) ? `<div class="fa-location">${[city, state].filter(Boolean).join(', ')}</div>` : '';
+
+    return `<a class="fa-card" href="/${stateSlug}/${citySlug}/${a.slug || a.id}/">
   <div class="fa-card-top">
     <div class="fa-initials">${initials}</div>
     <div>
       ${tierBadge}
-      <div class="fa-name">${a.name}</div>
-      <div class="fa-location">${a.city}, ${a.state}</div>
+      <div class="fa-name">${name}</div>
+      ${locationHtml}
     </div>
   </div>
-  <div class="fa-stats">
-    <div class="fa-stat"><strong>${a.years}</strong><span>yrs</span></div>
-    <div class="fa-stat-sep"></div>
-    <div class="fa-stat"><strong>${a.carriers}</strong><span>carriers</span></div>
-    <div class="fa-stat-sep"></div>
-    <div class="fa-stat-npn">NPN ${a.npn}</div>
-  </div>
+  ${statsHtml}
   ${specsHtml ? `<div class="fa-specs">${specsHtml}</div>` : ''}
   <div class="fa-cta">View profile →</div>
 </a>`;
-    }).join('');
+  }
 
+  function render(agents, stateLabel) {
+    const cards = agents.slice(0, 3).map(agentCard).filter(Boolean);
+    if (!cards.length) return;
+    const label = stateLabel ? `⭐ Featured agents in ${stateLabel}` : '⭐ Featured agents';
     wrap.innerHTML = `<section class="featured-agents">
   <div class="container">
     <div class="fa-head">
@@ -83,27 +98,33 @@ if (searchBtn) {
       <h2 class="display">Verified agents ready to help.</h2>
       <p>License-verified, locally resident, independently vetted — each agent below has cleared our full review. Contact them directly.</p>
     </div>
-    <div class="fa-grid">${cards}</div>
+    <div class="fa-grid">${cards.join('')}</div>
   </div>
 </section>`;
   }
 
-  // Try IP geo to detect state
+  function fetchAndRender(stateCode, stateLabel) {
+    const url = apiUrl + '/agents/mla-data' + (stateCode ? '?state=' + stateCode.toUpperCase() : '');
+    fetch(url)
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(data => {
+        const agents = Array.isArray(data) ? data : (data.agents || []);
+        if (agents.length) render(agents, stateLabel);
+      })
+      .catch(() => {});
+  }
+
+  // Try IP geo to detect state, then fetch matching agents
   const controller = new AbortController();
   const tid = setTimeout(() => controller.abort(), 3500);
   fetch('https://ipapi.co/json/', { signal: controller.signal })
     .then(r => r.json())
     .then(geo => {
       clearTimeout(tid);
-      const stateCode = (geo.region_code || '').toLowerCase();
-      const stateAgents = all[stateCode] || [];
-      if (stateAgents.length) {
-        render(stateAgents, geo.region || geo.region_code);
-      } else {
-        render(allAgents);
-      }
+      const stateCode = geo.region_code || '';
+      fetchAndRender(stateCode, geo.region || stateCode);
     })
-    .catch(() => { render(allAgents); });
+    .catch(() => { fetchAndRender('', ''); });
 })();
 
 // Mapbox — only init if token is set

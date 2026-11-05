@@ -143,7 +143,7 @@ async function build() {
 
     // 2. Homepage
     const allCities = markets.cities
-    write('dist/index.html', homepage(markets.states, allCities, config, agentsDb))
+    write('dist/index.html', homepage(markets.states, allCities, config))
 
     // 3. Static utility pages
     write('dist/how-it-works/index.html',        howItWorksPage(config))
