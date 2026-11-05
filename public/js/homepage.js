@@ -215,7 +215,7 @@ function glowState(code) {
     container: 'map',
     style: 'mapbox://styles/addison82/cjsdfy9xz14c81fmfgf1onj1z',
     center: [-96, 38.5],
-    zoom: 3.4,
+    zoom: 3.0,
     interactive: true,
     attributionControl: false,
     logoPosition: 'bottom-right',
@@ -236,7 +236,6 @@ function glowState(code) {
       dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:#c86519;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4);transition:transform .15s;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)';
       outer.appendChild(dot);
 
-      // Store dot by state code for geo glow
       if (!window._mlaMarkerDots[m.state]) window._mlaMarkerDots[m.state] = [];
       window._mlaMarkerDots[m.state].push(dot);
 
@@ -247,7 +246,15 @@ function glowState(code) {
       new mapboxgl.Marker({ element: outer }).setLngLat([m.lng, m.lat]).addTo(map);
     });
 
-    // Map is ready — apply geo glow if already detected
+    // Fit map to show all markers with padding
+    if (markers.length) {
+      const lngs = markers.map(m => m.lng);
+      const lats = markers.map(m => m.lat);
+      const sw = [Math.min(...lngs) - 2, Math.min(...lats) - 1];
+      const ne = [Math.max(...lngs) + 2, Math.max(...lats) + 1];
+      map.fitBounds([sw, ne], { padding: 20, maxZoom: 4.5, duration: 0 });
+    }
+
     window._mlaMap = map;
     if (_geoCode) glowState(_geoCode);
   });
