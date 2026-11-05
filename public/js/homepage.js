@@ -47,10 +47,9 @@ if (searchBtn) {
   const apiUrl = (window.MLA_CONFIG || {}).apiUrl || 'https://sidecarleads.com';
 
   function agentCard(a) {
-    const name = [a.first_name, a.last_name].filter(Boolean).join(' ') || a.name || '';
+    const name = a.name || '';
     if (!name) return '';
     const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-    const tierBadge = a.tier === 'elite' ? '<span class="fa-badge">Elite</span>' : '';
     const specs = Array.isArray(a.specialties) ? a.specialties.slice(0, 2) : [];
     const specsHtml = specs.map(s => `<span class="fa-spec">${s}</span>`).join('');
 
@@ -59,31 +58,30 @@ if (searchBtn) {
       statParts.push(`<div class="fa-stat"><strong>${a.yearsLicensed}</strong><span>yrs</span></div>`);
     }
     if (a.carrierCountRange) {
-      statParts.push(`<div class="fa-stat-sep"></div><div class="fa-stat"><strong>${a.carrierCountRange}</strong><span>carriers</span></div>`);
+      if (statParts.length) statParts.push('<div class="fa-stat-sep"></div>');
+      statParts.push(`<div class="fa-stat"><strong>${a.carrierCountRange}</strong><span>carriers</span></div>`);
     }
     if (a.npn) {
-      statParts.push(`<div class="fa-stat-sep"></div><div class="fa-stat-npn">NPN ${a.npn}</div>`);
+      if (statParts.length) statParts.push('<div class="fa-stat-sep"></div>');
+      statParts.push(`<div class="fa-stat-npn">NPN ${a.npn}</div>`);
     }
     const statsHtml = statParts.length ? `<div class="fa-stats">${statParts.join('')}</div>` : '';
 
-    const citySlug  = (a.office_city || '').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-    const stateSlug = (a.resident_state || '').toLowerCase();
-    const city  = a.office_city  || '';
-    const state = a.resident_state || '';
-    const locationHtml = (city || state) ? `<div class="fa-location">${[city, state].filter(Boolean).join(', ')}</div>` : '';
+    const stateSlug = (a.residentState || '').toLowerCase();
+    const locationHtml = a.residentState ? `<div class="fa-location">${a.residentState}</div>` : '';
+    const href = stateSlug ? `/${stateSlug}/` : '/agents/apply/';
 
-    return `<a class="fa-card" href="/${stateSlug}/${citySlug}/${a.slug || a.id}/">
+    return `<a class="fa-card" href="${href}">
   <div class="fa-card-top">
     <div class="fa-initials">${initials}</div>
     <div>
-      ${tierBadge}
       <div class="fa-name">${name}</div>
       ${locationHtml}
     </div>
   </div>
   ${statsHtml}
   ${specsHtml ? `<div class="fa-specs">${specsHtml}</div>` : ''}
-  <div class="fa-cta">View profile →</div>
+  <div class="fa-cta">View agents →</div>
 </a>`;
   }
 
@@ -104,8 +102,8 @@ if (searchBtn) {
   }
 
   function fetchAndRender(stateCode, stateLabel) {
-    const url = apiUrl + '/agents/mla-data' + (stateCode ? '?state=' + stateCode.toUpperCase() : '');
-    fetch(url)
+    if (!stateCode) return;
+    fetch(apiUrl + '/agents/mla-data?state=' + stateCode.toUpperCase())
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(data => {
         const agents = Array.isArray(data) ? data : (data.agents || []);
@@ -121,10 +119,10 @@ if (searchBtn) {
     .then(r => r.json())
     .then(geo => {
       clearTimeout(tid);
-      const stateCode = geo.region_code || '';
-      fetchAndRender(stateCode, geo.region || stateCode);
+      const stateCode = (geo.region_code || '').toUpperCase();
+      if (stateCode) fetchAndRender(stateCode, geo.region || stateCode);
     })
-    .catch(() => { fetchAndRender('', ''); });
+    .catch(() => {});
 })();
 
 // Mapbox — only init if token is set
