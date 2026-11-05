@@ -69,9 +69,10 @@ if (searchBtn) {
 
     const stateSlug = (a.residentState || '').toLowerCase();
     const locationHtml = a.residentState ? `<div class="fa-location">${a.residentState}</div>` : '';
-    const href = stateSlug ? `/${stateSlug}/` : '/agents/apply/';
+    const href = a.calendarUrl || (stateSlug ? `/${stateSlug}/` : '/agents/apply/');
+    const target = a.calendarUrl ? ' target="_blank" rel="noopener"' : '';
 
-    return `<a class="fa-card" href="${href}">
+    return `<a class="fa-card" href="${href}"${target}>
   <div class="fa-card-top">
     <div class="fa-initials">${initials}</div>
     <div>
@@ -81,7 +82,7 @@ if (searchBtn) {
   </div>
   ${statsHtml}
   ${specsHtml ? `<div class="fa-specs">${specsHtml}</div>` : ''}
-  <div class="fa-cta">View agents →</div>
+  <div class="fa-cta">View agent →</div>
 </a>`;
   }
 

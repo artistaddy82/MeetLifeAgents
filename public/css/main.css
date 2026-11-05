@@ -3069,7 +3069,7 @@ h1.city-title em { font-style: italic; color: var(--rust); font-weight: 400; }
 .fa-card {
   display: flex; flex-direction: column; gap: 14px;
   padding: 24px; border-radius: 12px;
-  background: var(--bg); border: 1px solid var(--border);
+  background: #fff; border: 1px solid var(--border);
   text-decoration: none; color: inherit;
   transition: box-shadow 0.15s, transform 0.12s;
 }
