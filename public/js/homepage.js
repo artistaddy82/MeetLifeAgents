@@ -64,13 +64,21 @@ if (searchBtn) {
     // Drop a marker for every city
     const markers = window.MLA_MARKERS || [];
     markers.forEach(m => {
-      const el = document.createElement('div');
-      el.style.cssText = 'width:8px;height:8px;border-radius:50%;background:#c86519;border:2px solid #fff;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.4);transition:transform .15s';
-      el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.8)'; el.style.zIndex = '10'; });
-      el.addEventListener('mouseleave', () => { el.style.transform = ''; el.style.zIndex = ''; });
-      el.addEventListener('click', () => { window.location.href = `/${m.stateSlug}/${m.slug}/`; });
-      el.title = `${m.city}, ${m.state}`;
-      new mapboxgl.Marker({ element: el })
+      // Outer wrapper: fixed size so Mapbox never recalculates offset on hover
+      const outer = document.createElement('div');
+      outer.style.cssText = 'width:12px;height:12px;position:relative;cursor:pointer;';
+      outer.title = `${m.city}, ${m.state}`;
+
+      // Inner dot: handles all visual animation
+      const dot = document.createElement('div');
+      dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:#c86519;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4);transition:transform .15s;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)';
+      outer.appendChild(dot);
+
+      outer.addEventListener('mouseenter', () => { dot.style.transform = 'translate(-50%,-50%) scale(1.8)'; });
+      outer.addEventListener('mouseleave', () => { dot.style.transform = 'translate(-50%,-50%) scale(1)'; });
+      outer.addEventListener('click', () => { window.location.href = `/${m.stateSlug}/${m.slug}/`; });
+
+      new mapboxgl.Marker({ element: outer })
         .setLngLat([m.lng, m.lat])
         .addTo(map);
     });
