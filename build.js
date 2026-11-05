@@ -74,6 +74,7 @@ const {
   agentApplyPage,
   quotePage,
 } = require('./src/templates/static-pages')
+const { articlesPage, articlePage, ARTICLES } = require('./src/templates/articles')
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function mkdirp(dir) {
@@ -154,6 +155,10 @@ async function build() {
     write('dist/about/index.html',          aboutPage(config))
     write('dist/agents/apply/index.html',   agentApplyPage(config))
     write('dist/quote/index.html',          quotePage(config))
+    write('dist/articles/index.html',       articlesPage(config))
+    for (const a of ARTICLES) {
+      write(`dist/articles/${a.slug}/index.html`, articlePage(a.slug, config))
+    }
     write('dist/match/index.html',        matchPage(config))
     write('dist/calculator/index.html',   calculatorPage(config))
     write('dist/contact/index.html',      contactPage(config))
@@ -260,6 +265,8 @@ async function build() {
       `${SITE_URL}/privacy/`,
       `${SITE_URL}/terms/`,
       `${SITE_URL}/tcpa/`,
+      `${SITE_URL}/articles/`,
+      ...ARTICLES.map(a => `${SITE_URL}/articles/${a.slug}/`),
     ]
     const stateUrls  = markets.states.map(s => `${SITE_URL}/${s.slug}/`)
     const cityUrls   = markets.cities.map(m => `${SITE_URL}/${m.state_slug}/${m.city_slug}/`)

@@ -41,6 +41,7 @@ function header() {
     <div class="nav-links">
       <a href="/how-it-works/">How it works</a>
       <a href="/our-vetting/">Our vetting</a>
+      <a href="/articles/">Articles</a>
       <a href="/#search" class="nav-cta">Find an agent</a>
     </div>
   </div>
@@ -87,6 +88,7 @@ function footer({ stateSlug = '', stateName = '' } = {}) {
         <h5>For consumers</h5>
         <a href="/how-it-works/">How it works</a>
         <a href="/our-vetting/">Our vetting standard</a>
+        <a href="/articles/">Articles & guides</a>
         <a href="/why-not-ethos/">Why not Ethos?</a>
         <a href="/about/">About</a>
       </div>
