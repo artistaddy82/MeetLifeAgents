@@ -209,7 +209,7 @@ ${footer()}
 
 ${configScript}
 ${config.mapboxToken ? `<script src="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js"></script>` : ''}
-<script src="/js/homepage.js" defer></script>
+<script src="/js/homepage.js?v=${config.buildHash || ''}" defer></script>
 </body>
 </html>`
 }

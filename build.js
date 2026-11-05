@@ -29,8 +29,9 @@
  *           index.html        (agent profile)
  */
 
-const fs   = require('fs')
-const path = require('path')
+const fs            = require('fs')
+const path          = require('path')
+const { execSync }  = require('child_process')
 
 // ── Config ────────────────────────────────────────────────────────────────────
 const SITE_URL        = process.env.SITE_URL        || 'https://meetlifeagents.com'
@@ -39,7 +40,8 @@ const PLATFORM_DISPLAY= process.env.PLATFORM_DISPLAY|| ''
 const MAPBOX_TOKEN    = process.env.MAPBOX_TOKEN     || ''
 const API_URL         = process.env.API_URL          || 'https://sidecarleads.com'
 
-const config = { siteUrl: SITE_URL, platformNumber: PLATFORM_NUMBER, platformDisplay: PLATFORM_DISPLAY, mapboxToken: MAPBOX_TOKEN, apiUrl: API_URL }
+const BUILD_HASH = (() => { try { return execSync('git rev-parse --short HEAD').toString().trim() } catch { return Date.now().toString(36) } })()
+const config = { siteUrl: SITE_URL, platformNumber: PLATFORM_NUMBER, platformDisplay: PLATFORM_DISPLAY, mapboxToken: MAPBOX_TOKEN, apiUrl: API_URL, buildHash: BUILD_HASH }
 
 // ── CLI flags ─────────────────────────────────────────────────────────────────
 const ONLY_CITY  = (process.argv.find(a => a.startsWith('--city='))  || '').replace('--city=', '')
