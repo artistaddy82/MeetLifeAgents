@@ -3099,87 +3099,97 @@ h1.city-title em { font-style: italic; color: var(--rust); font-weight: 400; }
 @media (max-width: 640px) { .fa-grid { grid-template-columns: 1fr; } }
 
 /* ── Agent modal ── */
-#mla-agent-modal { display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; }
+#mla-agent-modal { display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; padding: 16px; }
 #mla-agent-modal.open { display: flex; }
-.mla-modal-backdrop { position: absolute; inset: 0; background: rgba(15,21,51,0.6); backdrop-filter: blur(3px); }
+.mla-modal-backdrop { position: absolute; inset: 0; background: rgba(10,14,40,0.75); backdrop-filter: blur(4px); }
 .mla-modal-box {
-  position: relative; z-index: 1; background: #fff; border-radius: 16px;
-  width: 90%; max-width: 420px; padding: 36px 32px 28px;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.2);
-  max-height: 90vh; overflow-y: auto;
-  display: flex; flex-direction: column; align-items: center; text-align: center;
+  position: relative; z-index: 1; border-radius: 20px; overflow: hidden;
+  width: 100%; max-width: 400px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.35);
+  max-height: 92vh; overflow-y: auto;
+  display: flex; flex-direction: column;
 }
 .mla-modal-close {
-  position: absolute; top: 14px; right: 16px;
-  background: none; border: none; font-size: 18px; color: var(--ink-soft);
-  cursor: pointer; line-height: 1; padding: 4px 8px; border-radius: 6px;
-}
-.mla-modal-close:hover { background: var(--border); }
-.mla-modal-avatar {
-  width: 72px; height: 72px; border-radius: 50%;
-  background: var(--gold); color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Fraunces', serif; font-size: 28px; font-weight: 600;
-  margin-bottom: 14px;
-}
-.mla-modal-name { font-size: 22px; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
-.mla-modal-meta { font-size: 13px; color: var(--ink-soft); margin-bottom: 16px; }
-.mla-modal-stats { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 14px; }
-.mla-ms { display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.mla-ms strong { font-size: 20px; font-weight: 800; color: var(--ink); }
-.mla-ms span { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--ink-soft); }
-.mla-ms-sep { width: 1px; height: 32px; background: var(--border); }
-.mla-modal-specs { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 20px; }
-.mla-modal-specs span { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; background: rgba(0,0,0,0.05); color: var(--ink-soft); }
-.mla-modal-form { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
-.mla-modal-form input {
-  width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 8px;
-  font-size: 15px; font-family: inherit; color: var(--ink); outline: none;
-  transition: border-color .15s;
-}
-.mla-modal-form input:focus { border-color: var(--gold); }
-.mla-btn-submit {
-  width: 100%; padding: 14px; border: none; border-radius: 8px;
-  background: var(--navy); color: #fff; font-size: 15px; font-weight: 700;
-  cursor: pointer; font-family: inherit; transition: background .15s;
-}
-.mla-btn-submit:hover { background: var(--gold-dark); }
-.mla-modal-or { width: 100%; display: flex; align-items: center; gap: 10px; margin: 16px 0 10px; color: var(--ink-soft); font-size: 13px; }
-.mla-modal-or::before, .mla-modal-or::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-.mla-btn-cal {
-  display: block; width: 100%; padding: 13px 16px; border: 1.5px solid var(--border); border-radius: 8px;
-  font-size: 14px; font-weight: 600; color: var(--ink); text-decoration: none; text-align: center;
-  transition: border-color .15s, background .15s;
-}
-.mla-btn-cal:hover { border-color: var(--gold); background: #fdf8f0; }
-.mla-lead-thanks { width: 100%; padding: 20px; text-align: center; }
-.mla-thanks-icon { font-size: 32px; color: #059669; margin-bottom: 8px; }
-.mla-lead-thanks strong { display: block; font-size: 18px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
-.mla-lead-thanks p { font-size: 14px; color: var(--ink-soft); }
-.mla-modal-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 10px 0 4px; }
-.mla-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
-.mla-badge-green { background: #d1fae5; color: #065f46; }
-.mla-badge-blue  { background: #dbeafe; color: #1d4ed8; }
-.mla-modal-bio { font-size: 13px; color: var(--ink-soft); line-height: 1.6; margin: 12px 0 4px; text-align: left; }
-.mla-modal-divider {
-  width: 100%; text-align: center; font-size: 11px; font-weight: 700;
-  letter-spacing: .8px; text-transform: uppercase; color: var(--ink-soft);
-  margin: 18px 0 10px; position: relative;
-}
-.mla-modal-divider::before, .mla-modal-divider::after {
-  content: ''; position: absolute; top: 50%; width: 28%; height: 1px; background: var(--border);
-}
-.mla-modal-divider::before { left: 0; }
-.mla-modal-divider::after  { right: 0; }
-.mla-modal-fine { font-size: 11px; color: var(--ink-soft); margin-top: 8px; }
-.mla-btn-phone {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%; padding: 13px 16px; border-radius: 8px;
-  background: var(--navy); color: #fff;
-  font-size: 16px; font-weight: 700; text-decoration: none;
+  position: absolute; top: 14px; right: 14px; z-index: 2;
+  background: rgba(255,255,255,0.15); border: none; color: #fff;
+  font-size: 16px; cursor: pointer; width: 30px; height: 30px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
   transition: background .15s;
 }
-.mla-btn-phone:hover { background: var(--gold-dark); }
+.mla-modal-close:hover { background: rgba(255,255,255,0.3); }
+
+/* Header — navy */
+.mla-mh {
+  background: linear-gradient(145deg, #1a2666 0%, #0f1533 100%);
+  padding: 36px 28px 28px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.mla-mh-avatar {
+  width: 76px; height: 76px; border-radius: 50%;
+  background: linear-gradient(135deg, #d4a538, #c86519);
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700;
+  border: 3px solid rgba(255,255,255,0.2);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  margin-bottom: 6px;
+}
+.mla-mh-name { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
+.mla-mh-meta { font-size: 12px; color: rgba(255,255,255,0.55); font-weight: 500; letter-spacing: 0.3px; }
+.mla-modal-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 10px; }
+.mla-badge { font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.3px; }
+.mla-badge-green { background: rgba(16,185,129,0.2); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+.mla-badge-blue  { background: rgba(96,165,250,0.2); color: #93c5fd; border: 1px solid rgba(96,165,250,0.3); }
+
+/* Body — white */
+.mla-mb { background: #fff; padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 0; }
+.mla-modal-stats { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 16px 0; border-bottom: 1px solid #f1f1f1; margin-bottom: 16px; }
+.mla-ms { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.mla-ms strong { font-size: 20px; font-weight: 800; color: #0f1533; line-height: 1; }
+.mla-ms span { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #9ca3af; }
+.mla-ms-sep { width: 1px; height: 32px; background: #e5e7eb; }
+.mla-modal-bio { font-size: 13.5px; color: #4b5563; line-height: 1.65; margin-bottom: 14px; }
+.mla-modal-specs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.mla-modal-specs span { font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 20px; background: #f3f4f6; color: #374151; }
+.mla-mb-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: #9ca3af; text-align: center; margin-bottom: 14px; position: relative;
+}
+.mla-mb-label::before, .mla-mb-label::after {
+  content: ''; position: absolute; top: 50%; width: 30%; height: 1px; background: #e5e7eb;
+}
+.mla-mb-label::before { left: 0; } .mla-mb-label::after { right: 0; }
+.mla-modal-form { display: flex; flex-direction: column; gap: 10px; }
+.mla-modal-form input {
+  width: 100%; padding: 13px 16px; border: 1.5px solid #e5e7eb; border-radius: 10px;
+  font-size: 15px; font-family: inherit; color: #0f1533; outline: none; background: #fafafa;
+  transition: border-color .15s, background .15s;
+}
+.mla-modal-form input:focus { border-color: #c86519; background: #fff; }
+.mla-btn-submit {
+  width: 100%; padding: 15px; border: none; border-radius: 10px;
+  background: linear-gradient(135deg, #1a2666, #2a3a8c);
+  color: #fff; font-size: 15px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: opacity .15s, transform .1s;
+  letter-spacing: 0.2px;
+}
+.mla-btn-submit:hover { opacity: .88; transform: translateY(-1px); }
+.mla-btn-submit:active { transform: translateY(0); }
+.mla-modal-fine { font-size: 11px; color: #9ca3af; text-align: center; margin-top: 8px; }
+.mla-modal-or { display: flex; align-items: center; gap: 10px; margin: 20px 0 12px; color: #9ca3af; font-size: 12px; font-weight: 600; }
+.mla-modal-or::before, .mla-modal-or::after { content: ''; flex: 1; height: 1px; background: #e5e7eb; }
+.mla-btn-phone {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 14px 16px; border-radius: 10px;
+  background: #fff; border: 1.5px solid #e5e7eb;
+  color: #0f1533; font-size: 16px; font-weight: 700; text-decoration: none;
+  transition: border-color .15s, background .15s;
+}
+.mla-btn-phone:hover { border-color: #c86519; background: #fdf8f0; }
+.mla-lead-thanks { padding: 24px 0 8px; text-align: center; }
+.mla-thanks-icon { font-size: 36px; margin-bottom: 10px; }
+.mla-lead-thanks strong { display: block; font-size: 18px; font-weight: 800; color: #0f1533; margin-bottom: 6px; }
+.mla-lead-thanks p { font-size: 14px; color: #6b7280; }
 /* Mapbox marker pulse for geo-detected state */
 @keyframes mapPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(200,101,25,0.6); } 60% { box-shadow: 0 0 0 7px rgba(200,101,25,0); } }
 .marker-pulse { animation: mapPulse 2s ease infinite !important; }

@@ -239,26 +239,30 @@ function glowState(code) {
     const phoneHtml  = phone ? `<div class="mla-modal-or"><span>or call us now</span></div><a href="tel:${phoneRaw}" class="mla-btn-phone">📞 ${phone}</a>` : '';
 
     body.innerHTML = `
-<div class="mla-modal-avatar">${initials}</div>
-<div class="mla-modal-name">${name}</div>
-<div class="mla-modal-meta">${statMeta}</div>
-${badgesHtml}
-${statsHtml}
-${bioHtml}
-${specsHtml}
-<div class="mla-modal-divider">Contact ${firstName}</div>
-<form class="mla-modal-form" id="mla-lead-form" onsubmit="window._mlaSubmitLead(event,${JSON.stringify(a.id||'')},${JSON.stringify(a.residentState||'')},${JSON.stringify(firstName)})">
-  <input name="firstName" type="text" placeholder="Your first name" required autocomplete="given-name"/>
-  <input name="phone" type="tel" placeholder="Best phone number" required autocomplete="tel"/>
-  <button type="submit" class="mla-btn-submit">Request a call from ${firstName} →</button>
-</form>
-<p class="mla-modal-fine">No spam. Direct call back within 24 hours.</p>
-<div id="mla-lead-thanks" class="mla-lead-thanks" hidden>
-  <div class="mla-thanks-icon">✓</div>
-  <strong>Request sent!</strong>
-  <p>${firstName} will reach out to you shortly.</p>
+<div class="mla-mh">
+  <div class="mla-mh-avatar">${initials}</div>
+  <div class="mla-mh-name">${name}</div>
+  <div class="mla-mh-meta">${statMeta}</div>
+  ${badgesHtml}
 </div>
-${phoneHtml}`;
+<div class="mla-mb">
+  ${statsHtml}
+  ${bioHtml}
+  ${specsHtml}
+  <div class="mla-mb-label">Contact ${firstName}</div>
+  <form class="mla-modal-form" id="mla-lead-form" onsubmit="window._mlaSubmitLead(event,${JSON.stringify(a.id||'')},${JSON.stringify(a.residentState||'')},${JSON.stringify(firstName)})">
+    <input name="firstName" type="text" placeholder="Your first name" required autocomplete="given-name"/>
+    <input name="phone" type="tel" placeholder="Best phone number" required autocomplete="tel"/>
+    <button type="submit" class="mla-btn-submit">Request a call from ${firstName} →</button>
+  </form>
+  <p class="mla-modal-fine">🔒 No spam. Direct call back within 24 hours.</p>
+  <div id="mla-lead-thanks" class="mla-lead-thanks" hidden>
+    <div class="mla-thanks-icon">✓</div>
+    <strong>Request sent!</strong>
+    <p>${firstName} will reach out to you shortly.</p>
+  </div>
+  ${phoneHtml}
+</div>`;
 
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
