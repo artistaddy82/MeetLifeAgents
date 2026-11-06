@@ -74,33 +74,8 @@ function autoFillDropdown(code, name) {
 }
 
 function glowState(code) {
-  const map = window._mlaMap;
-  if (!map || !code) return;
-
-  // Pulse city markers in the detected state
-  const dots = window._mlaMarkerDots[code] || [];
-  dots.forEach(dot => dot.classList.add('marker-pulse'));
-
-  // Try to add a Mapbox fill layer for the state polygon
-  try {
-    if (!map.getSource('state-boundaries')) {
-      map.addSource('state-boundaries', {
-        type: 'vector',
-        url: 'mapbox://mapbox.country-boundaries-v1',
-      });
-    }
-    if (!map.getLayer('state-hl')) {
-      map.addLayer({
-        id: 'state-hl',
-        type: 'fill',
-        source: 'state-boundaries',
-        'source-layer': 'country_boundaries',
-        filter: ['==', ['get', 'iso_3166_2'], 'US-' + code],
-        paint: { 'fill-color': '#c86519', 'fill-opacity': 0.13 },
-      }, 'admin-state-label' // insert below state labels if that layer exists
-      );
-    }
-  } catch(e) {}
+  // Legacy stub — real logic is in highlightStateAndZoom
+  highlightStateAndZoom(code);
 }
 
 // ── Geo fetch (single fetch, shared by all consumers) ─────────────────────────
@@ -299,7 +274,18 @@ function glowState(code) {
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(data => {
         const agents = Array.isArray(data) ? data : (data.agents || []);
-        if (agents.length) render(agents, label);
+        if (!agents.length) return;
+        render(agents, label);
+        // Show first featured agent on the map
+        const first = _featuredAgents[0];
+        if (first) {
+          if (window._mlaMap) {
+            window._mlaShowMapAgent(first, code);
+          } else {
+            // Map not ready yet — store for map.onload to pick up
+            window._mlaPendingMapAgent = { agent: first, code };
+          }
+        }
       })
       .catch(() => {});
   }
@@ -319,6 +305,121 @@ function glowState(code) {
   tryFetch();
 })();
 
+// ── State center lookup (fallback when no MLA_MARKERS for a state) ────────────
+const _STATE_CENTERS = {
+  AL:[32.7,-86.7],AK:[64.2,-153.4],AZ:[34.3,-111.1],AR:[34.9,-92.4],
+  CA:[37.2,-119.7],CO:[39.0,-105.5],CT:[41.6,-72.7],DE:[39.3,-75.5],
+  FL:[27.8,-81.6],GA:[32.6,-83.4],HI:[20.3,-156.4],ID:[44.4,-114.6],
+  IL:[40.0,-89.2],IN:[39.9,-86.3],IA:[41.9,-93.4],KS:[38.5,-98.4],
+  KY:[37.5,-85.3],LA:[30.9,-91.8],ME:[45.3,-69.0],MD:[39.0,-76.8],
+  MA:[42.3,-71.8],MI:[44.3,-85.4],MN:[46.4,-93.1],MS:[32.7,-89.7],
+  MO:[38.5,-92.5],MT:[47.0,-110.5],NE:[41.5,-99.9],NV:[38.5,-117.1],
+  NH:[43.7,-71.6],NJ:[40.1,-74.5],NM:[34.3,-106.1],NY:[42.9,-75.5],
+  NC:[35.6,-79.4],ND:[47.5,-100.5],OH:[40.4,-82.8],OK:[35.6,-96.9],
+  OR:[44.1,-120.5],PA:[40.9,-77.8],RI:[41.7,-71.5],SC:[33.9,-80.9],
+  SD:[44.4,-100.2],TN:[35.9,-86.6],TX:[31.1,-97.6],UT:[39.3,-111.1],
+  VT:[44.0,-72.7],VA:[37.8,-78.2],WA:[47.4,-120.5],WV:[38.6,-80.6],
+  WI:[44.3,-89.8],WY:[43.0,-107.6]
+};
+
+let _mlaAgentMapMarker = null; // singleton Mapbox marker for featured agent
+
+function highlightStateAndZoom(code) {
+  const map = window._mlaMap;
+  if (!map || !code) return;
+  try {
+    // Add state fill
+    if (!map.getSource('state-hl-src')) {
+      map.addSource('state-hl-src', {
+        type: 'vector',
+        url: 'mapbox://mapbox.country-boundaries-v1',
+      });
+    }
+    const filter = ['==', ['get', 'iso_3166_2'], 'US-' + code];
+    if (!map.getLayer('state-hl-fill')) {
+      map.addLayer({
+        id: 'state-hl-fill', type: 'fill',
+        source: 'state-hl-src', 'source-layer': 'country_boundaries',
+        filter,
+        paint: { 'fill-color': '#c86519', 'fill-opacity': 0.18 },
+      });
+    }
+    if (!map.getLayer('state-hl-line')) {
+      map.addLayer({
+        id: 'state-hl-line', type: 'line',
+        source: 'state-hl-src', 'source-layer': 'country_boundaries',
+        filter,
+        paint: { 'line-color': '#c86519', 'line-width': 2.5, 'line-opacity': 0.7 },
+      });
+    }
+  } catch(e) {}
+
+  // Zoom to state: compute bounds from MLA_MARKERS or use center+fixed zoom
+  const sm = (window.MLA_MARKERS || []).filter(m => m.state === code);
+  if (sm.length) {
+    const lngs = sm.map(m => m.lng), lats = sm.map(m => m.lat);
+    const pad  = sm.length === 1 ? 120 : 60;
+    map.fitBounds(
+      [[Math.min(...lngs) - 1.5, Math.min(...lats) - 1],
+       [Math.max(...lngs) + 1.5, Math.max(...lats) + 1]],
+      { padding: pad, maxZoom: 7, duration: 900 }
+    );
+  } else {
+    const c = _STATE_CENTERS[code];
+    if (c) map.flyTo({ center: [c[1], c[0]], zoom: 5.8, duration: 900 });
+  }
+}
+
+function placeAgentMapMarker(agent, stateCode) {
+  const map = window._mlaMap;
+  if (!map || !agent) return;
+
+  // Remove old marker
+  if (_mlaAgentMapMarker) { _mlaAgentMapMarker.remove(); _mlaAgentMapMarker = null; }
+
+  // Determine position: centroid of state's MLA_MARKERS or state center
+  let lng, lat;
+  const sm = (window.MLA_MARKERS || []).filter(m => m.state === stateCode);
+  if (sm.length) {
+    lng = sm.reduce((s, m) => s + m.lng, 0) / sm.length;
+    lat = sm.reduce((s, m) => s + m.lat, 0) / sm.length;
+  } else {
+    const c = _STATE_CENTERS[stateCode];
+    if (!c) return;
+    lat = c[0]; lng = c[1];
+  }
+
+  const name     = agent.name || '';
+  const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  const firstName = name.split(' ')[0] || 'Agent';
+  const loc = agent.residentState || '';
+  const yrs = agent.yearsLicensed > 0 ? `${agent.yearsLicensed} yrs` : '';
+  const sub = [loc, yrs].filter(Boolean).join(' · ');
+
+  const el = document.createElement('div');
+  el.className = 'mla-map-popup';
+  el.innerHTML = `
+    <div class="mla-map-popup-avatar">${initials}</div>
+    <div class="mla-map-popup-body">
+      <div class="mla-map-popup-name">${name}</div>
+      ${sub ? `<div class="mla-map-popup-sub">${sub}</div>` : ''}
+      <div class="mla-map-popup-cta">View agent →</div>
+    </div>`;
+  el.addEventListener('click', () => window._mlaOpenAgent(0));
+
+  _mlaAgentMapMarker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
+    .setLngLat([lng, lat])
+    .addTo(map);
+}
+
+// Called by both geo+agents pipelines (whichever finishes last)
+window._mlaShowMapAgent = function(agent, stateCode) {
+  if (!stateCode || !agent) return;
+  if (!window._mlaMap) return; // map not ready yet — will be called again on map load
+  highlightStateAndZoom(stateCode);
+  placeAgentMapMarker(agent, stateCode);
+};
+
 // ── Mapbox map ────────────────────────────────────────────────────────────────
 (function initMap() {
   const token = window.MLA_CONFIG?.mapboxToken;
@@ -328,7 +429,7 @@ function glowState(code) {
     container: 'map',
     style: 'mapbox://styles/addison82/cjsdfy9xz14c81fmfgf1onj1z',
     center: [-96, 38.5],
-    zoom: 3.0,
+    zoom: 3.2,
     interactive: true,
     attributionControl: false,
     logoPosition: 'bottom-right',
@@ -339,36 +440,10 @@ function glowState(code) {
     const logo = map.getContainer().querySelector('.mapboxgl-ctrl-logo');
     if (logo) logo.style.display = 'none';
 
-    const markers = window.MLA_MARKERS || [];
-    markers.forEach(m => {
-      const outer = document.createElement('div');
-      outer.style.cssText = 'width:12px;height:12px;position:relative;cursor:pointer;';
-      outer.title = `${m.city}, ${m.state}`;
-
-      const dot = document.createElement('div');
-      dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:#c86519;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.4);transition:transform .15s;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)';
-      outer.appendChild(dot);
-
-      if (!window._mlaMarkerDots[m.state]) window._mlaMarkerDots[m.state] = [];
-      window._mlaMarkerDots[m.state].push(dot);
-
-      outer.addEventListener('mouseenter', () => { dot.style.transform = 'translate(-50%,-50%) scale(1.8)'; });
-      outer.addEventListener('mouseleave', () => { dot.style.transform = 'translate(-50%,-50%) scale(1)'; });
-      outer.addEventListener('click', () => { window.location.href = `/${m.stateSlug}/${m.slug}/`; });
-
-      new mapboxgl.Marker({ element: outer }).setLngLat([m.lng, m.lat]).addTo(map);
-    });
-
-    // Fit map to show all markers with padding
-    if (markers.length) {
-      const lngs = markers.map(m => m.lng);
-      const lats = markers.map(m => m.lat);
-      const sw = [Math.min(...lngs) - 2, Math.min(...lats) - 1];
-      const ne = [Math.max(...lngs) + 2, Math.max(...lats) + 1];
-      map.fitBounds([sw, ne], { padding: 20, maxZoom: 4.5, duration: 0 });
-    }
-
     window._mlaMap = map;
-    if (_geoCode) glowState(_geoCode);
+
+    // If geo + agents are already ready, show now
+    const pending = window._mlaPendingMapAgent;
+    if (pending) window._mlaShowMapAgent(pending.agent, pending.code);
   });
 })();

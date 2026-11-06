@@ -3098,6 +3098,37 @@ h1.city-title em { font-style: italic; color: var(--rust); font-weight: 400; }
 .fa-cta { font-size: 13px; font-weight: 700; color: var(--gold); margin-top: auto; }
 @media (max-width: 640px) { .fa-grid { grid-template-columns: 1fr; } }
 
+/* ── Map agent popup card ── */
+.mla-map-popup {
+  display: flex; align-items: center; gap: 10px;
+  background: #fff; border-radius: 12px;
+  padding: 10px 14px 10px 10px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
+  cursor: pointer; min-width: 180px; max-width: 220px;
+  border: 1.5px solid rgba(200,101,25,0.18);
+  transition: transform .15s, box-shadow .15s;
+  position: relative;
+}
+.mla-map-popup::after {
+  content: '';
+  position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%);
+  border: 9px solid transparent;
+  border-top-color: #fff;
+  border-bottom: none;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.12));
+}
+.mla-map-popup:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(0,0,0,0.26); }
+.mla-map-popup-avatar {
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, #1a2666, #2a3a8c);
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif; font-size: 15px; font-weight: 700;
+}
+.mla-map-popup-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.mla-map-popup-name { font-size: 13.5px; font-weight: 800; color: #0f1533; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mla-map-popup-sub  { font-size: 11px; color: #6b7280; }
+.mla-map-popup-cta  { font-size: 11px; font-weight: 700; color: #c86519; margin-top: 2px; }
+
 /* ── Agent modal ── */
 #mla-agent-modal { display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; padding: 16px; }
 #mla-agent-modal.open { display: flex; }
