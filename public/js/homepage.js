@@ -209,35 +209,56 @@ function glowState(code) {
     const modal = document.getElementById('mla-agent-modal');
     const body  = document.getElementById('mla-modal-body');
 
-    const name     = a.name || '';
-    const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-    const specs    = Array.isArray(a.specialties) ? a.specialties : [];
+    const name      = a.name || '';
+    const initials  = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const specs     = Array.isArray(a.specialties) ? a.specialties : [];
+    const desigs    = Array.isArray(a.designations) ? a.designations : [];
     const firstName = name.split(' ')[0] || 'this agent';
+    const phone     = (window.MLA_CONFIG || {}).platformDisplay || '';
+    const phoneRaw  = (window.MLA_CONFIG || {}).platformNumber  || '';
 
-    const statLine = [a.residentState, a.npn ? `NPN ${a.npn}` : ''].filter(Boolean).join(' · ');
+    // Trust badges
+    const badges = [];
+    if (a.doiClean === true)          badges.push('<span class="mla-badge mla-badge-green">✓ Clean DOI Record</span>');
+    if (a.isStateResident === true)   badges.push('<span class="mla-badge mla-badge-green">✓ State Resident</span>');
+    if (a.responseCommitment === true)badges.push('<span class="mla-badge mla-badge-blue">✓ 24-hr Response</span>');
+    if (a.referenceCount >= 3)        badges.push(`<span class="mla-badge mla-badge-blue">✓ ${a.referenceCount} References</span>`);
+
+    const statMeta = [a.residentState, a.npn ? `NPN ${a.npn}` : ''].filter(Boolean).join(' · ');
+
     const stats = [];
-    if (a.yearsLicensed > 0) stats.push(`<div class="mla-ms"><strong>${a.yearsLicensed}</strong><span>yrs licensed</span></div>`);
-    if (a.carrierCountRange) stats.push(`<div class="mla-ms"><strong>${a.carrierCountRange}</strong><span>carriers</span></div>`);
-    const specsHtml = specs.length ? `<div class="mla-modal-specs">${specs.map(s=>`<span>${s}</span>`).join('')}</div>` : '';
-    const calBtn = a.calendarUrl ? `<div class="mla-modal-or"><span>or</span></div><a href="${a.calendarUrl}" target="_blank" rel="noopener" class="mla-btn-cal">📅 Book directly on ${firstName}'s calendar</a>` : '';
+    if (a.yearsLicensed > 0)  stats.push(`<div class="mla-ms"><strong>${a.yearsLicensed}</strong><span>yrs licensed</span></div>`);
+    if (a.carrierCountRange)   stats.push(`<div class="mla-ms"><strong>${a.carrierCountRange}</strong><span>carriers</span></div>`);
+    if (a.annualPolicies > 0)  stats.push(`<div class="mla-ms"><strong>${a.annualPolicies}+</strong><span>policies/yr</span></div>`);
+
+    const bioHtml    = a.bio ? `<p class="mla-modal-bio">${a.bio.slice(0, 180)}${a.bio.length > 180 ? '…' : ''}</p>` : '';
+    const specsHtml  = [...specs, ...desigs].length
+      ? `<div class="mla-modal-specs">${[...specs, ...desigs].map(s=>`<span>${s}</span>`).join('')}</div>` : '';
+    const badgesHtml = badges.length ? `<div class="mla-modal-badges">${badges.join('')}</div>` : '';
+    const statsHtml  = stats.length  ? `<div class="mla-modal-stats">${stats.join('<div class="mla-ms-sep"></div>')}</div>` : '';
+    const phoneHtml  = phone ? `<div class="mla-modal-or"><span>or call us now</span></div><a href="tel:${phoneRaw}" class="mla-btn-phone">📞 ${phone}</a>` : '';
 
     body.innerHTML = `
 <div class="mla-modal-avatar">${initials}</div>
 <div class="mla-modal-name">${name}</div>
-<div class="mla-modal-meta">${statLine}</div>
-${stats.length ? `<div class="mla-modal-stats">${stats.join('<div class="mla-ms-sep"></div>')}</div>` : ''}
+<div class="mla-modal-meta">${statMeta}</div>
+${badgesHtml}
+${statsHtml}
+${bioHtml}
 ${specsHtml}
+<div class="mla-modal-divider">Contact ${firstName}</div>
 <form class="mla-modal-form" id="mla-lead-form" onsubmit="window._mlaSubmitLead(event,${JSON.stringify(a.id||'')},${JSON.stringify(a.residentState||'')},${JSON.stringify(firstName)})">
   <input name="firstName" type="text" placeholder="Your first name" required autocomplete="given-name"/>
   <input name="phone" type="tel" placeholder="Best phone number" required autocomplete="tel"/>
   <button type="submit" class="mla-btn-submit">Request a call from ${firstName} →</button>
 </form>
+<p class="mla-modal-fine">No spam. Direct call back within 24 hours.</p>
 <div id="mla-lead-thanks" class="mla-lead-thanks" hidden>
   <div class="mla-thanks-icon">✓</div>
   <strong>Request sent!</strong>
   <p>${firstName} will reach out to you shortly.</p>
 </div>
-${calBtn}`;
+${phoneHtml}`;
 
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
