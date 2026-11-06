@@ -341,7 +341,7 @@ function highlightStateAndZoom(code) {
         id: 'state-hl-fill', type: 'fill',
         source: 'state-hl-src', 'source-layer': 'country_boundaries',
         filter,
-        paint: { 'fill-color': '#c86519', 'fill-opacity': 0.18 },
+        paint: { 'fill-color': '#1a2666', 'fill-opacity': 0.28 },
       });
     }
     if (!map.getLayer('state-hl-line')) {
@@ -349,7 +349,7 @@ function highlightStateAndZoom(code) {
         id: 'state-hl-line', type: 'line',
         source: 'state-hl-src', 'source-layer': 'country_boundaries',
         filter,
-        paint: { 'line-color': '#c86519', 'line-width': 2.5, 'line-opacity': 0.7 },
+        paint: { 'line-color': '#c86519', 'line-width': 3, 'line-opacity': 0.9 },
       });
     }
   } catch(e) {}
