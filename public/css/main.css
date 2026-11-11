@@ -3100,7 +3100,7 @@ h1.city-title em { font-style: italic; color: var(--rust); font-weight: 400; }
 
 /* ── Map agent popup card ── */
 .mla-map-popup {
-  display: flex; flex-direction: column;
+  display: block;
   background: #fff; border-radius: 14px; overflow: hidden;
   box-shadow: 0 8px 28px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
   cursor: pointer; min-width: 190px; max-width: 230px;
