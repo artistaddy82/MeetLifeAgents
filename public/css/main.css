@@ -3100,11 +3100,10 @@ h1.city-title em { font-style: italic; color: var(--rust); font-weight: 400; }
 
 /* ── Map agent popup card ── */
 .mla-map-popup {
-  display: flex; align-items: center; gap: 10px;
-  background: #fff; border-radius: 12px;
-  padding: 10px 14px 10px 10px;
+  display: flex; flex-direction: column;
+  background: #fff; border-radius: 14px; overflow: hidden;
   box-shadow: 0 8px 28px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
-  cursor: pointer; min-width: 180px; max-width: 220px;
+  cursor: pointer; min-width: 190px; max-width: 230px;
   border: 1.5px solid rgba(200,101,25,0.18);
   transition: transform .15s, box-shadow .15s;
   position: relative;
@@ -3118,6 +3117,13 @@ h1.city-title em { font-style: italic; color: var(--rust); font-weight: 400; }
   filter: drop-shadow(0 2px 2px rgba(0,0,0,0.12));
 }
 .mla-map-popup:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(0,0,0,0.26); }
+.mla-map-popup-badge {
+  background: linear-gradient(90deg, #c86519, #d4870f);
+  color: #fff; font-size: 10px; font-weight: 800;
+  letter-spacing: 0.6px; text-transform: uppercase;
+  padding: 5px 12px; text-align: center;
+}
+.mla-map-popup-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px 10px 10px; }
 .mla-map-popup-avatar {
   flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
   background: linear-gradient(135deg, #1a2666, #2a3a8c);

@@ -399,11 +399,14 @@ function placeAgentMapMarker(agent, stateCode) {
   const el = document.createElement('div');
   el.className = 'mla-map-popup';
   el.innerHTML = `
-    <div class="mla-map-popup-avatar">${initials}</div>
-    <div class="mla-map-popup-body">
-      <div class="mla-map-popup-name">${name}</div>
-      ${sub ? `<div class="mla-map-popup-sub">${sub}</div>` : ''}
-      <div class="mla-map-popup-cta">View agent →</div>
+    <div class="mla-map-popup-badge">⭐ Featured Agent</div>
+    <div class="mla-map-popup-row">
+      <div class="mla-map-popup-avatar">${initials}</div>
+      <div class="mla-map-popup-body">
+        <div class="mla-map-popup-name">${name}</div>
+        ${sub ? `<div class="mla-map-popup-sub">${sub}</div>` : ''}
+        <div class="mla-map-popup-cta">View agent →</div>
+      </div>
     </div>`;
   el.addEventListener('click', () => window._mlaOpenAgent(0));
 
