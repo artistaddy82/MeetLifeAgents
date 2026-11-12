@@ -55,8 +55,23 @@ function handler(req, res) {
     const cache       = ext === '.html' ? 'no-cache, no-store' : 'public, max-age=86400'
 
     res.writeHead(is404 ? 404 : 200, {
-      'Content-Type' : contentType,
-      'Cache-Control': cache,
+      'Content-Type'                    : contentType,
+      'Cache-Control'                   : cache,
+      // Security headers
+      'Strict-Transport-Security'       : 'max-age=31536000; includeSubDomains',
+      'X-Content-Type-Options'          : 'nosniff',
+      'X-Frame-Options'                 : 'SAMEORIGIN',
+      'Referrer-Policy'                 : 'strict-origin-when-cross-origin',
+      'Permissions-Policy'              : 'camera=(), microphone=(), geolocation=()',
+      'Content-Security-Policy'         :
+        "default-src 'self'; " +
+        "script-src 'self' 'unsafe-inline' https://api.mapbox.com https://events.mapbox.com https://cdnjs.cloudflare.com; " +
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.mapbox.com; " +
+        "font-src 'self' https://fonts.gstatic.com; " +
+        "img-src 'self' data: blob: https://*.mapbox.com; " +
+        "connect-src 'self' https://api.mapbox.com https://events.mapbox.com https://ipapi.co https://sidecarleads.com; " +
+        "worker-src blob:; " +
+        "frame-ancestors 'none';",
     })
     fs.createReadStream(filePath).pipe(res)
     return
