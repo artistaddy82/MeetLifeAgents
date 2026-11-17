@@ -335,13 +335,17 @@ function highlightStateAndZoom(code) {
         url: 'mapbox://mapbox.country-boundaries-v1',
       });
     }
-    const filter = ['==', ['get', 'iso_3166_2'], 'US-' + code];
+    // worldview filter is required for country-boundaries-v1 to return US state features
+    const filter = ['all',
+      ['==', ['get', 'iso_3166_2'], 'US-' + code],
+      ['any', ['==', ['get', 'worldview'], 'all'], ['in', 'US', ['get', 'worldview']]]
+    ];
     if (!map.getLayer('state-hl-fill')) {
       map.addLayer({
         id: 'state-hl-fill', type: 'fill',
         source: 'state-hl-src', 'source-layer': 'country_boundaries',
         filter,
-        paint: { 'fill-color': '#1a2666', 'fill-opacity': 0.28 },
+        paint: { 'fill-color': '#1a2666', 'fill-opacity': 0.32 },
       });
     }
     if (!map.getLayer('state-hl-line')) {
@@ -349,7 +353,7 @@ function highlightStateAndZoom(code) {
         id: 'state-hl-line', type: 'line',
         source: 'state-hl-src', 'source-layer': 'country_boundaries',
         filter,
-        paint: { 'line-color': '#c86519', 'line-width': 3, 'line-opacity': 0.9 },
+        paint: { 'line-color': '#c86519', 'line-width': 3, 'line-opacity': 1 },
       });
     }
   } catch(e) {}
